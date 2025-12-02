@@ -1,5 +1,15 @@
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Users, MessageSquare, TrendingUp, BarChart3 } from "lucide-react"
+import {
+  Users,
+  MessageSquare,
+  TrendingUp,
+  BarChart3,
+  Clock,
+  Bot,
+  Newspaper,
+  TrendingDown,
+  Calendar,
+} from "lucide-react"
 import Link from "next/link"
 
 export function HeroSection() {
@@ -32,25 +42,30 @@ export function HeroSection() {
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Button size="lg" asChild>
             <Link href="https://calendly.com/qwksearch/30min?month=2025-12" target="_blank">
-              Book a Demo <ArrowRight className="ml-2 h-4 w-4" />
+              <Calendar className="mr-2 h-5 w-5" />
+              Book a Demo
             </Link>
           </Button>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-4">
+        <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { icon: Users, label: "Multi-Agent Teams", desc: "4 specialized analysts" },
             { icon: BarChart3, label: "Algo Strategies", desc: "Momentum & breakout" },
             { icon: TrendingUp, label: "Prediction Markets", desc: "Polymarket & Kalshi" },
             { icon: MessageSquare, label: "Copy Trading", desc: "Follow top performers" },
+            { icon: Clock, label: "Time Travel Backtesting", desc: "Test strategies in the past" },
+            { icon: Bot, label: "Chatbot Algo Builder", desc: "Modify rules with AI chat" },
+            { icon: Newspaper, label: "News Opinion Scanner", desc: "AI judges sentiment shifts" },
+            { icon: TrendingDown, label: "Senate & Investor Tracking", desc: "Follow insider moves" },
           ].map((item) => (
             <div
               key={item.label}
-              className="flex flex-col items-center gap-2 rounded-xl border border-border bg-card/50 p-6 backdrop-blur-sm"
+              className="flex flex-col items-center gap-2 rounded-xl border border-border bg-card/50 p-6 backdrop-blur-sm hover:bg-card/70 transition-colors"
             >
               <item.icon className="h-8 w-8 text-primary" />
-              <span className="font-semibold text-foreground">{item.label}</span>
-              <span className="text-sm text-muted-foreground">{item.desc}</span>
+              <span className="font-semibold text-foreground text-center text-sm">{item.label}</span>
+              <span className="text-xs text-muted-foreground text-center">{item.desc}</span>
             </div>
           ))}
         </div>

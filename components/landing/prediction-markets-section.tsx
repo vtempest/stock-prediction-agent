@@ -4,11 +4,46 @@ import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { TrendingUp, Users, Brain, Target, BarChart3, Trophy, Eye, Zap, Scale, Globe } from "lucide-react"
+import {
+  TrendingUp,
+  Users,
+  Brain,
+  Target,
+  BarChart3,
+  Trophy,
+  Eye,
+  Zap,
+  Scale,
+  Globe,
+  Building2,
+  Landmark,
+} from "lucide-react"
 
 const topTraders = [
   {
     rank: 1,
+    name: "Nancy Pelosi",
+    pnl: 12847293,
+    winRate: 78.4,
+    activePositions: 67,
+    currentValue: 4340000,
+    specialty: "Tech & Finance",
+    badge: "senate",
+    type: "politician",
+  },
+  {
+    rank: 2,
+    name: "Warren Buffett",
+    pnl: 8215890,
+    winRate: 82.1,
+    activePositions: 34,
+    currentValue: 3850000,
+    specialty: "Value Investing",
+    badge: "legend",
+    type: "investor",
+  },
+  {
+    rank: 3,
     name: "Theo",
     pnl: 5847293,
     winRate: 68.4,
@@ -16,9 +51,21 @@ const topTraders = [
     currentValue: 2340000,
     specialty: "Politics",
     badge: "whale",
+    type: "trader",
   },
   {
-    rank: 2,
+    rank: 4,
+    name: "Dan Crenshaw",
+    pnl: 4215890,
+    winRate: 74.5,
+    activePositions: 45,
+    currentValue: 1950000,
+    specialty: "Defense & Energy",
+    badge: "senate",
+    type: "politician",
+  },
+  {
+    rank: 5,
     name: "Fredi9999",
     pnl: 3215890,
     winRate: 72.1,
@@ -26,9 +73,21 @@ const topTraders = [
     currentValue: 1850000,
     specialty: "Economics",
     badge: "sharp",
+    type: "trader",
   },
   {
-    rank: 3,
+    rank: 6,
+    name: "Cathie Wood",
+    pnl: 2947120,
+    winRate: 69.3,
+    activePositions: 78,
+    currentValue: 1620000,
+    specialty: "Disruptive Tech",
+    badge: "fund-manager",
+    type: "investor",
+  },
+  {
+    rank: 7,
     name: "SilverVVolf",
     pnl: 2847120,
     winRate: 65.8,
@@ -36,9 +95,10 @@ const topTraders = [
     currentValue: 1420000,
     specialty: "Sports",
     badge: "consistent",
+    type: "trader",
   },
   {
-    rank: 4,
+    rank: 8,
     name: "Domer",
     pnl: 2156340,
     winRate: 71.2,
@@ -46,16 +106,7 @@ const topTraders = [
     currentValue: 980000,
     specialty: "Tech",
     badge: "sharp",
-  },
-  {
-    rank: 5,
-    name: "PredictIt_Pro",
-    pnl: 1934560,
-    winRate: 69.5,
-    activePositions: 94,
-    currentValue: 750000,
-    specialty: "Politics",
-    badge: "veteran",
+    type: "trader",
   },
 ]
 
@@ -117,6 +168,12 @@ function formatCurrency(value: number): string {
 
 function getBadgeVariant(badge: string) {
   switch (badge) {
+    case "senate":
+      return "bg-red-500/20 text-red-400 border-red-500/30"
+    case "legend":
+      return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
+    case "fund-manager":
+      return "bg-indigo-500/20 text-indigo-400 border-indigo-500/30"
     case "whale":
       return "bg-blue-500/20 text-blue-400 border-blue-500/30"
     case "sharp":
@@ -127,6 +184,17 @@ function getBadgeVariant(badge: string) {
       return "bg-purple-500/20 text-purple-400 border-purple-500/30"
     default:
       return "bg-muted text-muted-foreground"
+  }
+}
+
+function getTypeIcon(type: string) {
+  switch (type) {
+    case "politician":
+      return Landmark
+    case "investor":
+      return Building2
+    default:
+      return Users
   }
 }
 
@@ -142,7 +210,8 @@ export function PredictionMarketsSection() {
           </Badge>
           <h2 className="text-4xl md:text-5xl font-bold mb-4 text-balance">Polymarket & Kalshi Analysis</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto text-pretty">
-            Research-based LLM analysis on prediction market outcomes with copy trading signals from top investors
+            Research-based LLM analysis on prediction market outcomes with copy trading signals from top investors,
+            senators, and traders
           </p>
         </div>
 
@@ -212,7 +281,8 @@ export function PredictionMarketsSection() {
                   <CardTitle>Top Traders Leaderboard</CardTitle>
                 </div>
                 <CardDescription>
-                  Copy trades from sharp money traders on Polymarket. Data updated every 5 minutes.
+                  Copy trades from senators, institutional investors, and sharp money traders. Data updated every 5
+                  minutes.
                 </CardDescription>
               </div>
               <Button
@@ -246,79 +316,82 @@ export function PredictionMarketsSection() {
                   </tr>
                 </thead>
                 <tbody>
-                  {topTraders.map((trader) => (
-                    <tr
-                      key={trader.rank}
-                      className={`border-b border-border/30 hover:bg-muted/30 transition-colors ${
-                        selectedTrader === trader.name ? "bg-cyan-500/5" : ""
-                      }`}
-                    >
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-2">
-                          {trader.rank <= 3 ? (
-                            <div
-                              className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                                trader.rank === 1
-                                  ? "bg-amber-500/20 text-amber-400"
-                                  : trader.rank === 2
-                                    ? "bg-slate-400/20 text-slate-300"
-                                    : "bg-orange-600/20 text-orange-400"
-                              }`}
-                            >
-                              {trader.rank}
-                            </div>
-                          ) : (
-                            <span className="text-muted-foreground w-6 text-center">{trader.rank}</span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 flex items-center justify-center border border-cyan-500/30">
-                            <Users className="w-4 h-4 text-cyan-400" />
+                  {topTraders.map((trader) => {
+                    const TypeIcon = getTypeIcon(trader.type)
+                    return (
+                      <tr
+                        key={trader.rank}
+                        className={`border-b border-border/30 hover:bg-muted/30 transition-colors ${
+                          selectedTrader === trader.name ? "bg-cyan-500/5" : ""
+                        }`}
+                      >
+                        <td className="py-4 px-4">
+                          <div className="flex items-center gap-2">
+                            {trader.rank <= 3 ? (
+                              <div
+                                className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                                  trader.rank === 1
+                                    ? "bg-amber-500/20 text-amber-400"
+                                    : trader.rank === 2
+                                      ? "bg-slate-400/20 text-slate-300"
+                                      : "bg-orange-600/20 text-orange-400"
+                                }`}
+                              >
+                                {trader.rank}
+                              </div>
+                            ) : (
+                              <span className="text-muted-foreground w-6 text-center">{trader.rank}</span>
+                            )}
                           </div>
-                          <div>
-                            <p className="font-medium">{trader.name}</p>
-                            <div className="flex items-center gap-2">
-                              <Badge className={`text-xs ${getBadgeVariant(trader.badge)}`}>{trader.badge}</Badge>
-                              <span className="text-xs text-muted-foreground">{trader.specialty}</span>
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500/20 to-emerald-500/20 flex items-center justify-center border border-cyan-500/30">
+                              <TypeIcon className="w-4 h-4 text-cyan-400" />
+                            </div>
+                            <div>
+                              <p className="font-medium">{trader.name}</p>
+                              <div className="flex items-center gap-2">
+                                <Badge className={`text-xs ${getBadgeVariant(trader.badge)}`}>{trader.badge}</Badge>
+                                <span className="text-xs text-muted-foreground">{trader.specialty}</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="py-4 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1">
-                          <TrendingUp className="w-4 h-4 text-emerald-400" />
-                          <span className="font-semibold text-emerald-400">{formatCurrency(trader.pnl)}</span>
-                        </div>
-                      </td>
-                      <td className="py-4 px-4 text-right">
-                        <span className={trader.winRate >= 70 ? "text-emerald-400" : "text-foreground"}>
-                          {trader.winRate}%
-                        </span>
-                      </td>
-                      <td className="py-4 px-4 text-right hidden md:table-cell text-muted-foreground">
-                        {trader.activePositions}
-                      </td>
-                      <td className="py-4 px-4 text-right hidden lg:table-cell text-muted-foreground">
-                        {formatCurrency(trader.currentValue)}
-                      </td>
-                      <td className="py-4 px-4 text-center">
-                        <Button
-                          size="sm"
-                          variant={selectedTrader === trader.name ? "default" : "outline"}
-                          className={
-                            selectedTrader === trader.name
-                              ? "bg-cyan-500 hover:bg-cyan-600"
-                              : "border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
-                          }
-                          onClick={() => setSelectedTrader(selectedTrader === trader.name ? null : trader.name)}
-                        >
-                          {selectedTrader === trader.name ? "Following" : "Copy"}
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td className="py-4 px-4 text-right">
+                          <div className="flex items-center justify-end gap-1">
+                            <TrendingUp className="w-4 h-4 text-emerald-400" />
+                            <span className="font-semibold text-emerald-400">{formatCurrency(trader.pnl)}</span>
+                          </div>
+                        </td>
+                        <td className="py-4 px-4 text-right">
+                          <span className={trader.winRate >= 70 ? "text-emerald-400" : "text-foreground"}>
+                            {trader.winRate}%
+                          </span>
+                        </td>
+                        <td className="py-4 px-4 text-right hidden md:table-cell text-muted-foreground">
+                          {trader.activePositions}
+                        </td>
+                        <td className="py-4 px-4 text-right hidden lg:table-cell text-muted-foreground">
+                          {formatCurrency(trader.currentValue)}
+                        </td>
+                        <td className="py-4 px-4 text-center">
+                          <Button
+                            size="sm"
+                            variant={selectedTrader === trader.name ? "default" : "outline"}
+                            className={
+                              selectedTrader === trader.name
+                                ? "bg-cyan-500 hover:bg-cyan-600"
+                                : "border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10"
+                            }
+                            onClick={() => setSelectedTrader(selectedTrader === trader.name ? null : trader.name)}
+                          >
+                            {selectedTrader === trader.name ? "Following" : "Copy"}
+                          </Button>
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
             </div>
