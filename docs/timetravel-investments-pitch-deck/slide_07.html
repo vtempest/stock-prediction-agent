@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentation - Slide 7</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+    <style>
+        body {
+            height: 1080px;
+            width: 1920px;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .slide-container {
+    width: 1920px;
+    height: 1080px;
+    background: linear-gradient(135deg, #0A0E27 0%, #151B3B 100%);
+    display: flex;
+    flex-direction: column;
+    padding: 80px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .title {
+    font-size: 72px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: 50px;
+    letter-spacing: -1px;
+    text-align: center;
+  }
+  
+  .title-accent {
+    color: #00D9FF;
+  }
+  
+  .content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    flex: 1;
+  }
+  
+  .left-section {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+  
+  .strategy-card {
+    background: rgba(0, 217, 255, 0.05);
+    border: 2px solid rgba(0, 217, 255, 0.2);
+    border-radius: 20px;
+    padding: 30px;
+    transition: all 0.3s ease;
+  }
+  
+  .strategy-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .strategy-name {
+    font-size: 28px;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+  
+  .win-rate {
+    font-size: 24px;
+    font-weight: 800;
+    color: #10B981;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  .strategy-desc {
+    font-size: 19px;
+    color: #94A3B8;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  
+  .strategy-use {
+    font-size: 17px;
+    color: #00D9FF;
+    font-weight: 600;
+  }
+  
+  .right-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .chart-container {
+    width: 100%;
+    height: 750px;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    background: rgba(255, 255, 255, 0.02);
+  }
+  
+  .chart-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .glow-effect {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0, 217, 255, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    top: 50%;
+    left: -150px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+</style>
+
+<div class="slide-container">
+  <div class="glow-effect"></div>
+  
+  <div class="title">Algorithmic <span class="title-accent">Strategies</span></div>
+  
+  <div class="content-wrapper">
+    <div class="left-section">
+      <div class="strategy-card">
+        <div class="strategy-header">
+          <div class="strategy-name">Momentum Trading</div>
+          <div class="win-rate">50-60%</div>
+        </div>
+        <div class="strategy-desc">
+          Capitalizes on trending markets by following price movements and volume surges
+        </div>
+        <div class="strategy-use">Best for: Trending markets, breakout scenarios</div>
+      </div>
+      
+      <div class="strategy-card">
+        <div class="strategy-header">
+          <div class="strategy-name">Mean Reversion</div>
+          <div class="win-rate">55-65%</div>
+        </div>
+        <div class="strategy-desc">
+          Identifies overbought/oversold conditions and trades expected price corrections
+        </div>
+        <div class="strategy-use">Best for: Range-bound markets, volatile oscillations</div>
+      </div>
+      
+      <div class="strategy-card">
+        <div class="strategy-header">
+          <div class="strategy-name">Breakout Trading</div>
+          <div class="win-rate">45-55%</div>
+        </div>
+        <div class="strategy-desc">
+          Captures explosive moves when price breaks through key resistance/support levels
+        </div>
+        <div class="strategy-use">Best for: High volume rallies, news-driven events</div>
+      </div>
+      
+      <div class="strategy-card">
+        <div class="strategy-header">
+          <div class="strategy-name">Scalping / Day Trading</div>
+          <div class="win-rate">60-70%</div>
+        </div>
+        <div class="strategy-desc">
+          Exploits small intraday price movements with rapid entry/exit execution
+        </div>
+        <div class="strategy-use">Best for: High liquidity, tight spreads</div>
+      </div>
+      
+      <div class="strategy-card">
+        <div class="strategy-header">
+          <div class="strategy-name">Prediction Market Arbitrage</div>
+          <div class="win-rate">Variable</div>
+        </div>
+        <div class="strategy-desc">
+          Exploits mispricings between prediction markets and traditional exchanges
+        </div>
+        <div class="strategy-use">Best for: Event-driven opportunities, sharp trader tracking</div>
+      </div>
+    </div>
+    
+    <div class="right-section">
+      <div class="chart-container">
+        <img src="../images/slide07_strategies.png" alt="Trading Strategies Comparison">
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

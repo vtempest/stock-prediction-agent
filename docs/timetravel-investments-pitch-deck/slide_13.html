@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentation - Slide 13</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+    <style>
+        body {
+            height: 1080px;
+            width: 1920px;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .slide-container {
+    width: 1920px;
+    height: 1080px;
+    background: linear-gradient(135deg, #0A0E27 0%, #151B3B 100%);
+    display: flex;
+    flex-direction: column;
+    padding: 80px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .title {
+    font-size: 72px;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: 50px;
+    letter-spacing: -1px;
+    text-align: center;
+  }
+  
+  .title-accent {
+    color: #10B981;
+  }
+  
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    flex: 1;
+  }
+  
+  .left-section {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  
+  .revenue-card {
+    background: rgba(16, 185, 129, 0.05);
+    border-left: 4px solid #10B981;
+    border-radius: 16px;
+    padding: 28px;
+  }
+  
+  .revenue-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 12px;
+  }
+  
+  .revenue-icon {
+    font-size: 32px;
+    min-width: 40px;
+  }
+  
+  .revenue-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+  
+  .revenue-desc {
+    font-size: 19px;
+    color: #94A3B8;
+    line-height: 1.6;
+    padding-left: 58px;
+  }
+  
+  .pricing-box {
+    background: rgba(0, 217, 255, 0.1);
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+  }
+  
+  .pricing-title {
+    font-size: 26px;
+    color: #00D9FF;
+    font-weight: 700;
+    margin-bottom: 18px;
+  }
+  
+  .pricing-tiers {
+    display: flex;
+    justify-content: space-around;
+    gap: 15px;
+  }
+  
+  .tier {
+    flex: 1;
+  }
+  
+  .tier-name {
+    font-size: 18px;
+    color: #FFFFFF;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .tier-price {
+    font-size: 28px;
+    color: #10B981;
+    font-weight: 800;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  .right-section {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .projection-box {
+    background: rgba(139, 92, 246, 0.05);
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    border-radius: 20px;
+    padding: 35px;
+    flex: 1;
+  }
+  
+  .projection-title {
+    font-size: 32px;
+    color: #8B5CF6;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-align: center;
+  }
+  
+  .projection-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+  }
+  
+  .year-card {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    padding: 25px;
+    text-align: center;
+  }
+  
+  .year-label {
+    font-size: 20px;
+    color: #94A3B8;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+  
+  .year-value {
+    font-size: 42px;
+    color: #10B981;
+    font-weight: 800;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 8px;
+  }
+  
+  .year-metric {
+    font-size: 17px;
+    color: #FFFFFF;
+    font-weight: 500;
+  }
+  
+  .metrics-box {
+    background: linear-gradient(135deg, rgba(0, 217, 255, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+  }
+  
+  .metrics-title {
+    font-size: 28px;
+    color: #00D9FF;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .metric-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+  }
+  
+  .metric-label {
+    font-size: 19px;
+    color: #FFFFFF;
+    font-weight: 600;
+  }
+  
+  .metric-value {
+    font-size: 22px;
+    color: #10B981;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  .glow-effect {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+</style>
+
+<div class="slide-container">
+  <div class="glow-effect"></div>
+  
+  <div class="title">Business <span class="title-accent">Model</span></div>
+  
+  <div class="content-wrapper">
+    <div class="content-grid">
+      <div class="left-section">
+        <div class="revenue-card">
+          <div class="revenue-header">
+            <div class="revenue-icon">💳</div>
+            <div class="revenue-title">Subscription Tiers</div>
+          </div>
+          <div class="revenue-desc">
+            Free tier (basic signals), Pro ($29-99/mo), Enterprise ($500+/mo)
+          </div>
+        </div>
+        
+        <div class="revenue-card">
+          <div class="revenue-header">
+            <div class="revenue-icon">📈</div>
+            <div class="revenue-title">Performance Fees</div>
+          </div>
+          <div class="revenue-desc">
+            10-25% of net gains on user accounts - aligns incentives like hedge funds
+          </div>
+        </div>
+        
+        <div class="revenue-card">
+          <div class="revenue-header">
+            <div class="revenue-icon">🏢</div>
+            <div class="revenue-title">Enterprise Licensing</div>
+          </div>
+          <div class="revenue-desc">
+            White-label platform for brokers, funds, fintech partners (5-6 figure annual)
+          </div>
+        </div>
+        
+        <div class="revenue-card">
+          <div class="revenue-header">
+            <div class="revenue-icon">👥</div>
+            <div class="revenue-title">Copy-Trading Fees</div>
+          </div>
+          <div class="revenue-desc">
+            2-5% commission on copied trades from sharp traders (Polymarket leaderboard)
+          </div>
+        </div>
+        
+        <div class="revenue-card">
+          <div class="revenue-header">
+            <div class="revenue-icon">🔌</div>
+            <div class="revenue-title">API Access</div>
+          </div>
+          <div class="revenue-desc">
+            B2B2C: Other platforms pay for direct access to TimeTravel signals
+          </div>
+        </div>
+      </div>
+      
+      <div class="right-section">
+        <div class="projection-box">
+          <div class="projection-title">Revenue Projections</div>
+          <div class="projection-grid">
+            <div class="year-card">
+              <div class="year-label">Year 1</div>
+              <div class="year-value">$750K</div>
+              <div class="year-metric">500 paid users</div>
+            </div>
+            
+            <div class="year-card">
+              <div class="year-label">Year 2</div>
+              <div class="year-value">$5.4M</div>
+              <div class="year-metric">3K paid users</div>
+            </div>
+            
+            <div class="year-card">
+              <div class="year-label">Year 3</div>
+              <div class="year-value">$27M</div>
+              <div class="year-metric">12K paid users</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="metrics-box">
+          <div class="metrics-title">Unit Economics</div>
+          <div class="metrics-grid">
+            <div class="metric-item">
+              <div class="metric-label">CAC</div>
+              <div class="metric-value">$50-100</div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-label">LTV</div>
+              <div class="metric-value">$1.5-3K</div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-label">LTV:CAC</div>
+              <div class="metric-value">20-40x</div>
+            </div>
+            <div class="metric-item">
+              <div class="metric-label">Gross Margin</div>
+              <div class="metric-value">75-80%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+{
+  "presentation_name": "TimeTravel-Investments-Pitch-Deck",
+  "title": "TimeTravel.Investments - AI-Powered Trading Platform",
+  "description": "",
+  "slides": {
+    "1": {
+      "title": "Title Slide",
+      "filename": "slide_01.html",
+      "file_path": "presentations/timetravel-investments-pitch-deck/slide_01.html",
+      "preview_url": "/workspace/presentations/timetravel-investments-pitch-deck/slide_01.html",
+      "created_at": "2025-12-03T09:07:24.825294"
+    },
+    "2": {
+      "title": "The Problem",
+      "filename": "slide_02.html",
+      "file_path": "presentations/timetravel-investments-pitch-deck/slide_02.html",
+      "preview_url": "/workspace/presentations/timetravel-investments-pitch-deck/slide_02.html",
+      "created_at": "2025-12-03T09:07:52.133782"
+    },
+    "3": {
+      "title": "Our Solution",
+      "filename": "slide_03.html",
+      "file_path": "presentations/timetravel-investments-pitch-deck/slide_03.html",
+      "preview_url": "/workspace/presentations/timetravel-investments-pitch-deck/slide_03.html",
+      "created_at": "2025-12-03T09:08:19.624682"
+    },
+    "4": {
+      "title": "Market Opportunity",
+      "filename": "slide_04.html",
+      "file_path": "presentations/timetravel-investments-pitch-deck/slide_04.html",
+      "preview_url": "/workspace/presentations/timetravel-investments-pitch-deck/slide_04.html",
+      "created_at": "2025-12-03T09:08:46.291343"
+    },
+    "5": {
+      "title": "Product Overview",
+      "filename": "slide_05.html",
+      "file_path": "presentations/timetravel-investments-pitch-deck/slide_05.html",
+      "preview_url": "/workspace/presentations/timetravel-investments-pitch-deck/slide_05.html",
+      "created_at": "2025-12-03T09:09:16.783761"
+    },
+    "6": {
+      "title": "Multi-Agent Architecture",
+      "filename": "slide_06.html",
+      "file_path": "presentations/timetravel-investments-pitch-deck/slide_06.html",
+      "preview_url": "/workspace/presentations/timetravel-investments-pitch-deck/slide_06.html",
+      "created_at": "2025-12-03T09:09:59.112470"
+    },
+    "7": {
+      "title": "Algorithmic Strategies",
+      "filename": "slide_07.html",
+      "file_path": "presentations/timetravel-investments-pitch-deck/slide_07.html",
+      "preview_url": "/workspace/presentations/timetravel-investments-pitch-deck/slide_07.html",
+      "created_at": "2025-12-03T09:10:27.935533"
+    },
+    "8": {
+      "title": "Signal Scoring System",
+      "filename": "slide_08.html",
+      "file_path": "presentations/timetravel-investments-pitch-deck/slide_08.html",
+      "preview_url": "/workspace/presentations/timetravel-investments-pitch-deck/slide_08.html",
+      "created_at": "2025-12-03T09:10:59.323145"
+    },
+    "9": {
+      "title": "Prediction Market Integration",
+      "filename": "slide_09.html",
+      "file_path": "presentations/timetravel-investments-pitch-deck/slide_09.html",
+      "preview_url": "/workspace/presentations/timetravel-investments-pitch-deck/slide_09.html",
+      "created_at": "2025-12-03T09:11:29.182820"
+    },
+    "10": {
+      "title": "Risk Management Engine",
+      "filename": "slide_10.html",
+      "file_path": "presentations/timetravel-investments-pitch-deck/slide_10.html",
+      "preview_url": "/workspace/presentations/timetravel-investments-pitch-deck/slide_10.html",
+      "created_at": "2025-12-03T09:11:58.777467"
+    },
+    "11": {
+      "title": "Platform Architecture",
+      "filename": "slide_11.html",
+      "file_path": "presentations/timetravel-investments-pitch-deck/slide_11.html",
+      "preview_url": "/workspace/presentations/timetravel-investments-pitch-deck/slide_11.html",
+      "created_at": "2025-12-03T09:12:38.820750"
+    },
+    "12": {
+      "title": "Competitive Advantage",
+      "filename": "slide_12.html",
+      "file_path": "presentations/timetravel-investments-pitch-deck/slide_12.html",
+      "preview_url": "/workspace/presentations/timetravel-investments-pitch-deck/slide_12.html",
+      "created_at": "2025-12-03T09:13:09.817847"
+    },
+    "13": {
+      "title": "Business Model",
+      "filename": "slide_13.html",
+      "file_path": "presentations/timetravel-investments-pitch-deck/slide_13.html",
+      "preview_url": "/workspace/presentations/timetravel-investments-pitch-deck/slide_13.html",
+      "created_at": "2025-12-03T09:13:50.422487"
+    }
+  },
+  "created_at": "2025-12-03T09:07:24.487907",
+  "updated_at": "2025-12-03T09:13:50.422501"
+}
