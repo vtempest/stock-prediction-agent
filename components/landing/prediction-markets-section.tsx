@@ -272,7 +272,7 @@ export function PredictionMarketsSection() {
         </div>
 
         {/* Copy Trading Leaderboard */}
-        <Card className="bg-card/50 border-border/50 backdrop-blur">
+        <Card className="bg-card/50 border-border/50 backdrop-blur max-w-4xl mx-auto">
           <CardHeader>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
@@ -321,21 +321,19 @@ export function PredictionMarketsSection() {
                     return (
                       <tr
                         key={trader.rank}
-                        className={`border-b border-border/30 hover:bg-muted/30 transition-colors ${
-                          selectedTrader === trader.name ? "bg-cyan-500/5" : ""
-                        }`}
+                        className={`border-b border-border/30 hover:bg-muted/30 transition-colors ${selectedTrader === trader.name ? "bg-cyan-500/5" : ""
+                          }`}
                       >
                         <td className="py-4 px-4">
                           <div className="flex items-center gap-2">
                             {trader.rank <= 3 ? (
                               <div
-                                className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                                  trader.rank === 1
+                                className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${trader.rank === 1
                                     ? "bg-amber-500/20 text-amber-400"
                                     : trader.rank === 2
                                       ? "bg-slate-400/20 text-slate-300"
                                       : "bg-orange-600/20 text-orange-400"
-                                }`}
+                                  }`}
                               >
                                 {trader.rank}
                               </div>

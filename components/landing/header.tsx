@@ -83,7 +83,7 @@ export function Header() {
             </Link>
           </Button>
           <Button size="sm" asChild>
-            <Link href="https://calendly.com/qwksearch/30min?month=2025-12" target="_blank">
+            <Link href="https://takemymoney.timetravel.investments" target="_blank">
               <Calendar className="mr-2 h-4 w-4" />
               Book Demo
             </Link>
@@ -154,7 +154,7 @@ export function Header() {
                 </Link>
               </Button>
               <Button size="sm" className="flex-1" asChild>
-                <Link href="https://calendly.com/qwksearch/30min?month=2025-12" target="_blank">
+                <Link href="https://takemymoney.timetravel.investments" target="_blank">
                   <Calendar className="mr-2 h-4 w-4" />
                   Book Demo
                 </Link>

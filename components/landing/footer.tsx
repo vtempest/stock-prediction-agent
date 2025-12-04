@@ -20,7 +20,7 @@ export function Footer() {
             >
               GitHub
             </Link>
-            <Link href="https://arxiv.org/abs/2412.20138" target="_blank" className="hover:text-foreground">
+            <Link href="https://arxiv.org/pdf/2412.20138" target="_blank" className="hover:text-foreground">
               Paper
             </Link>
             <Link href="#" className="hover:text-foreground">

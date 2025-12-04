@@ -41,7 +41,7 @@ export function HeroSection() {
 
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Button size="lg" asChild>
-            <Link href="https://calendly.com/qwksearch/30min?month=2025-12" target="_blank">
+            <Link href="https://takemymoney.timetravel.investments" target="_blank">
               <Calendar className="mr-2 h-5 w-5" />
               Book a Demo
             </Link>

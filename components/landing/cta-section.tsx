@@ -14,7 +14,7 @@ export function CTASection() {
         </p>
         <div className="mt-10 flex items-center justify-center">
           <Button size="lg" asChild>
-            <Link href="https://calendly.com/qwksearch/30min?month=2025-12" target="_blank">
+            <Link href="https://takemymoney.timetravel.investments" target="_blank">
               <Calendar className="mr-2 h-5 w-5" />
               Book a Demo
             </Link>
