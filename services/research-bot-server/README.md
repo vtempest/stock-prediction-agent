@@ -15,6 +15,8 @@ A comprehensive Hono-based server for managing and scheduling AI-powered stock r
 - **Smart Alerts**: Automatic alerts for high-confidence signals and consensus
 - **RESTful API**: Full CRUD operations for stocks, jobs, and analysis
 - **Real-time Metrics**: Queue statistics and system monitoring
+- **Comprehensive Testing**: Unit and integration tests with 80%+ coverage
+- **Backtest Validation**: Automated strategy backtesting with performance reports
 
 ## Architecture
 

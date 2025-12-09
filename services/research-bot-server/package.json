@@ -7,7 +7,11 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "vitest"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:unit": "vitest run test/unit",
+    "test:integration": "vitest run test/integration"
   },
   "dependencies": {
     "hono": "^4.6.12",
@@ -23,9 +27,11 @@
     "axios": "^1.13.2"
   },
   "devDependencies": {
+    "@hono/zod-validator": "^0.4.1",
     "@types/node": "^22.10.2",
     "@types/node-cron": "^3.0.11",
     "@types/better-sqlite3": "^7.6.12",
+    "@vitest/coverage-v8": "^2.1.8",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
