@@ -57,15 +57,34 @@ export async function POST(request: NextRequest) {
     // Use current date if not provided
     const tradeDate = date || new Date().toISOString().split('T')[0]
 
+    // Determine LLM provider from config, environment, or default
+    const llmProvider = config?.llmProvider ||
+                       process.env.NEXT_PUBLIC_LLM_PROVIDER ||
+                       (process.env.GROQ_API_KEY ? 'groq' : 'openai')
+
+    // Set default models based on provider
+    let defaultDeepThink = 'gpt-4o'
+    let defaultQuickThink = 'gpt-4o-mini'
+
+    if (llmProvider === 'groq') {
+      defaultDeepThink = process.env.NEXT_PUBLIC_GROQ_DEEP_THINK_MODEL || 'llama-3.1-70b-versatile'
+      defaultQuickThink = process.env.NEXT_PUBLIC_GROQ_QUICK_THINK_MODEL || 'llama-3.1-8b-instant'
+    } else if (llmProvider === 'anthropic') {
+      defaultDeepThink = 'claude-3-5-sonnet-20241022'
+      defaultQuickThink = 'claude-3-5-haiku-20241022'
+    }
+
     // Initialize TradingAgentsGraph
     const selectedAnalysts = analysts || ['market', 'social', 'news', 'fundamentals']
     const tradingConfig = {
-      llmProvider: config?.llmProvider || 'openai',
-      deepThinkLLM: config?.deepThinkLLM || 'gpt-4o',
-      quickThinkLLM: config?.quickThinkLLM || 'gpt-4o-mini',
+      llmProvider,
+      deepThinkLLM: config?.deepThinkLLM || defaultDeepThink,
+      quickThinkLLM: config?.quickThinkLLM || defaultQuickThink,
       temperature: config?.temperature || 0.3,
       apiKeys: {
-        openai: process.env.OPENAI_API_KEY || ''
+        openai: process.env.OPENAI_API_KEY || '',
+        groq: process.env.GROQ_API_KEY || '',
+        anthropic: process.env.ANTHROPIC_API_KEY || ''
       }
     }
 
@@ -118,25 +137,70 @@ export async function POST(request: NextRequest) {
  * Get information about the trading agents system
  */
 export async function GET() {
+  const currentProvider = process.env.NEXT_PUBLIC_LLM_PROVIDER ||
+                         (process.env.GROQ_API_KEY ? 'groq' : 'openai')
+
   return NextResponse.json({
     name: 'TradingAgents Multi-Agent System',
     description: 'A multi-agent trading system that uses debate and consensus to generate trading signals',
     version: '1.0.0',
+    currentProvider,
+    supportedProviders: ['openai', 'groq', 'anthropic'],
     analysts: ['market', 'social', 'news', 'fundamentals'],
     features: [
       'Technical market analysis with indicators',
       'Bull vs Bear debate for investment decisions',
       'Risk management consensus',
       'Memory-based learning from past decisions',
-      'Multiple LLM provider support'
+      'Multiple LLM provider support (OpenAI, Groq, Anthropic)',
+      'Fast inference with Groq for real-time analysis'
     ],
+    defaultModels: {
+      groq: {
+        deepThink: 'llama-3.1-70b-versatile',
+        quickThink: 'llama-3.1-8b-instant'
+      },
+      openai: {
+        deepThink: 'gpt-4o',
+        quickThink: 'gpt-4o-mini'
+      },
+      anthropic: {
+        deepThink: 'claude-3-5-sonnet-20241022',
+        quickThink: 'claude-3-5-haiku-20241022'
+      }
+    },
     usage: {
       endpoint: 'POST /api/trading-agents',
       parameters: {
         symbol: 'Stock symbol (required)',
         date: 'Trade date in YYYY-MM-DD format (optional, defaults to today)',
-        analysts: 'Array of analyst types to use (optional)',
-        config: 'LLM configuration (optional)'
+        analysts: 'Array of analyst types to use (optional, defaults to all)',
+        config: {
+          llmProvider: 'LLM provider: openai, groq, or anthropic (optional)',
+          deepThinkLLM: 'Model for complex reasoning (optional)',
+          quickThinkLLM: 'Model for fast analysis (optional)',
+          temperature: 'Temperature setting 0-1 (optional, default 0.3)'
+        }
+      },
+      examples: {
+        basic: {
+          symbol: 'AAPL'
+        },
+        withGroq: {
+          symbol: 'TSLA',
+          config: {
+            llmProvider: 'groq',
+            deepThinkLLM: 'llama-3.1-70b-versatile',
+            quickThinkLLM: 'llama-3.1-8b-instant'
+          }
+        },
+        customAnalysts: {
+          symbol: 'NVDA',
+          analysts: ['market', 'news'],
+          config: {
+            llmProvider: 'groq'
+          }
+        }
       }
     }
   })
