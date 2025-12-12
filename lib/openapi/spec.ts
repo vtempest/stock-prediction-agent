@@ -146,6 +146,158 @@ export const openApiSpec = {
         }
       }
     },
+    "/stocks/filings/{symbol}": {
+      get: {
+        tags: ["Stocks"],
+        summary: "Get SEC filings",
+        description: "Retrieve recent SEC filings (Forms 10-K, 10-Q, 8-K, etc.) for a company using its CIK",
+        parameters: [
+          {
+            name: "symbol",
+            in: "path",
+            required: true,
+            description: "Stock symbol (e.g., AAPL)",
+            schema: { type: "string" }
+          },
+          {
+            name: "limit",
+            in: "query",
+            description: "Number of filings to return (default: 20)",
+            schema: { type: "integer", default: 20 }
+          }
+        ],
+        responses: {
+          "200": {
+            description: "Successful response",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    success: { type: "boolean" },
+                    symbol: { type: "string" },
+                    cik: { type: "string" },
+                    companyName: { type: "string" },
+                    filings: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          form: { type: "string" },
+                          filingDate: { type: "string" },
+                          accessionNumber: { type: "string" },
+                          primaryDocument: { type: "string" },
+                          url: { type: "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            description: "Symbol or CIK not found"
+          }
+        }
+      }
+    },
+    "/stocks/sectors": {
+      get: {
+        tags: ["Stocks"],
+        summary: "Get sector information",
+        description: "Retrieve aggregated sector data, including total companies, market cap, and top companies. Can filter by specific sector.",
+        parameters: [
+          {
+            name: "sector",
+            in: "query",
+            description: "Optional: Filter by specific sector name (e.g., 'Technology')",
+            schema: { type: "string" }
+          },
+          {
+            name: "includeCompanies",
+            in: "query",
+            description: "Include top 10 companies for each sector (default: false)",
+            schema: { type: "boolean" }
+          },
+          {
+            name: "includeIndustries",
+            in: "query",
+            description: "Include industry breakdown for each sector (default: false)",
+            schema: { type: "boolean" }
+          }
+        ],
+        responses: {
+          "200": {
+            description: "Successful response",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    success: { type: "boolean" },
+                    count: { type: "integer" },
+                    data: {
+                      oneOf: [
+                        {
+                          type: "array",
+                          items: {
+                            type: "object",
+                            properties: {
+                              sector: { type: "string" },
+                              totalCompanies: { type: "integer" },
+                              totalMarketCap: { type: "number" },
+                              top10Companies: { 
+                                type: "array",
+                                items: { $ref: "#/components/schemas/Stock" }
+                              },
+                              industries: {
+                                type: "array",
+                                items: {
+                                  type: "object",
+                                  properties: {
+                                    name: { type: "string" },
+                                    totalCompanies: { type: "integer" },
+                                    totalMarketCap: { type: "number" }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        {
+                          type: "object",
+                          properties: {
+                            sector: { type: "string" },
+                            totalCompanies: { type: "integer" },
+                            totalMarketCap: { type: "number" },
+                            top10Companies: { 
+                              type: "array",
+                              items: { $ref: "#/components/schemas/Stock" }
+                            },
+                             industries: {
+                                type: "array",
+                                items: {
+                                  type: "object",
+                                  properties: {
+                                    name: { type: "string" },
+                                    totalCompanies: { type: "integer" },
+                                    totalMarketCap: { type: "number" }
+                                  }
+                                }
+                              }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/stocks/gainers": {
       get: {
         tags: ["Stocks"],
