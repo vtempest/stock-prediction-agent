@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation"
 import { useSession } from "@/lib/auth-client"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import Image from "next/image"
 
 interface DashboardSidebarProps {
   activeTab?: string
@@ -69,10 +70,16 @@ export function DashboardSidebar({ activeTab = "overview", setActiveTab }: Dashb
     <>
       <div className="flex h-16 items-center gap-2 border-b border-border px-6">
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-            <Activity className="h-4 w-4 text-primary-foreground" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg overflow-hidden">
+            <Image
+              src="/apple-touch-icon.png"
+              alt="Logo"
+              width={36}
+              height={36}
+              className="h-full w-full object-cover"
+            />
           </div>
-          <span className="text-lg font-semibold">TimeTravel.AI</span>
+          <span className="text-lg font-semibold">TimeTravel</span>
         </Link>
       </div>
 

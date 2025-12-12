@@ -49,7 +49,8 @@ export function PredictionMarketsTab() {
     }
   }
 
-  const formatVolume = (volume: number) => {
+  const formatVolume = (volume: number | undefined | null) => {
+    if (!volume || isNaN(volume)) return "$0"
     if (volume >= 1000000) return `$${(volume / 1000000).toFixed(2)}M`
     if (volume >= 1000) return `$${(volume / 1000).toFixed(0)}K`
     return `$${volume.toFixed(0)}`

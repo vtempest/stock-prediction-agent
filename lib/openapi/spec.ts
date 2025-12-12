@@ -47,6 +47,10 @@ export const openApiSpec = {
     {
       name: "User Signals",
       description: "User watchlist and trading signals"
+    },
+    {
+      name: "Statistics",
+      description: "Statistical analysis and predictive modeling"
     }
   ],
   paths: {
@@ -192,6 +196,35 @@ export const openApiSpec = {
           },
           "401": {
             description: "Unauthorized"
+          }
+        }
+      }
+    },
+    "/zulu/sync": {
+      post: {
+        tags: ["Zulu Social Trading"],
+        summary: "Sync Zulu Traders",
+        description: "Manually trigger a sync of top traders from ZuluTrade",
+        responses: {
+          "200": {
+            description: "Successful response",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    success: { type: "boolean" },
+                    data: { 
+                      type: "object",
+                      properties: {
+                        traders: { type: "integer" }
+                      }
+                    },
+                    message: { type: "string" }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -607,6 +640,52 @@ export const openApiSpec = {
                     }
                   }
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stocks/predict/statistics": {
+      post: {
+        tags: ["Statistics"],
+        summary: "Calculate stock statistics",
+        description: "Perform advanced statistical analysis including rolling statistics and timeseries correlation (e.g., price vs volume, cross-asset correlation).",
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/StatisticsRequest" },
+              examples: {
+                "rolling_stats": {
+                  summary: "Calculate Rolling Stats",
+                  value: {
+                    symbol: "AAPL",
+                    period: "1y",
+                    metrics: ["rolling_mean", "rolling_std"],
+                    window: 20
+                  }
+                },
+                "correlation": {
+                  summary: "Timeseries Correlation",
+                  value: {
+                    symbol: "TSLA",
+                    correlation: {
+                      target: "price",
+                      features: ["volume", "rsi", "macd"],
+                      window: 50
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        responses: {
+          "200": {
+            description: "Successful response",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/StatisticsResponse" }
               }
             }
           }
@@ -1044,6 +1123,56 @@ export const openApiSpec = {
           technicalScore: { type: "number" },
           sentimentScore: { type: "number" },
           suggestedAction: { type: "string" }
+        }
+      },
+      StatisticsRequest: {
+        type: "object",
+        properties: {
+          symbol: { type: "string", example: "AAPL" },
+          period: { type: "string", default: "1y" },
+          metrics: { 
+            type: "array", 
+            items: { type: "string", enum: ["rolling_mean", "rolling_std", "bollinger_bands"] }
+          },
+          window: { type: "integer", default: 14 },
+          correlation: {
+            type: "object",
+            description: "Configuration for correlating different timeseries data",
+            properties: {
+              target: { type: "string", example: "price", description: "Primary series to correlate against" },
+              features: { 
+                type: "array", 
+                items: { type: "string" },
+                example: ["volume", "sector_etf_price", "market_index_price"],
+                description: "List of other timeseries to test for correlation" 
+              },
+              method: { type: "string", enum: ["pearson", "spearman"], default: "pearson" }
+            }
+          }
+        }
+      },
+      StatisticsResponse: {
+        type: "object",
+        properties: {
+          success: { type: "boolean" },
+          symbol: { type: "string" },
+          data: {
+            type: "object",
+            properties: {
+              timestamps: { type: "array", items: { type: "string" } },
+              values: { type: "object", additionalProperties: { type: "array", items: { type: "number" } } },
+              correlations: {
+                type: "object",
+                description: "Correlation coefficients between target and features",
+                additionalProperties: { type: "number" },
+                example: {
+                  "volume": 0.45,
+                  "sector_etf_price": 0.89,
+                  "market_index_price": 0.92
+                }
+              }
+            }
+          }
         }
       }
     },

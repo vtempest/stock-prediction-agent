@@ -157,7 +157,7 @@ export function BrokerPlatformsSection() {
                   ))}
                 </div>
 
-                {/* Action Button */}
+                {/* 
                 <Button
                   variant={broker.status === "Active" ? "default" : "outline"}
                   className="w-full group-hover:shadow-md transition-all"
@@ -172,7 +172,7 @@ export function BrokerPlatformsSection() {
                   ) : (
                     <>Coming Soon</>
                   )}
-                </Button>
+                </Button> */}
               </div>
             </Card>
           ))}

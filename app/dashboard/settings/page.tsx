@@ -327,7 +327,6 @@ export default function SettingsPage() {
                             <th className="text-left py-2 w-[30%]">API Key</th>
                             <th className="text-left py-2 w-[25%]">Models</th>
                             <th className="text-left py-2 w-[15%]">Links</th>
-                            <th className="text-right py-2 w-[15%]">Cost (1M Output)</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -380,7 +379,6 @@ export default function SettingsPage() {
                                   </a>
                                 </div>
                               </td>
-                              <td className="py-3 text-right font-medium align-middle">{provider.cost}</td>
                             </tr>
                           ))}
                         </tbody>
