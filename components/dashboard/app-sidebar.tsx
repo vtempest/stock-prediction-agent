@@ -152,14 +152,13 @@ const navigationGroups = [
     items: [
       { name: "Alpaca Trading", tab: "alpaca", icon: TrendingUp },
       { name: "Copy Trading", tab: "copy-trading", icon: Copy },
-      { name: "Signals", tab: "signals", icon: Signal },
       { name: "Prediction Markets", tab: "prediction-markets", icon: Target },
     ],
   },
   {
     title: "Analysis",
     items: [
-      { name: "API Data", tab: "api-data", icon: Activity },
+      { name: "AI Analyze", tab: "api-data", icon: Activity },
       { name: "Agents", tab: "agents", icon: Users },
       { name: "Strategies", tab: "strategies", icon: Zap },
     ],

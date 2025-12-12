@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Progress } from "@/components/ui/progress"
-import { demoSignals, type Signal } from "@/lib/demo-data"
+import { type Signal } from "@/lib/demo-data"
 import {
   Search,
   TrendingUp,
@@ -20,7 +20,7 @@ import {
 } from "lucide-react"
 
 export function SignalsTab() {
-  const [signals] = useState(demoSignals)
+  const [signals] = useState<Signal[]>([])
   const [filterType, setFilterType] = useState<string>("all")
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedSignal, setSelectedSignal] = useState<Signal | null>(null)

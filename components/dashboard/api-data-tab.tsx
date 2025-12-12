@@ -229,26 +229,6 @@ export function ApiDataTab() {
           </Button>
         </div>
 
-        {/* Service Health Status */}
-        {healthData && (
-          <div className="grid gap-4 md:grid-cols-3 mb-6 p-4 bg-muted/50 rounded-lg">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">API Gateway</span>
-              <Badge className="bg-green-500">
-                <CheckCircle2 className="h-3 w-3 mr-1" />
-                {healthData.status}
-              </Badge>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">News Researcher</span>
-              {getServiceStatusBadge(healthData.services?.news_researcher || 'unknown')}
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Debate Analyst</span>
-              {getServiceStatusBadge(healthData.services?.debate_analyst || 'unknown')}
-            </div>
-          </div>
-        )}
 
         {/* Stock Selection */}
         <div className="grid gap-4 md:grid-cols-3">

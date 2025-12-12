@@ -8,8 +8,10 @@ export async function GET(
     request: NextRequest,
     { params }: { params: Promise<{ symbol: string }> }
 ) {
+    let symbol = '';
     try {
-        const { symbol } = await params;
+        const paramsValue = await params;
+        symbol = paramsValue.symbol;
         const { searchParams } = new URL(request.url);
 
         // Get parameters with defaults
@@ -29,13 +31,55 @@ export async function GET(
             queryOptions.period1 = period1Param;
             queryOptions.period2 = period2Param;
         } else {
-            // Otherwise use range (defaults to 1mo)
-            queryOptions.period1 = range;
+            // Calculate start date based on range
+            const now = new Date();
+            let startDate = new Date();
+            
+            switch(range) {
+                case '1d':
+                    startDate.setDate(now.getDate() - 1);
+                    break;
+                case '5d':
+                    startDate.setDate(now.getDate() - 5);
+                    break;
+                case '1mo':
+                    startDate.setMonth(now.getMonth() - 1);
+                    break;
+                case '3mo':
+                    startDate.setMonth(now.getMonth() - 3);
+                    break;
+                case '6mo':
+                    startDate.setMonth(now.getMonth() - 6);
+                    break;
+                case '1y':
+                    startDate.setFullYear(now.getFullYear() - 1);
+                    break;
+                case '2y':
+                    startDate.setFullYear(now.getFullYear() - 2);
+                    break;
+                case '5y':
+                    startDate.setFullYear(now.getFullYear() - 5);
+                    break;
+                case '10y':
+                    startDate.setFullYear(now.getFullYear() - 10);
+                    break;
+                case 'ytd':
+                    startDate = new Date(now.getFullYear(), 0, 1);
+                    break;
+                case 'max':
+                    startDate = new Date(1970, 0, 1);
+                    break;
+                default:
+                    // Default to 1 month if invalid range
+                    startDate.setMonth(now.getMonth() - 1);
+            }
+            
+            queryOptions.period1 = startDate;
         }
 
         console.log(`Fetching historical data for ${symbol} with options:`, queryOptions);
 
-        const result = await yahooFinance.chart(symbol, queryOptions);
+        const result: any = await yahooFinance.chart(symbol, queryOptions);
 
         if (!result || !result.quotes || result.quotes.length === 0) {
             return NextResponse.json(
@@ -80,10 +124,10 @@ export async function GET(
         let errorCode = 'HISTORICAL_ERROR';
 
         if (error.message?.includes('Invalid symbol')) {
-            errorMessage = `Invalid symbol: ${params.symbol}`;
+            errorMessage = `Invalid symbol: ${symbol}`;
             errorCode = 'INVALID_SYMBOL';
         } else if (error.message?.includes('Not Found')) {
-            errorMessage = `Symbol not found: ${params.symbol}`;
+            errorMessage = `Symbol not found: ${symbol}`;
             errorCode = 'SYMBOL_NOT_FOUND';
         } else if (error.message) {
             errorMessage = error.message;

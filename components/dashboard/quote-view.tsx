@@ -126,6 +126,82 @@ export function QuoteView({ symbol, showBackButton = true }: QuoteViewProps) {
     fetchChart()
   }, [symbol, chartRange, chartInterval])
 
+  // New state for performance metrics
+  const [performance, setPerformance] = useState<{
+    week: number | null,
+    month: number | null,
+    month3: number | null,
+    month6: number | null,
+    year: number | null,
+    year5: number | null,
+    ytd: number | null
+  }>({
+    week: null,
+    month: null,
+    month3: null,
+    month6: null,
+    year: null,
+    year5: null,
+    ytd: null
+  })
+
+  // Fetch 5y data for calculating performance metrics
+  useEffect(() => {
+    if (!symbol) return
+
+    const fetchPerformanceData = async () => {
+      try {
+        // Fetch 5 years of daily data
+        const res = await fetch(`/api/stocks/historical/${symbol}?range=5y&interval=1d`)
+        const json = await res.json()
+
+        if (json.success && json.data && Array.isArray(json.data)) {
+          const history = json.data
+          if (history.length === 0) return
+
+          const currentPrice = history[history.length - 1].close
+          const now = new Date()
+          
+          const findPriceAtDate = (targetDate: Date) => {
+             // Find closest date in history (going backwards)
+             const targetTime = targetDate.getTime()
+             // Sort by difference
+             const closest = history.reduce((prev: any, curr: any) => {
+                return (Math.abs(new Date(curr.date).getTime() - targetTime) < Math.abs(new Date(prev.date).getTime() - targetTime) ? curr : prev);
+             });
+             return closest.close;
+          }
+
+          const getChange = (daysAgo: number) => {
+             const targetDate = new Date()
+             targetDate.setDate(now.getDate() - daysAgo)
+             const startPrice = findPriceAtDate(targetDate)
+             return startPrice ? ((currentPrice - startPrice) / startPrice) : null
+          }
+          
+          const getDateChange = (targetDate: Date) => {
+             const startPrice = findPriceAtDate(targetDate)
+             return startPrice ? ((currentPrice - startPrice) / startPrice) : null
+          }
+
+          setPerformance({
+            week: getChange(7),
+            month: getChange(30),
+            month3: getChange(90),
+            month6: getChange(180),
+            year: getChange(365),
+            year5: getChange(365 * 5),
+            ytd: getDateChange(new Date(new Date().getFullYear(), 0, 1))
+          })
+        }
+      } catch (err) {
+        console.error("Performance data fetch error:", err)
+      }
+    }
+
+    fetchPerformanceData()
+  }, [symbol])
+
   const handleRangeChange = (range: string, interval: string) => {
     setChartRange(range)
     setChartInterval(interval)
@@ -248,55 +324,89 @@ export function QuoteView({ symbol, showBackButton = true }: QuoteViewProps) {
             <p className="text-muted-foreground ml-11">{price.longName || price.shortName || symbol}</p>
           </div>
 
-<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Day Range</CardTitle>
-              <Activity className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {formatNumber(price.regularMarketDayLow)} - {formatNumber(price.regularMarketDayHigh)}
-              </div>
-              <p className="text-xs text-muted-foreground">Open: {formatCurrency(price.regularMarketOpen)}</p>
-            </CardContent>
-          </Card>
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+           
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">52 Week Range</CardTitle>
-              <Activity className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {formatNumber(summary.fiftyTwoWeekLow)} - {formatNumber(summary.fiftyTwoWeekHigh)}
-              </div>
-              <p className="text-xs text-muted-foreground">Yearly fluctuation</p>
-            </CardContent>
-          </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1">
+                <CardTitle className="text-xs font-medium text-muted-foreground">Performance</CardTitle>
+                <TrendingUp className="h-3 w-3 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-3 gap-2 text-sm">
+                   <div>
+                      <div className="text-xs text-muted-foreground">1D</div>
+                      <div className={`font-bold ${price.regularMarketChangePercent >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        {formatPercent(price.regularMarketChangePercent)}
+                      </div>
+                   </div>
+                   <div>
+                      <div className="text-xs text-muted-foreground">1W</div>
+                      <div className={`font-bold ${performance.week && performance.week >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        {performance.week ? formatPercent(performance.week) : '-'}
+                      </div>
+                   </div>
+                   <div>
+                      <div className="text-xs text-muted-foreground">1M</div>
+                      <div className={`font-bold ${performance.month && performance.month >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        {performance.month ? formatPercent(performance.month) : '-'}
+                      </div>
+                   </div>
+                   <div>
+                      <div className="text-xs text-muted-foreground">6M</div>
+                      <div className={`font-bold ${performance.month6 && performance.month6 >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        {performance.month6 ? formatPercent(performance.month6) : '-'}
+                      </div>
+                   </div>
+                   <div>
+                      <div className="text-xs text-muted-foreground">1Y</div>
+                      <div className={`font-bold ${performance.year && performance.year >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        {performance.year ? formatPercent(performance.year) : '-'}
+                      </div>
+                   </div>
+                   <div>
+                      <div className="text-xs text-muted-foreground">5Y</div>
+                      <div className={`font-bold ${performance.year5 && performance.year5 >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                        {performance.year5 ? formatPercent(performance.year5) : '-'}
+                      </div>
+                   </div>
+                </div>
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Market Cap</CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{formatNumber(price.marketCap)}</div>
-              <p className="text-xs text-muted-foreground">Analyst Rating: {data.financialData?.targetMeanPrice ? formatCurrency(data.financialData.targetMeanPrice) : 'N/A'}</p>
-            </CardContent>
-          </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1">
+                <CardTitle className="text-xs font-medium text-muted-foreground">52 Week Range</CardTitle>
+                <Activity className="h-3 w-3 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg font-bold">
+                  {formatNumber(summary.fiftyTwoWeekLow)} - {formatNumber(summary.fiftyTwoWeekHigh)}
+                </div>
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Volume</CardTitle>
-              <BarChart3 className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{formatNumber(price.regularMarketVolume)}</div>
-              <p className="text-xs text-muted-foreground">Avg: {formatNumber(summary.averageVolume)}</p>
-            </CardContent>
-          </Card>
-        </div>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1">
+                <CardTitle className="text-xs font-medium text-muted-foreground">Market Cap</CardTitle>
+                <DollarSign className="h-3 w-3 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg font-bold">{formatNumber(price.marketCap)}</div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1">
+                <CardTitle className="text-xs font-medium text-muted-foreground">Volume</CardTitle>
+                <BarChart3 className="h-3 w-3 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg font-bold">{formatNumber(price.regularMarketVolume)}</div>
+                <div className="text-xs text-muted-foreground">Avg: {formatNumber(summary.averageVolume)}</div>
+              </CardContent>
+            </Card>
+          </div>
           <div className="flex items-end flex-col bg-card p-4 rounded-xl border border-border shadow-sm">
              <div className="flex items-center gap-2">
                 <span className="text-3xl font-bold">{formatCurrency(price.regularMarketPrice)}</span>
