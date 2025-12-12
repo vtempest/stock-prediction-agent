@@ -42,29 +42,29 @@ export function Header() {
             className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             <Users className="h-4 w-4" />
-            Agents
+            Research Agents
           </Link>
-          <Link
+          {/* <Link
             href="#workflow"
             className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             <GitBranch className="h-4 w-4" />
             Workflow
-          </Link>
+          </Link> */}
           <Link
             href="#strategies"
             className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             <Target className="h-4 w-4" />
-            Strategies
+            Algo Strategies
           </Link>
-          <Link
+          {/* <Link
             href="#signals"
             className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             <Radio className="h-4 w-4" />
             Signals
-          </Link>
+          </Link> */}
           <Link
             href="#prediction-markets"
             className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
@@ -72,13 +72,13 @@ export function Header() {
             <TrendingUp className="h-4 w-4" />
             Prediction Markets
           </Link>
-          <Link
+          {/* <Link
             href="#features"
             className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             <Sparkles className="h-4 w-4" />
             Features
-          </Link>
+          </Link> */}
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">

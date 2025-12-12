@@ -1,6 +1,3 @@
 {
-  "/api/docs/route": "app/api/docs/route.js",
-  "/api/openapi.json/route": "app/api/openapi.json/route.js",
-  "/api/stocks/trending/route": "app/api/stocks/trending/route.js",
   "/page": "app/page.js"
 }

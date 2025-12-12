@@ -87,22 +87,6 @@ export function BrokerPlatformsSection() {
     <section className="relative px-4 py-24 sm:px-6 lg:px-8 bg-muted/30">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-16">
-          <Badge variant="outline" className="mb-4 text-sm">
-            <Wallet className="h-3 w-3 mr-2" />
-            Broker Integrations
-          </Badge>
-
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-4">
-            Connect Your Favorite
-            <span className="block text-primary mt-2">Trading Platform</span>
-          </h2>
-
-          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Seamlessly integrate with leading brokers for automated trading. Execute strategies
-            across multiple platforms with institutional-grade APIs.
-          </p>
-        </div>
 
         {/* Broker Cards Grid */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 mb-12">
@@ -118,10 +102,10 @@ export function BrokerPlatformsSection() {
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 flex items-center justify-center">
+                    <div className="w-24 h-16 flex items-center justify-center bg-white p-2 rounded-md">
                       {broker.logo.startsWith('http') ? (
-                        <img 
-                          src={broker.logo} 
+                        <img
+                          src={broker.logo}
                           alt={`${broker.name} logo`}
                           className="w-full h-full object-contain"
                         />
@@ -226,15 +210,7 @@ export function BrokerPlatformsSection() {
           ))}
         </div>
 
-        {/* CTA */}
-        <div className="mt-12 text-center">
-          <p className="text-sm text-muted-foreground mb-4">
-            Need support for another broker?{" "}
-            <Link href="mailto:support@example.com" className="text-primary hover:underline">
-              Contact us
-            </Link>
-          </p>
-        </div>
+       
       </div>
     </section>
   )
