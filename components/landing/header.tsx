@@ -13,7 +13,6 @@ import {
   Radio,
   TrendingUp,
   Sparkles,
-  Github,
   Calendar,
 } from "lucide-react"
 import { useState } from "react"
@@ -147,7 +146,7 @@ export function Header() {
               <Sparkles className="h-4 w-4" />
               Features
             </Link>
-            <div className="flex gap-2 pt-2">
+            <div className="pt-2">
               <Button size="sm" className="w-full" asChild>
                 <Link href="https://takemymoney.timetravel.investments" target="_blank">
                   <Calendar className="mr-2 h-4 w-4" />
