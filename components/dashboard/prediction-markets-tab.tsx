@@ -27,16 +27,16 @@ export function PredictionMarketsTab() {
   const [markets, setMarkets] = useState<PolymarketMarket[]>([])
   const [loading, setLoading] = useState(true)
   const [limit, setLimit] = useState(20)
-  const [window, setWindow] = useState('24h')
+  const [timeWindow, setTimeWindow] = useState('24h')
 
   useEffect(() => {
     fetchMarkets()
-  }, [limit, window])
+  }, [limit, timeWindow])
 
   const fetchMarkets = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/polymarket/markets?limit=${limit}&window=${window}`)
+      const response = await fetch(`/api/polymarket/markets?limit=${limit}&window=${timeWindow}`)
       const data = await response.json()
       
       if (data.success) {
@@ -84,16 +84,16 @@ export function PredictionMarketsTab() {
         
         <div className="flex gap-2">
           <Button
-            variant={window === '24h' ? 'default' : 'outline'}
+            variant={timeWindow === '24h' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setWindow('24h')}
+            onClick={() => setTimeWindow('24h')}
           >
             24h Volume
           </Button>
           <Button
-            variant={window === 'total' ? 'default' : 'outline'}
+            variant={timeWindow === 'total' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setWindow('total')}
+            onClick={() => setTimeWindow('total')}
           >
             Total Volume
           </Button>
@@ -136,7 +136,7 @@ export function PredictionMarketsTab() {
                 </div>
 
                 {/* Outcomes */}
-                {market.outcomes && market.outcomePrices && (
+                {market.outcomes && market.outcomePrices && Array.isArray(market.outcomes) && Array.isArray(market.outcomePrices) && market.outcomes.length > 0 && (
                   <div className="space-y-2 mb-4">
                     {market.outcomes.map((outcome, idx) => (
                       <div key={idx} className="flex items-center justify-between">

@@ -76,6 +76,76 @@ export const openApiSpec = {
         }
       }
     },
+    "/stocks/delisted": {
+      get: {
+        tags: ["Stocks"],
+        summary: "Get delisted stocks",
+        description: "Retrieve list of delisted stocks or check if a specific symbol is delisted",
+        parameters: [
+          {
+            name: "symbol",
+            in: "query",
+            description: "Optional: Check if specific symbol is delisted",
+            schema: { type: "string" }
+          },
+          {
+            name: "exchange",
+            in: "query",
+            description: "Exchange code (default: US). Examples: US, LSE, TO",
+            schema: { type: "string", default: "US" }
+          },
+          {
+            name: "limit",
+            in: "query",
+            description: "Number of results to return (default: 50)",
+            schema: { type: "integer", default: 50 }
+          }
+        ],
+        responses: {
+          "200": {
+            description: "Successful response",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    success: { type: "boolean" },
+                    delisted: { type: "boolean" },
+                    count: { type: "integer" },
+                    total: { type: "integer" },
+                    data: {
+                      oneOf: [
+                        {
+                          type: "object",
+                          properties: {
+                            symbol: { type: "string" },
+                            name: { type: "string" },
+                            delistedDate: { type: "string" },
+                            reason: { type: "string" }
+                          }
+                        },
+                        {
+                          type: "array",
+                          items: {
+                            type: "object",
+                            properties: {
+                              symbol: { type: "string" },
+                              name: { type: "string" },
+                              delistedDate: { type: "string" },
+                              reason: { type: "string" }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/stocks/gainers": {
       get: {
         tags: ["Stocks"],

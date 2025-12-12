@@ -40,14 +40,14 @@ export async function GET(request: NextRequest) {
       volumeTotal: m.volumeNum,
       active: m.active,
       closed: m.closed,
-      outcomes: m.outcomes,
-      outcomePrices: m.outcomePrices,
+      outcomes: Array.isArray(m.outcomes) ? m.outcomes : [],
+      outcomePrices: Array.isArray(m.outcomePrices) ? m.outcomePrices : [],
       image: m.imageUrl || m.image,
       description: m.description,
       endDate: m.endDate,
       groupItemTitle: m.groupItemTitle,
       enableOrderBook: m.enableOrderBook,
-      tags: m.tags || [],
+      tags: Array.isArray(m.tags) ? m.tags : [],
     }))
 
     return NextResponse.json({

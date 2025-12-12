@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if GROQ API key is available
-    if (!config.apiKeys.groq) {
+    if (!config.apiKeys?.groq) {
       return NextResponse.json({
         role: 'assistant',
         content: '⚠️ GROQ API key is not configured. Please add GROQ_API_KEY to your environment variables.\n\nGet your free API key at: https://console.groq.com/keys',

@@ -7,6 +7,7 @@
     "dev": "next dev",
     "lint": "eslint .",
     "start": "next start",
+    "import:stocks": "bun lib/stocks/import-stock-names.ts",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:migrate": "drizzle-kit migrate",

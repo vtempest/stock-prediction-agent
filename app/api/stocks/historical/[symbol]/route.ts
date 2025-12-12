@@ -1,6 +1,8 @@
-// Historical Price Data API Route
+// Historical Stock Data API Route
 import { NextRequest, NextResponse } from 'next/server';
-import yahooFinance from 'yahoo-finance2';
+import YahooFinance from 'yahoo-finance2';
+
+const yahooFinance = new YahooFinance();
 
 export async function GET(
     request: NextRequest,
