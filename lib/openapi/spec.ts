@@ -11,7 +11,7 @@ export const openApiSpec = {
   },
   servers: [
     {
-      url: "https://timetavel.investments/api",
+      url: "https://timetravel.investments/api",
       description: "Production server"
     },
     {
@@ -196,6 +196,121 @@ export const openApiSpec = {
         }
       }
     },
+    "/zulu/search": {
+      get: {
+        tags: ["Zulu"],
+        summary: "Search Zulu traders",
+        description: "Search for Zulu traders with performance filters",
+        parameters: [
+          {
+            name: "minRoi",
+            in: "query",
+            description: "Minimum ROI percentage",
+            schema: { type: "number" }
+          },
+          {
+            name: "minWinRate",
+            in: "query",
+            description: "Minimum Win Rate percentage",
+            schema: { type: "number" }
+          },
+          {
+            name: "maxDrawdown",
+            in: "query",
+            description: "Maximum Drawdown percentage",
+            schema: { type: "number" }
+          },
+          {
+            name: "isEa",
+            in: "query",
+            description: "Filter by EA (Expert Advisor) usage",
+            schema: { type: "boolean" }
+          },
+          {
+            name: "limit",
+            in: "query",
+            description: "Max results (default: 50)",
+            schema: { type: "integer", default: 50 }
+          }
+        ],
+        responses: {
+          "200": {
+            description: "Successful response"
+          }
+        }
+      }
+    },
+    "/zulu/top-rank": {
+      get: {
+        tags: ["Zulu"],
+        summary: "Get top ranked traders",
+        description: "Get list of top ranked Zulu traders",
+        parameters: [
+          {
+            name: "limit",
+            in: "query",
+            description: "Max results (default: 50)",
+            schema: { type: "integer", default: 50 }
+          }
+        ],
+        responses: {
+          "200": {
+            description: "Successful response"
+          }
+        }
+      }
+    },
+    "/polymarket/markets": {
+      get: {
+        tags: ["Polymarket"],
+        summary: "Get prediction markets",
+        description: "Get active Polymarket prediction markets",
+        parameters: [
+          {
+            name: "limit",
+            in: "query",
+            description: "Max results (default: 20)",
+            schema: { type: "integer", default: 20 }
+          },
+          {
+            name: "window",
+            in: "query",
+            description: "Time window for sorting (24h, total)",
+            schema: { type: "string", default: "24h" }
+          }
+        ],
+        responses: {
+          "200": {
+            description: "Successful response"
+          }
+        }
+      }
+    },
+    "/polymarket/positions": {
+      post: {
+        tags: ["Polymarket"],
+        summary: "Get trader positions",
+        description: "Get positions for a specific Polymarket trader",
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  trader_id: { type: "string" }
+                },
+                required: ["trader_id"]
+              }
+            }
+          }
+        },
+        responses: {
+          "200": {
+            description: "Successful response"
+          }
+        }
+      }
+    },
     "/stocks/autocomplete": {
       get: {
         tags: ["Stocks"],
@@ -240,62 +355,6 @@ export const openApiSpec = {
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/stocks/filings/{symbol}": {
-      get: {
-        tags: ["Stocks"],
-        summary: "Get SEC filings",
-        description: "Retrieve recent SEC filings (Forms 10-K, 10-Q, 8-K, etc.) for a company using its CIK",
-        parameters: [
-          {
-            name: "symbol",
-            in: "path",
-            required: true,
-            description: "Stock symbol (e.g., AAPL)",
-            schema: { type: "string" }
-          },
-          {
-            name: "limit",
-            in: "query",
-            description: "Number of filings to return (default: 20)",
-            schema: { type: "integer", default: 20 }
-          }
-        ],
-        responses: {
-          "200": {
-            description: "Successful response",
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
-                  properties: {
-                    success: { type: "boolean" },
-                    symbol: { type: "string" },
-                    cik: { type: "string" },
-                    companyName: { type: "string" },
-                    filings: {
-                      type: "array",
-                      items: {
-                        type: "object",
-                        properties: {
-                          form: { type: "string" },
-                          filingDate: { type: "string" },
-                          accessionNumber: { type: "string" },
-                          primaryDocument: { type: "string" },
-                          url: { type: "string" }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            description: "Symbol or CIK not found"
           }
         }
       }
