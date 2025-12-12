@@ -4,6 +4,7 @@ import * as schema from "./db/schema"
 
 export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET || process.env.AUTH_SECRET,
+  baseURL: process.env.NEXT_PUBLIC_APP_URL,
   database: {
     provider: "sqlite",
     db: db as any,
