@@ -7,11 +7,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 // @ts-ignore
-import { ArrowLeft, Loader2, TrendingUp, TrendingDown, DollarSign, Activity, BarChart3 } from "lucide-react"
+import { ArrowLeft, Loader2, TrendingUp, TrendingDown, DollarSign, Activity, BarChart3, Star } from "lucide-react"
 import Link from "next/link"
+import { useSession } from "@/lib/auth-client"
 import { ReactGrid, Column, Row } from "@silevis/reactgrid"
 import "@silevis/reactgrid/styles.css"
 import { StockChart } from "@/components/dashboard/stock-chart"
+import { TradeModal } from "@/components/dashboard/trade-modal"
 
 interface QuoteData {
   symbol: string
@@ -59,6 +61,7 @@ interface QuoteViewProps {
 
 export function QuoteView({ symbol, showBackButton = true }: QuoteViewProps) {
   const router = useRouter()
+  const { data: session } = useSession()
   const [data, setData] = useState<QuoteData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
@@ -66,6 +69,29 @@ export function QuoteView({ symbol, showBackButton = true }: QuoteViewProps) {
   const [chartLoading, setChartLoading] = useState(true)
   const [chartRange, setChartRange] = useState("1y")
   const [chartInterval, setChartInterval] = useState("1d")
+  const [isInWatchlist, setIsInWatchlist] = useState(false)
+  const [watchlistLoading, setWatchlistLoading] = useState(false)
+  const [tradeModalOpen, setTradeModalOpen] = useState(false)
+
+  // Check if symbol is in watchlist
+  useEffect(() => {
+    if (!symbol || !session?.user) return
+
+    const checkWatchlist = async () => {
+      try {
+        const res = await fetch('/api/user/watchlist')
+        const json = await res.json()
+        if (json.success && json.data) {
+          const inWatchlist = json.data.some((item: any) => item.symbol === symbol.toUpperCase())
+          setIsInWatchlist(inWatchlist)
+        }
+      } catch (err) {
+        console.error('Error checking watchlist:', err)
+      }
+    }
+
+    checkWatchlist()
+  }, [symbol, session])
 
   useEffect(() => {
     if (!symbol) return
@@ -208,6 +234,47 @@ export function QuoteView({ symbol, showBackButton = true }: QuoteViewProps) {
     setChartInterval(interval)
   }
 
+  const toggleWatchlist = async () => {
+    if (!session?.user) {
+      alert('Please sign in to add to watchlist')
+      return
+    }
+
+    setWatchlistLoading(true)
+    try {
+      if (isInWatchlist) {
+        // Remove from watchlist
+        const res = await fetch(`/api/user/watchlist?symbol=${symbol}`, {
+          method: 'DELETE',
+        })
+        const json = await res.json()
+        if (json.success) {
+          setIsInWatchlist(false)
+        }
+      } else {
+        // Add to watchlist
+        const res = await fetch('/api/user/watchlist', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            symbol: symbol.toUpperCase(),
+            name: data?.price?.longName || data?.price?.shortName || symbol,
+          }),
+        })
+        const json = await res.json()
+        if (json.success) {
+          setIsInWatchlist(true)
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling watchlist:', error)
+    } finally {
+      setWatchlistLoading(false)
+    }
+  }
+
   // Helper to format large numbers
   const formatNumber = (num: number) => {
     if (!num) return "N/A"
@@ -318,7 +385,35 @@ export function QuoteView({ symbol, showBackButton = true }: QuoteViewProps) {
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="space-y-1">
             <div className="flex items-center gap-3">
-             
+              {session?.user && (
+                <>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={toggleWatchlist}
+                    disabled={watchlistLoading}
+                    className="h-8 w-8"
+                    title={isInWatchlist ? "Remove from watchlist" : "Add to watchlist"}
+                  >
+                    <Star
+                      className={`h-5 w-5 ${
+                        isInWatchlist
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "text-muted-foreground"
+                      }`}
+                    />
+                  </Button>
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={() => setTradeModalOpen(true)}
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    <TrendingUp className="h-4 w-4 mr-2" />
+                    Buy / Short
+                  </Button>
+                </>
+              )}
             </div>
             </div>
 
@@ -416,7 +511,11 @@ export function QuoteView({ symbol, showBackButton = true }: QuoteViewProps) {
                 <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
               </div>
             ) : (
-              <StockChart data={chartData} symbol={symbol} onRangeChange={handleRangeChange} />
+              <StockChart
+                data={chartData}
+                symbol={symbol}
+                onRangeChange={handleRangeChange}
+              />
             )}
           </CardContent>
         </Card>
@@ -454,6 +553,15 @@ export function QuoteView({ symbol, showBackButton = true }: QuoteViewProps) {
          </Card> */}
 
       </div>
+
+      {/* Trade Modal */}
+      <TradeModal
+        open={tradeModalOpen}
+        onOpenChange={setTradeModalOpen}
+        symbol={symbol}
+        currentPrice={price.regularMarketPrice}
+        stockName={price.longName || price.shortName || symbol}
+      />
     </div>
   )
 }

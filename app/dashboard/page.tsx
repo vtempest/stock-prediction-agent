@@ -13,6 +13,7 @@ import { CopyTradingTab } from "@/components/dashboard/copy-trading-tab"
 import { RiskPortfolioTab } from "@/components/dashboard/risk-portfolio-tab"
 import { ApiDataTab } from "@/components/dashboard/api-data-tab"
 import { AlpacaTradingTab } from "@/components/dashboard/alpaca-trading-tab"
+import { WatchlistTab } from "@/components/dashboard/watchlist-tab"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Loader2, LogIn } from "lucide-react"
@@ -122,6 +123,10 @@ function DashboardContent() {
 
         <TabsContent value="overview" className="space-y-6 mt-6">
           <OverviewTab />
+        </TabsContent>
+
+        <TabsContent value="watchlist" className="space-y-6 mt-6">
+          <WatchlistTab />
         </TabsContent>
 
         <TabsContent value="api-data" className="space-y-6 mt-6">

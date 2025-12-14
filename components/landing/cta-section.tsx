@@ -32,9 +32,16 @@ export function CTASection() {
               </Link>
             </Button>
 
-            <Button variant="outline" size="lg" asChild className="w-full">
+            {/* <Button variant="outline" size="lg" asChild className="w-full">
               <Link href="/demo" target="_blank" rel="noopener noreferrer">
                 Demo Data
+              </Link>
+            </Button> */}
+
+
+            <Button variant="outline" size="lg" asChild className="w-full">
+              <Link href="/pitchdeck.html" target="_blank" rel="noopener noreferrer">
+                Outline Slides
               </Link>
             </Button>
 

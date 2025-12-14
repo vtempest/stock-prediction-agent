@@ -42,7 +42,8 @@
     "./dist/types/**/*.ts",
     "dist/types/**/*.ts",
     "dist/dev/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
+    ".next/dev/types/**/*.ts",
+    "./dist/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

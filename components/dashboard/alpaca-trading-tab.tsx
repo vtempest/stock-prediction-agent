@@ -240,7 +240,7 @@ function StrategyChatInterface() {
       </Card>
 
       {/* Quick Actions */}
-      <div className="grid gap-4 md:grid-cols-3">
+      {/* <div className="grid gap-4 md:grid-cols-3">
         <Card className="p-4">
           <h4 className="font-medium mb-2 flex items-center">
             <TrendingUp className="h-4 w-4 mr-2 text-green-500" />
@@ -294,7 +294,7 @@ function StrategyChatInterface() {
             Explore
           </Button>
         </Card>
-      </div>
+      </div> */}
     </div>
   )
 }

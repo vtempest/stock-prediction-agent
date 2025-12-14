@@ -33,7 +33,7 @@ export function HeroSection() {
           <span className="block text-primary">Everyday Investors</span>
         </h1>
 
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+        <p className="mx-auto mt-6 max-w-2xl rounded-lg border border-border bg-background/50 p-4 text-lg leading-relaxed text-foreground backdrop-blur-sm">
           Deploy specialized AI agents with algorithmic trading strategies across stocks and prediction markets. Track
           sharp traders on Polymarket & Kalshi, analyze outcomes with LLM-powered research, and execute momentum,
           breakout, and scalping strategies with institutional-grade risk management.

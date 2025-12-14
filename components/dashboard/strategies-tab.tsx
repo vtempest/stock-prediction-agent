@@ -11,8 +11,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { demoStrategies, Strategy } from "@/lib/demo-data"
-import { Play, Pause, Settings, TrendingUp, Activity, ChevronDown, ChevronUp } from "lucide-react"
+import { Play, Pause, Settings, TrendingUp, Activity, ChevronDown, ChevronUp, ExternalLink } from "lucide-react"
 
 interface BacktestResult {
   strategyName: string
@@ -34,9 +35,10 @@ export function StrategiesTab() {
 
   const [strategies, setStrategies] = useState<Strategy[]>(demoStrategies)
   const [sortOption, setSortOption] = useState<'likes' | 'name' | 'pnl'>('likes')
-  const [expandedStrategyId, setExpandedStrategyId] = useState<string | null>(null)
-  const [loadingDetails, setLoadingDetails] = useState<string | null>(null)
+  const [selectedStrategyForModal, setSelectedStrategyForModal] = useState<Strategy | null>(null)
+  const [loadingDetails, setLoadingDetails] = useState<boolean>(false)
   const [showAllStrategies, setShowAllStrategies] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [backtestParams, setBacktestParams] = useState({
     symbol: symbolFromUrl || 'AAPL',
     startDate: '2022-01-01',
@@ -97,39 +99,34 @@ export function StrategiesTab() {
     fetchAlgoScripts()
   }, [])
 
-  const handleExpandStrategy = async (strategyId: string) => {
-    if (expandedStrategyId === strategyId) {
-      setExpandedStrategyId(null)
-      return
-    }
+  const handleOpenStrategyModal = async (strategyId: string) => {
+    const strategy = strategies.find(s => s.id === strategyId)
+    if (!strategy) return
+
+    setSelectedStrategyForModal(strategy)
+    setIsModalOpen(true)
 
     // If description/source is missing, fetch it
-    const strategy = strategies.find(s => s.id === strategyId)
-    if (strategy && (!strategy.description || !strategy.source) && !strategy.id.startsWith('demo-')) { // Assuming demo IDs don't match algo URLs
-       setLoadingDetails(strategyId)
+    if ((!strategy.description || !strategy.source) && !strategy.id.startsWith('demo-')) {
+       setLoadingDetails(true)
        try {
-           const response = await fetch(`/api/strategies/algo-scripts?id=${strategyId}`)
+           const response = await fetch(`/api/strategies?id=${strategyId}`)
            if (response.ok) {
                const details = await response.json()
-               setStrategies(prev => prev.map(s => {
-                   if (s.id === strategyId) {
-                       return {
-                           ...s,
-                           description: details.description,
-                           source: details.source,
-                           winRate: details.description?.includes('Win Rate') ? parseFloat(details.description.match(/Win Rate\s*[|:]\s*([\d.]+)%?/)?.[1] || '0') : s.winRate
-                       }
-                   }
-                   return s
-               }))
+               const updatedStrategy = {
+                   ...strategy,
+                   description: details.description,
+                   source: details.source,
+               }
+               setSelectedStrategyForModal(updatedStrategy)
+               setStrategies(prev => prev.map(s => s.id === strategyId ? updatedStrategy : s))
            }
        } catch (error) {
            console.error("Failed to fetch strategy details", error)
        } finally {
-           setLoadingDetails(null)
+           setLoadingDetails(false)
        }
     }
-    setExpandedStrategyId(strategyId)
   }
 
   const sortedStrategies = [...strategies].sort((a, b) => {
@@ -402,34 +399,18 @@ export function StrategiesTab() {
               </div>
             </div>
 
-            {expandedStrategyId === strategy.id ? (
-                <div className="mb-4 text-sm" onClick={(e) => e.stopPropagation()}>
-                    {loadingDetails === strategy.id ? (
-                        <div className="flex items-center text-muted-foreground animate-pulse">
-                            Loading details...
-                        </div>
-                    ) : (
-                        <div className="max-h-[300px] overflow-y-auto pr-2">
-                            <p className="whitespace-pre-wrap mb-4 text-muted-foreground text-xs">{strategy.description}</p>
-                            {strategy.source && (
-                                <div className="bg-muted p-2 rounded-md overflow-x-auto">
-                                    <pre className="text-xs font-mono">{strategy.source}</pre>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            ) : (
-                <div 
-                    className="text-xs text-muted-foreground mb-3 italic cursor-pointer hover:underline hover:text-primary w-fit" 
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        handleExpandStrategy(strategy.id)
-                    }}
-                >
-                    Click to view details
-                </div>
-            )}
+            <Button
+                variant="outline"
+                size="sm"
+                className="text-xs mb-3 w-full"
+                onClick={(e) => {
+                    e.stopPropagation()
+                    handleOpenStrategyModal(strategy.id)
+                }}
+            >
+                <ExternalLink className="h-3 w-3 mr-2" />
+                View Details
+            </Button>
             
             <div className="flex justify-end pt-2">
                <Button variant="ghost" size="icon" onClick={(e) => e.stopPropagation()}>
@@ -439,6 +420,75 @@ export function StrategiesTab() {
           </Card>
         ))}
       </div>
+
+      {/* Strategy Details Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">{selectedStrategyForModal?.name}</DialogTitle>
+            <div className="flex items-center gap-2 mt-2">
+              {selectedStrategyForModal?.likes !== undefined && (
+                <Badge variant="secondary" className="text-xs">
+                  ❤️ {selectedStrategyForModal.likes}
+                </Badge>
+              )}
+              <span className="text-sm text-muted-foreground">
+                by {selectedStrategyForModal?.author || 'Unknown'}
+              </span>
+              {selectedStrategyForModal?.created && (
+                <span className="text-sm text-muted-foreground">
+                  • {new Date(selectedStrategyForModal.created).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: '2-digit',
+                    year: 'numeric',
+                  })}
+                </span>
+              )}
+            </div>
+          </DialogHeader>
+
+          <div className="mt-6 space-y-6">
+            {loadingDetails ? (
+              <div className="flex items-center justify-center py-8 text-muted-foreground animate-pulse">
+                Loading strategy details...
+              </div>
+            ) : (
+              <>
+                {selectedStrategyForModal?.description && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3">Description</h3>
+                    <p className="whitespace-pre-wrap text-sm text-muted-foreground">
+                      {selectedStrategyForModal.description}
+                    </p>
+                  </div>
+                )}
+
+                {selectedStrategyForModal?.source && (
+                  <div>
+                    <h3 className="text-lg font-semibold mb-3">Source Code</h3>
+                    <div className="bg-muted p-4 rounded-md overflow-x-auto">
+                      <pre className="text-xs font-mono">{selectedStrategyForModal.source}</pre>
+                    </div>
+                  </div>
+                )}
+
+                {selectedStrategyForModal?.id && !selectedStrategyForModal.id.startsWith('demo-') && (
+                  <div className="flex justify-end">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => window.open(`https://www.tradingview.com/script/${selectedStrategyForModal.id}`, '_blank')}
+                    >
+                      <ExternalLink className="h-4 w-4 mr-2" />
+                      View on TradingView
+                    </Button>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

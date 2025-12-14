@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useRef, useEffect } from "react"
 import { Chart, CandlestickSeries, LineSeries, HistogramSeries, AreaSeries, TimeScale, TimeScaleFitContentTrigger, Pane } from "lightweight-charts-react-components"
 import { Button } from "@/components/ui/button"
 import { rsi } from "indicatorts"
@@ -9,6 +9,7 @@ import { atr } from "indicatorts"
 import { stochasticOscillator } from "indicatorts"
 import { cci } from "indicatorts"
 import { obv } from "indicatorts"
+import type { IChartApi } from "lightweight-charts"
 
 interface ChartData {
   date: string
@@ -317,7 +318,7 @@ export function StockChart({ data, symbol, onRangeChange }: StockChartProps) {
 
       {/* Chart */}
       <div className="relative">
-        <Chart 
+        <Chart
           key={`chart-${showVolume}-${selectedIndicator}-${chartType}`}
           options={chartOptions}
         >

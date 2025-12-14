@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Switch } from "@/components/ui/switch"
 import { Input } from "@/components/ui/input"
-import { demoRiskMetrics, demoPositions, demoTrades } from "@/lib/demo-data"
+// import { demoRiskMetrics, demoPositions, demoTrades } from "@/lib/demo-data"
 import { useSession } from "@/lib/auth-client"
 import {
   Activity,
@@ -20,7 +20,7 @@ import {
 
 export function RiskPortfolioTab() {
   const { data: session } = useSession()
-  const risk = demoRiskMetrics
+  const risk = session ? [] : demoRiskMetrics
   const positions = session ? [] : demoPositions  // Empty array if signed in
   const trades = session ? [] : demoTrades  // Empty array if signed in
 
@@ -74,7 +74,7 @@ export function RiskPortfolioTab() {
         <div className="mt-6">
           <h3 className="font-semibold mb-3">Concentration Risk</h3>
           <div className="space-y-3">
-            {risk.topConcentrations.map((item, i) => (
+            {risk.topConcentrations?.map((item, i) => (
               <div key={i}>
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm font-medium">{item.name}</span>

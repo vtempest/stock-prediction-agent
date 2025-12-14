@@ -121,6 +121,15 @@ export const strategies = sqliteTable("strategies", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
 })
 
+// User Watchlist
+export const watchlist = sqliteTable("watchlist", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  symbol: text("symbol").notNull(),
+  name: text("name"), // Stock name (optional)
+  addedAt: integer("added_at", { mode: "timestamp" }).notNull(),
+})
+
 // User Watchlist/Signals
 export const signals = sqliteTable("signals", {
   id: text("id").primaryKey(),

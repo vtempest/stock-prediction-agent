@@ -372,7 +372,7 @@ export function MarketCorrelations() {
                             <span>•</span>
                             <span className="flex items-center gap-1">
                               <TrendingUp className="h-3 w-3" />
-                              {correlation.correlation.toFixed(0)}% correlation
+                              {(100*correlation.correlation).toFixed(0)}% correlation
                             </span>
                           </CardDescription>
                         </div>

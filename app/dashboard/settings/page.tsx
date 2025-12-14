@@ -128,13 +128,7 @@ const BROKERS = [
     fields: ["ibkrUsername", "ibkrPassword"],
     docs: "https://www.interactivebrokers.com/api/",
     keys: "https://www.interactivebrokers.com/",
-  },
-  {
-    name: "TD Ameritrade",
-    fields: ["tdaApiKey", "tdaRefreshToken"],
-    docs: "https://developer.tdameritrade.com/apis",
-    keys: "https://developer.tdameritrade.com/user/me/apps",
-  },
+  }
 ];
 
 const DATA_PROVIDERS = [

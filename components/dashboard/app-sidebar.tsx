@@ -5,25 +5,27 @@ import { Suspense } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
-import { 
-  LayoutDashboard, 
-  Activity, 
-  TrendingUp, 
-  Signal, 
-  Users, 
-  Zap, 
-  Target, 
-  Copy, 
+import {
+  LayoutDashboard,
+  Activity,
+  TrendingUp,
+  Signal,
+  Users,
+  Zap,
+  Target,
+  Copy,
   Shield,
-  Settings, 
+  Settings,
   HelpCircle,
-  ChevronUp, 
-  User2, 
-  LogOut, 
+  ChevronUp,
+  User2,
+  LogOut,
   Sparkles,
   CreditCard,
   Search,
-  Bell
+  Bell,
+  Star,
+  Trash2
 } from 'lucide-react'
 import { useSession, signOut } from "@/lib/auth-client"
 
@@ -128,13 +130,25 @@ function SidebarSearch() {
       {isOpen && results.length > 0 && (
         <div className="absolute top-full left-2 right-2 mt-1 bg-popover border border-border rounded-md shadow-md z-50 max-h-60 overflow-y-auto">
           {results.map((item) => (
-            <div 
+            <div
               key={item.symbol}
-              className="px-3 py-2 cursor-pointer hover:bg-accent hover:text-accent-foreground text-sm flex justify-between items-center"
+              className="px-3 py-2 cursor-pointer hover:bg-accent hover:text-accent-foreground text-sm flex items-center gap-2"
               onClick={() => handleSelect(item.symbol)}
             >
-              <span className="font-bold">{item.symbol}</span>
-              <span className="text-muted-foreground truncate max-w-[80px] text-xs">{item.name}</span>
+              <img
+                src={`https://img.logo.dev/ticker/${item.symbol}?token=pk_TttrZhYwSReZxFePkXo-Bg&size=38&retina=true`}
+                alt={`${item.symbol} logo`}
+                className="w-5 h-5 rounded object-contain flex-shrink-0 bg-white"
+                onError={(e) => {
+                  // Fallback to hiding if logo fails to load
+                  const target = e.target as HTMLImageElement
+                  target.style.display = 'none'
+                }}
+              />
+              <div className="flex items-center justify-between flex-1 min-w-0">
+                <span className="font-bold text-xs">{item.symbol}</span>
+                <span className="text-muted-foreground truncate max-w-[100px] text-xs ml-1">{item.name}</span>
+              </div>
             </div>
           ))}
         </div>
@@ -145,13 +159,17 @@ function SidebarSearch() {
 
 // Navigation Configuration
 const navigationGroups = [
-  
+  {
+    title: "Market",
+    items: [
+      { name: "Watchlist", tab: "watchlist", icon: Star },
+      { name: "Research Agents", tab: "api-data", icon: Activity },
+      { name: "Strategies", tab: "strategies", icon: Zap },
+    ],
+  },
   {
     title: "Trading",
     items: [
-      { name: "Research Agents", tab: "api-data", icon: Activity },
-      // { name: "Agents", tab: "agents", icon: Users },
-      { name: "Strategies", tab: "strategies", icon: Zap },
       { name: "Copy Trading", tab: "copy-trading", icon: Copy },
       { name: "Prediction Markets", tab: "prediction-markets", icon: Target },
     ],
@@ -160,7 +178,6 @@ const navigationGroups = [
     title: "Risk & Portfolio",
     items: [
       { name: "Overview", tab: "overview", icon: LayoutDashboard },
-
       { name: "Risk Management", tab: "risk", icon: Shield },
       { name: "Alpaca Trading", tab: "alpaca", icon: TrendingUp },
     ],
@@ -224,8 +241,8 @@ function AppSidebarContent({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {group.items.map((item) => (
                   <SidebarMenuItem key={item.name}>
-                    <SidebarMenuButton 
-                      asChild 
+                    <SidebarMenuButton
+                      asChild
                       isActive={isActive(item.tab)}
                       tooltip={item.name}
                     >

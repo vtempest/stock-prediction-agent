@@ -176,7 +176,7 @@ export function MarketDebate({ marketId, question, currentYesPrice, currentNoPri
           {debate && (
             <div className="space-y-4">
               {/* Current Odds */}
-              <Card className="p-4 bg-muted/50">
+              {/* <Card className="p-4 bg-muted/50">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
                     <div className="text-sm text-muted-foreground mb-1">YES Odds</div>
@@ -191,7 +191,7 @@ export function MarketDebate({ marketId, question, currentYesPrice, currentNoPri
                     </div>
                   </div>
                 </div>
-              </Card>
+              </Card> */}
 
               {/* YES Case */}
               <Card className="p-5 border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-950/20">
