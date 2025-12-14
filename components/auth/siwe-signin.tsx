@@ -31,11 +31,16 @@ export function SiweSignIn() {
       const network = await provider.getNetwork()
       const chainId = Number(network.chainId)
 
-      // 1. Get Nonce
-      // We cast to any because typescript might not infer the plugin methods immediately
+      // 1. Get Nonce from backend
+      // Using direct client method which corresponds to the 'getNonce' config in auth.ts
       const nonce = await (authClient as any).siwe.generateNonce()
+      
+      if (!nonce) {
+        throw new Error("Failed to generate nonce")
+      }
 
       // 2. Create SIWE Message
+      // Standard SIWE message format
       const message = new SiweMessage({
         domain: window.location.host,
         address,
@@ -48,20 +53,20 @@ export function SiweSignIn() {
 
       const preparedMessage = message.prepareMessage()
 
-      // 3. Sign Message
+      // 3. Sign Message with Wallet
       const signature = await signer.signMessage(preparedMessage)
 
-      // 4. Verify & Sign In
-      // Use verify() instead of signIn() as per better-auth SIWE docs
+      // 4. Verify Signature & Create Session
+      // Using verify() which hits the correct better-auth endpoint
       const { data, error } = await (authClient as any).siwe.verify({
         message: preparedMessage,
         signature,
       })
 
       if (error) {
-         console.error("SIWE Verify Error:", error)
-         setIsLoading(false)
-         return
+        console.error("SIWE Verify Error:", error)
+        setIsLoading(false)
+        return
       }
 
       if (data) {
