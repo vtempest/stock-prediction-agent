@@ -86,7 +86,14 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <Button size="sm" asChild>
+          
+            <Button size="sm" asChild className="w-[100px]">
+              <Link href="/login" target="_blank" rel="noopener noreferrer">
+                Login
+              </Link>
+            </Button>
+            
+            <Button  variant="outline" size="sm" asChild>
             <Link href="https://takemymoney.timetravel.investments" target="_blank">
               <Calendar className="mr-2 h-4 w-4" />
               Book Demo

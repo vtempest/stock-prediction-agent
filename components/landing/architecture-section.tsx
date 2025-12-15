@@ -31,7 +31,9 @@ export function ArchitectureSection() {
               />
           </div>
           <div className="flex flex-col justify-center">
-            <h3 className="text-2xl font-bold text-foreground">Your Personal Hedge Fund Analyst Team</h3>
+            <h3 className="text-2xl font-bold text-foreground"> 
+              Automation of Hedge Fund Level of Research
+            </h3>
             <p className="mt-4 text-muted-foreground">
               Our AI agents analyze candlestick patterns, moving averages, and technical indicators in real-time,
               providing institutional-grade market insights.

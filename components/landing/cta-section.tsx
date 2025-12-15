@@ -32,11 +32,11 @@ export function CTASection() {
               </Link>
             </Button>
 
-            {/* <Button variant="outline" size="lg" asChild className="w-full">
-              <Link href="/demo" target="_blank" rel="noopener noreferrer">
-                Demo Data
+            <Button variant="outline" size="lg" asChild className="w-full">
+              <Link href="/api/docs" target="_blank" rel="noopener noreferrer">
+                API Docs
               </Link>
-            </Button> */}
+            </Button>
 
 
             <Button variant="outline" size="lg" asChild className="w-full">

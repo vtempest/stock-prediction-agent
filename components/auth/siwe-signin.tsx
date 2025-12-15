@@ -39,6 +39,9 @@ export function SiweSignIn() {
         throw new Error("Failed to generate nonce")
       }
 
+      console.log("SIWE Debug (Raw Nonce):", nonce, "Type:", typeof nonce)
+      console.log("SIWE Debug:", { domain: window.location.host, address, uri: window.location.origin, chainId, nonce })
+
       // 2. Create SIWE Message
       // Standard SIWE message format
       const message = new SiweMessage({

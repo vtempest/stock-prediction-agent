@@ -52,6 +52,12 @@ interface QuoteData {
   financialData?: {
     targetMeanPrice?: number
   }
+  summaryProfile?: {
+      sector?: string
+      industry?: string
+      longBusinessSummary?: string
+  }
+  peers?: string[]
 }
 
 interface TradeSignal {
@@ -307,7 +313,7 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
     return new Intl.NumberFormat('en-US', {
       style: 'percent',
       minimumFractionDigits: 0,
-      maximumFractionDigits: 1
+      maximumFractionDigits: 0
     }).format(num)
   }
 
@@ -453,19 +459,19 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
               <CardContent>
                 <div className="grid grid-cols-3 gap-2 text-sm">
                    <div>
-                      <div className="text-xs text-muted-foreground">1D</div>
+                      <div className="text-xs text-muted-foreground">D</div>
                       <div className={`font-bold ${price.regularMarketChangePercent >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                         {formatPercent(price.regularMarketChangePercent)}
                       </div>
                    </div>
                    <div>
-                      <div className="text-xs text-muted-foreground">1W</div>
+                      <div className="text-xs text-muted-foreground">W</div>
                       <div className={`font-bold ${performance.week && performance.week >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                         {performance.week ? formatPercent(performance.week) : '-'}
                       </div>
                    </div>
                    <div>
-                      <div className="text-xs text-muted-foreground">1M</div>
+                      <div className="text-xs text-muted-foreground">M</div>
                       <div className={`font-bold ${performance.month && performance.month >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                         {performance.month ? formatPercent(performance.month) : '-'}
                       </div>
@@ -477,7 +483,7 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
                       </div>
                    </div>
                    <div>
-                      <div className="text-xs text-muted-foreground">1Y</div>
+                      <div className="text-xs text-muted-foreground">Y</div>
                       <div className={`font-bold ${performance.year && performance.year >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                         {performance.year ? formatPercent(performance.year) : '-'}
                       </div>
@@ -560,6 +566,56 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
                 </div>
             </CardContent>
          </Card> */}
+
+
+
+        {/* Industry & Peers */}
+        <div className="grid gap-4 md:grid-cols-2">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Industry & Sector</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="space-y-4">
+                        <div>
+                            <div className="text-sm font-medium text-muted-foreground">Sector</div>
+                            <div className="text-lg font-bold">{data.summaryProfile?.sector || "N/A"}</div>
+                        </div>
+                        <div>
+                            <div className="text-sm font-medium text-muted-foreground">Industry</div>
+                            <div className="text-lg font-bold">{data.summaryProfile?.industry || "N/A"}</div>
+                        </div>
+                        <div>
+                            <div className="text-sm font-medium text-muted-foreground">Description</div>
+                            <p className="text-sm text-muted-foreground line-clamp-3">
+                                {data.summaryProfile?.longBusinessSummary || "No description available."}
+                            </p>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Related Stocks</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {data.peers && data.peers.length > 0 ? (
+                        <div className="flex flex-wrap gap-2">
+                            {data.peers.slice(0, 10).map((peerSymbol: string) => (
+                                <Link key={peerSymbol} href={`/dashboard/quote?symbol=${peerSymbol}`}>
+                                    <Badge variant="secondary" className="hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">
+                                        {peerSymbol}
+                                    </Badge>
+                                </Link>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-sm text-muted-foreground">No related stocks found.</div>
+                    )}
+                </CardContent>
+            </Card>
+        </div>
 
       </div>
 

@@ -56,7 +56,7 @@ export function StockChart({ data, symbol, onRangeChange, tradeSignals = [] }: S
   const lineSeriesRef = useRef<any>(null)
   const areaSeriesRef = useRef<any>(null)
 
-  // Initialize indicators from URL
+  // Initialize indicators from URL or Default
   useEffect(() => {
     const urlState = setStateInURL(null) as Record<string, string>
     const indicators = urlState.indicators
@@ -68,11 +68,18 @@ export function StockChart({ data, symbol, onRangeChange, tradeSignals = [] }: S
       
       if (initialTags.length > 0) {
         setActiveTags(prev => {
-          // Merge with existing symbol tags if any (though usually empty on mount)
            const symbolTags = prev.filter(t => t.type === 'symbol')
            return [...symbolTags, ...initialTags]
         })
       }
+    } else {
+        // DEFAULT: Enable all indicators if none specified
+        setActiveTags(prev => {
+            const symbolTags = prev.filter(t => t.type === 'symbol')
+            // Filter out symbols that might be in suggestions if any, just to be safe
+            const defaultIndicators = INDICATOR_SUGGESTIONS.filter(t => t.type === 'indicator')
+            return [...symbolTags, ...defaultIndicators]
+        })
     }
   }, [])
 
@@ -203,7 +210,7 @@ export function StockChart({ data, symbol, onRangeChange, tradeSignals = [] }: S
               data: values.map((v: any, i: number) => ({
                  time: times[i + (closes.length - values.length)], 
                  value: v 
-              })).filter((x: any) => x.value != null),
+              })).filter((x: any) => x.value != null && !isNaN(x.value)),
               options: { color: "#2196F3", lineWidth: 2 }
             }
           }
@@ -218,13 +225,13 @@ export function StockChart({ data, symbol, onRangeChange, tradeSignals = [] }: S
               type: "macd",
               name: "MACD (12, 26, 9)",
               data: {
-                macd: macdLine.map((v: any, i: number) => ({ time: times[i + offset], value: v })),
-                signal: signalLine.map((v: any, i: number) => ({ time: times[i + offset], value: v })),
+                macd: macdLine.map((v: any, i: number) => ({ time: times[i + offset], value: v })).filter((x: any) => x.value != null && !isNaN(x.value)),
+                signal: signalLine.map((v: any, i: number) => ({ time: times[i + offset], value: v })).filter((x: any) => x.value != null && !isNaN(x.value)),
                 histogram: histogram.map((v: any, i: number) => ({ 
                     time: times[i + offset], 
                     value: v,
                     color: v >= 0 ? "rgba(34, 197, 94, 0.5)" : "rgba(239, 68, 68, 0.5)"
-                }))
+                })).filter((x: any) => x.value != null && !isNaN(x.value))
               }
             }
           }
@@ -235,7 +242,7 @@ export function StockChart({ data, symbol, onRangeChange, tradeSignals = [] }: S
                id: tag.id,
                type: "line",
                name: "ATR (14)",
-               data: atrLine.map((v: any, i: number) => ({ time: times[i + offset], value: v })),
+               data: atrLine.map((v: any, i: number) => ({ time: times[i + offset], value: v })).filter((x: any) => x.value != null && !isNaN(x.value)),
                options: { color: "#FF9800", lineWidth: 2 }
              }
            }
@@ -247,8 +254,8 @@ export function StockChart({ data, symbol, onRangeChange, tradeSignals = [] }: S
                 type: "stochastic",
                 name: "Stoch (14, 3)",
                 data: {
-                  k: k.map((v: any, i: number) => ({ time: times[i + offset], value: v })),
-                  d: d.map((v: any, i: number) => ({ time: times[i + offset], value: v })),
+                  k: k.map((v: any, i: number) => ({ time: times[i + offset], value: v })).filter((x: any) => x.value != null && !isNaN(x.value)),
+                  d: d.map((v: any, i: number) => ({ time: times[i + offset], value: v })).filter((x: any) => x.value != null && !isNaN(x.value)),
                 }
               }
            }
@@ -259,7 +266,7 @@ export function StockChart({ data, symbol, onRangeChange, tradeSignals = [] }: S
                   id: tag.id,
                   type: "line",
                   name: "CCI (20)",
-                  data: values.map((v: any, i: number) => ({ time: times[i + offset], value: v })),
+                  data: values.map((v: any, i: number) => ({ time: times[i + offset], value: v })).filter((x: any) => x.value != null && !isNaN(x.value)),
                   options: { color: "#9C27B0", lineWidth: 2 }
               }
            }
@@ -269,7 +276,7 @@ export function StockChart({ data, symbol, onRangeChange, tradeSignals = [] }: S
                   id: tag.id,
                   type: "line",
                   name: "OBV",
-                  data: values.map((v: any, i: number) => ({ time: times[i], value: v })),
+                  data: values.map((v: any, i: number) => ({ time: times[i], value: v })).filter((x: any) => x.value != null && !isNaN(x.value)),
                   options: { color: "#4CAF50", lineWidth: 2 }
               }
            }

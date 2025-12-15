@@ -29,8 +29,8 @@ export function HeroSection() {
         </div>
 
         <h1 className="text-balance text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl leading-tight">
-          Chatbot Automation of Algorithmic Trading for
-          <span className="block text-primary">Everyday Investors</span>
+          Your Personal Hedge Fund Analyst Chatbot Team
+          <span className="block text-primary"> for Everyday Investors</span>
         </h1>
 
         <p className="mx-auto mt-6 max-w-2xl rounded-lg border border-border bg-background/50 p-4 text-lg leading-relaxed text-foreground backdrop-blur-sm">

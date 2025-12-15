@@ -354,12 +354,13 @@ export function StrategiesTab() {
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="debate-analyst">Debate Analyst</TabsTrigger>
-          <TabsTrigger value="news-researcher">News Researcher</TabsTrigger>
-          <TabsTrigger value="algo-strategies">Algo Strategies</TabsTrigger>
-          <TabsTrigger value="history">History</TabsTrigger>
-        </TabsList>
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="debate-analyst">Debate Analyst</TabsTrigger>
+            <TabsTrigger value="buy-sell">Buy / Sell</TabsTrigger>
+            <TabsTrigger value="news-researcher">News Researcher</TabsTrigger>
+            <TabsTrigger value="algo-strategies">Algo Strategies</TabsTrigger>
+            <TabsTrigger value="history">History</TabsTrigger>
+          </TabsList>
 
         {/* --- Tab 1: Debate Analyst --- */}
         <TabsContent value="debate-analyst" className="space-y-4 mt-4">
@@ -387,38 +388,8 @@ export function StrategiesTab() {
                      </Button>
                  </div>
                  
-                 {debateAnalystData ? (
+                  {debateAnalystData ? (
                     <div className="space-y-6">
-                        <Card className="p-6 border-2 border-primary/10">
-                            <div className="flex items-center justify-between mb-4">
-                              <h3 className="text-xl font-bold">Recommended Action</h3>
-                              {getDecisionBadge(debateAnalystData.decision.action)}
-                            </div>
-
-                            <div className="grid gap-4 md:grid-cols-2">
-                              <div>
-                                <div className="text-sm text-muted-foreground mb-1">Confidence</div>
-                                <div className="text-2xl font-bold">
-                                  {(debateAnalystData.decision.confidence * 100).toFixed(1)}%
-                                </div>
-                                <Progress value={debateAnalystData.decision.confidence * 100} className="mt-2" />
-                              </div>
-
-                              <div>
-                                <div className="text-sm text-muted-foreground mb-1">Position Size</div>
-                                <div className="text-2xl font-bold">
-                                  {(debateAnalystData.decision.position_size * 100).toFixed(1)}%
-                                </div>
-                                <Progress value={debateAnalystData.decision.position_size * 100} className="mt-2" />
-                              </div>
-                            </div>
-
-                            <div className="mt-6">
-                              <div className="text-sm font-medium mb-2">Reasoning</div>
-                                <MarkdownRenderer content={debateAnalystData.decision.reasoning} />
-                            </div>
-                        </Card>
-
                         {debateAnalystData.decision.debate_summary && (
                             <Card className="p-6">
                               <h3 className="text-xl font-bold mb-4">Debate Summary</h3>
@@ -486,6 +457,62 @@ export function StrategiesTab() {
                       </Button>
                     </div>
                   )}
+            </Card>
+        </TabsContent>
+
+        {/* --- Tab 1.5: Buy / Sell --- */}
+        <TabsContent value="buy-sell" className="space-y-4 mt-4">
+             <Card className="p-6">
+                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                     <div>
+                         <h3 className="text-xl font-bold">Buy / Sell Recommendation</h3>
+                         <p className="text-sm text-muted-foreground">Actionable signals based on agent consensus.</p>
+                     </div>
+                 </div>
+
+                 {debateAnalystData ? (
+                    <div className="space-y-6">
+                        <Card className="p-6 border-2 border-primary/10">
+                            <div className="flex items-center justify-between mb-4">
+                              <h3 className="text-xl font-bold">Recommended Action</h3>
+                              {getDecisionBadge(debateAnalystData.decision.action)}
+                            </div>
+
+                            <div className="grid gap-4 md:grid-cols-2">
+                              <div>
+                                <div className="text-sm text-muted-foreground mb-1">Confidence</div>
+                                <div className="text-2xl font-bold">
+                                  {(debateAnalystData.decision.confidence * 100).toFixed(1)}%
+                                </div>
+                                <Progress value={debateAnalystData.decision.confidence * 100} className="mt-2" />
+                              </div>
+
+                              <div>
+                                <div className="text-sm text-muted-foreground mb-1">Position Size</div>
+                                <div className="text-2xl font-bold">
+                                  {(debateAnalystData.decision.position_size * 100).toFixed(1)}%
+                                </div>
+                                <Progress value={debateAnalystData.decision.position_size * 100} className="mt-2" />
+                              </div>
+                            </div>
+
+                            <div className="mt-6">
+                              <div className="text-sm font-medium mb-2">Reasoning</div>
+                                <MarkdownRenderer content={debateAnalystData.decision.reasoning} />
+                            </div>
+                        </Card>
+                    </div>
+                 ) : (
+                    <div className="text-center py-12 bg-muted/20 rounded-lg border-2 border-dashed">
+                       <TrendingUp className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                       <p className="text-muted-foreground mb-4">
+                         Run an analysis in the Debate Analyst tab to generate Buy/Sell signals.
+                       </p>
+                       <Button onClick={() => setActiveTab("debate-analyst")}>
+                          Go to Debate Analyst
+                       </Button>
+                    </div>
+                 )}
             </Card>
         </TabsContent>
 

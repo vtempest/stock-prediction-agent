@@ -15,14 +15,25 @@ export async function GET(
 
         const modules = modulesParam
             ? modulesParam.split(',')
-            : ['price', 'summaryDetail', 'defaultKeyStatistics', 'financialData'];
+            : ['price', 'summaryDetail', 'defaultKeyStatistics', 'financialData', 'summaryProfile'];
 
         const data = await yahooFinance.quoteSummary(symbol, { modules: modules as any });
+        
+        // Fetch peers/related stocks
+        let peers: any[] = [];
+        try {
+            const recommendations = await yahooFinance.recommendationsBySymbol(symbol);
+            if (recommendations && Array.isArray(recommendations)) {
+                 peers = recommendations.map((r: any) => r.symbol);
+            }
+        } catch (e) {
+            console.warn(`Failed to fetch recommendations for ${symbol}`, e);
+        }
 
         return NextResponse.json({
             success: true,
             symbol,
-            data,
+            data: { ...data, peers }, // Append peers to data
             timestamp: new Date().toISOString()
         });
     } catch (error: any) {

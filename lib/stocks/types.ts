@@ -157,47 +157,7 @@ export interface PECalculationResult {
   statistics: PEStatistics | null;
 }
 
-// ==========================================
-// API Response Types
-// ==========================================
 
-export interface ApiError {
-  success: false;
-  error: string;
-  code: string;
-  timestamp: string;
-}
-
-export interface ApiSuccess<T> {
-  success: true;
-  data: T;
-  timestamp: string;
-}
-
-export type ApiResponse<T> = ApiSuccess<T> | ApiError;
-
-// ==========================================
-// Configuration Types
-// ==========================================
-
-export interface DownloaderConfig {
-  companyName: string;
-  emailAddress: string;
-}
-
-export interface FilingOptions {
-  includeAmends?: boolean;
-}
-
-export interface DownloadFilingOptions {
-  url: string;
-}
-
-export interface GetFilingHtmlOptions {
-  query?: string;
-  ticker?: string;
-  form?: string;
-}
 
 // ==========================================
 // Statistical Prediction Types

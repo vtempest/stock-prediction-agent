@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
-  ],
+, "lib/stocks/history.js"  ],
   "exclude": [
     "node_modules"
   ]
