@@ -9,7 +9,7 @@ export const logo = (
   <>
     <Image
       alt={title}
-      src={'/app'}
+      src={'/apple-touch-icon.png'}
       sizes='100px'
       width={28}
       height={28}

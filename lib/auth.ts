@@ -19,6 +19,12 @@ export const auth = betterAuth({
       verification: schema.verifications,
     },
   }),
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    },
+  },
   plugins: [
     siwe({
       domain: process.env.NEXT_PUBLIC_APP_DOMAIN || "localhost:3000",
