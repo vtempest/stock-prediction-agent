@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     // Configure Groq LLM
     const config: TradingConfig = {
       llmProvider: 'groq',
-      deepThinkLLM: 'llama-3.1-70b-versatile',
+      deepThinkLLM: 'llama-3.3-70b-versatile',
       quickThinkLLM: 'llama-3.1-8b-instant',
       temperature: 0.7,
       apiKeys: {
@@ -79,8 +79,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Use the quick model for responsive chat
-    const llm = createLLM(config, config.quickThinkLLM!)
+    // Use the deep-thinking Llama 3.3 model for high-quality trading advice
+    const llm = createLLM(config, config.deepThinkLLM!)
 
     // Combine available tools based on configuration
     const availableTools = [
@@ -211,7 +211,7 @@ export async function GET() {
     description: 'AI-powered trading strategy assistant using Groq LLMs',
     version: '1.0.0',
     provider: 'Groq',
-    model: 'llama-3.1-8b-instant',
+    model: 'llama-3.3-70b-versatile',
     features: [
       'Real-time strategy suggestions',
       'Custom trading rule design',

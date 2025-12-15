@@ -171,8 +171,7 @@ const navigationGroups = [
   {
     title: "Trading",
     items: [
-      { name: "Orders & Short", tab: "orders", icon: TrendingDown },
-      { name: "Options Advisor", tab: "options-advisor", icon: Sparkles },
+      { name: "Orders", tab: "orders", icon: TrendingUp },
       { name: "Copy Trading", tab: "copy-trading", icon: Copy },
       { name: "Prediction Markets", tab: "prediction-markets", icon: Target },
     ],
@@ -182,7 +181,6 @@ const navigationGroups = [
     items: [
       { name: "Overview", tab: "overview", icon: LayoutDashboard },
       { name: "Risk Management", tab: "risk", icon: Shield },
-      { name: "Alpaca Trading", tab: "alpaca", icon: TrendingUp },
     ],
   },
 ]

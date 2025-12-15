@@ -8,11 +8,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { OverviewTab } from "@/components/dashboard/overview-tab"
 import { AgentsTab } from "@/components/dashboard/agents-tab"
 import { StrategiesTab } from "@/components/dashboard/strategies-tab"
-import { OptionsAdvisor } from "@/components/dashboard/options-advisor"
 import { PredictionMarketsTab } from "@/components/dashboard/prediction-markets-tab"
 import { CopyTradingTab } from "@/components/dashboard/copy-trading-tab"
 import { RiskPortfolioTab } from "@/components/dashboard/risk-portfolio-tab"
-import { OrdersTab } from "@/components/dashboard/orders-tab"
+import { UnifiedOrdersTab } from "@/components/dashboard/unified-orders-tab"
 
 import { AlpacaTradingTab } from "@/components/dashboard/alpaca-trading-tab"
 import { MarketScanner } from "@/components/dashboard/market-scanner"
@@ -151,10 +150,6 @@ function DashboardContent() {
           <StrategiesTab />
         </TabsContent>
 
-        <TabsContent value="options-advisor" className="space-y-6 mt-6">
-          <OptionsAdvisor />
-        </TabsContent>
-
         <TabsContent value="prediction-markets" className="space-y-6 mt-6">
           <PredictionMarketsTab />
         </TabsContent>
@@ -168,7 +163,12 @@ function DashboardContent() {
         </TabsContent>
 
         <TabsContent value="orders" className="space-y-6 mt-6">
-          <OrdersTab />
+          <UnifiedOrdersTab />
+        </TabsContent>
+
+        {/* Legacy support for old options-advisor route - redirect to orders tab */}
+        <TabsContent value="options-advisor" className="space-y-6 mt-6">
+          <UnifiedOrdersTab />
         </TabsContent>
       </Tabs>
     </div>
