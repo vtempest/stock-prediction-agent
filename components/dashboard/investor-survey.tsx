@@ -571,7 +571,7 @@ export default function InvestorSurvey() {
                   "Not very interested at this time",
                 ]}
                 value={responses.overallInterest}
-                onChange={handleResponseChange}
+                onChange={(value) => handleResponseChange("overallInterest", value)}
               />
             </div>
 
@@ -650,7 +650,7 @@ export default function InvestorSurvey() {
                 id="additionalComments"
                 question="26. Any additional comments, questions, or suggestions?"
                 value={responses.additionalComments}
-                onChange={handleResponseChange}
+                onChange={(value) => handleResponseChange("additionalComments", value)}
                 placeholder="Share any additional thoughts..."
               />
             </div>

@@ -50,9 +50,9 @@ export default function LoginPage() {
           </div>
 
           <div className="text-center text-sm text-muted-foreground">
-            <Link href="/demo" className="underline hover:text-foreground">
+            {/* <Link href="/demo" className="underline hover:text-foreground">
               Try the demo
-            </Link>
+            </Link> */}
             {" · "}
             <Link href="/" className="underline hover:text-foreground">
               Learn more

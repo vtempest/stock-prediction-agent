@@ -25,5 +25,6 @@ export default defineConfig({
             },
         },
         copyPublicDir: false,
+        minify: true,
     },
 });
