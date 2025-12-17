@@ -13,6 +13,20 @@ export const users = sqliteTable("users", {
   alpacaSecretKey: text("alpaca_secret_key"),
   alpacaPaper: integer("alpaca_paper", { mode: "boolean" }).default(true),
   surveyResponse: text("survey_response"), // JSON string of survey responses
+
+  // Broker Questionnaire Fields
+  investmentSize: text("investment_size"), // Portfolio size range
+  annualIncome: text("annual_income"), // Income range
+  investmentExperience: text("investment_experience"), // Experience level with stocks
+  riskTolerance: text("risk_tolerance"), // Risk tolerance level
+  investmentObjectives: text("investment_objectives"), // Investment goals
+  employmentStatus: text("employment_status"), // Employment status
+  signatureBase64: text("signature_base64"), // Base64 signature image
+  agreedToTerms: integer("agreed_to_terms", { mode: "boolean" }).default(false),
+  agreedToRiskDisclosure: integer("agreed_to_risk_disclosure", { mode: "boolean" }).default(false),
+  agreementDate: integer("agreement_date", { mode: "timestamp" }),
+  questionnaireCompleted: integer("questionnaire_completed", { mode: "boolean" }).default(false),
+
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
   updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
 })

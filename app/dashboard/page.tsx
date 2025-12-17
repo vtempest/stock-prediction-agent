@@ -43,12 +43,31 @@ function DashboardContent() {
     router.push(`/dashboard?${currentParams.toString()}`, { scroll: false })
   }
 
-  // Initialize portfolio on first login
+  // Check if user completed questionnaire
   useEffect(() => {
     if (session?.user && !isPending) {
-      initializePortfolio()
+      checkQuestionnaireStatus()
     }
   }, [session, isPending])
+
+  const checkQuestionnaireStatus = async () => {
+    try {
+      const response = await fetch('/api/user/questionnaire-status')
+      const data = await response.json()
+
+      if (!data.completed) {
+        router.push('/questionnaire')
+        return
+      }
+
+      // If questionnaire is completed, initialize portfolio
+      initializePortfolio()
+    } catch (error) {
+      console.error('Error checking questionnaire status:', error)
+      // Continue to portfolio initialization if check fails
+      initializePortfolio()
+    }
+  }
 
   const initializePortfolio = async () => {
     try {
