@@ -27,4 +27,3 @@ export function createAlpacaClient(config?: Partial<AlpacaConfig>) {
   // })
 }
 
-export type { Alpaca }

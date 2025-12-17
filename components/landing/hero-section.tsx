@@ -73,19 +73,14 @@ export function HeroSection() {
             </div>
           </div>
 
-          <div className="w-full relative rounded-xl overflow-hidden shadow-2xl border border-border/50 bg-background/50 backdrop-blur-sm">
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="w-full h-auto object-cover"
-              poster="/images/hero-poster.png"
-            >
-              <source src="/public/images/autoinvest-ad.webm" type="video/webm" />
-              <source src="/images/autoinvest-ad.webm" type="video/webm" />
-              Your browser does not support the video tag.
-            </video>
+          <div className="w-full relative rounded-xl overflow-hidden shadow-2xl border border-border/50 bg-background/50 backdrop-blur-sm aspect-video">
+            <iframe
+              className="absolute inset-0 w-full h-full"
+              src="https://www.youtube.com/embed/Sns0krBn5WA?autoplay=1&mute=1&controls=0&loop=1&playlist=Sns0krBn5WA&rel=0"
+              title="Auto-invest Demo"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent pointer-events-none" />
           </div>
         </div>
