@@ -56,7 +56,10 @@ export function StockSearch({
         const data = await res.json()
         if (data.success) {
           setResults(data.data)
-          setIsOpen(true)
+          // Only open dropdown if input is focused
+          if (document.activeElement === wrapperRef.current?.querySelector('input')) {
+            setIsOpen(true)
+          }
         }
       } catch (err) {
         console.error("Autocomplete failed", err)

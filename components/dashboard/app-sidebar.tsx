@@ -63,6 +63,7 @@ import {
   DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { SettingsDialog } from "@/components/settings/settings-dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
@@ -130,7 +131,10 @@ function SidebarSearch() {
         const data = await res.json()
         if (data.success) {
           setResults(data.data)
-          setIsOpen(true)
+          // Only open dropdown if input is focused
+          if (document.activeElement === wrapperRef.current?.querySelector('input')) {
+            setIsOpen(true)
+          }
         }
       } catch (err) {
         console.error("Autocomplete failed", err)
@@ -332,16 +336,14 @@ function AppSidebarContent({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname === '/dashboard/settings'}
-                  tooltip="Settings"
-                >
-                  <Link href="/dashboard/settings">
-                    <Settings />
-                    <span className="group-data-[collapsible=icon]:hidden">Settings</span>
-                  </Link>
-                </SidebarMenuButton>
+                <SettingsDialog
+                  trigger={
+                    <SidebarMenuButton tooltip="Settings">
+                      <Settings />
+                      <span className="group-data-[collapsible=icon]:hidden">Settings</span>
+                    </SidebarMenuButton>
+                  }
+                />
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton
@@ -401,12 +403,14 @@ function AppSidebarContent({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   </div>
                 </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard/settings" className="cursor-pointer">
-                    <User2 className="mr-2 h-4 w-4" />
-                    Profile
-                  </Link>
-                </DropdownMenuItem>
+                <SettingsDialog
+                  trigger={
+                    <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      <User2 className="mr-2 h-4 w-4" />
+                      Profile
+                    </DropdownMenuItem>
+                  }
+                />
                 <DropdownMenuItem>
                   <CreditCard className="mr-2 h-4 w-4" />
                   Billing
