@@ -22,11 +22,19 @@ interface DebateAnalysis {
 
 // --- Tavily helpers ---
 
-const tavily = new TavilyClient({
-  apiKey: process.env.TAVILY_API_KEY!,
-}) // [web:70][web:80][web:83]
+let _tavily: TavilyClient | null = null
+
+function getTavilyClient(): TavilyClient {
+  if (!_tavily) {
+    _tavily = new TavilyClient({
+      apiKey: process.env.TAVILY_API_KEY || '',
+    })
+  }
+  return _tavily
+}
 
 async function researchQuestionWithTavily(question: string): Promise<string> {
+  const tavily = getTavilyClient()
   // Step 1: search for the question
   const searchRes = await tavily.search({
     query: question,

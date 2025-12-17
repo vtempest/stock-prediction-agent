@@ -8,6 +8,7 @@ import { TechnicalChart } from "./technical-chart"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import type { IChartApi, ISeriesApi } from "lightweight-charts"
+import { useTheme } from "next-themes"
 
 interface ChartTab {
   id: string
@@ -38,6 +39,7 @@ export function MultiChartView({ initialSymbol = "AAPL" }: MultiChartViewProps) 
   const [syncEnabled, setSyncEnabled] = useState(true)
   const [newSymbol, setNewSymbol] = useState("")
   const [loading, setLoading] = useState<Record<string, boolean>>({})
+  const { resolvedTheme } = useTheme()
 
   const chartRefs = useRef<Map<string, IChartApi>>(new Map())
   const seriesRefs = useRef<Map<string, ISeriesApi<any>>>(new Map())
@@ -142,7 +144,7 @@ export function MultiChartView({ initialSymbol = "AAPL" }: MultiChartViewProps) 
 
         isSyncing.current = true
         charts.forEach(([otherId, otherChart]) => {
-          if (otherId !== tabId) {
+          if (otherId !== tabId && timeRange) {
             try {
               otherChart.timeScale().setVisibleLogicalRange(timeRange)
             } catch (e) {
@@ -170,7 +172,7 @@ export function MultiChartView({ initialSymbol = "AAPL" }: MultiChartViewProps) 
               try {
                 otherChart.setCrosshairPosition(
                   (dataPoint as any).value || (dataPoint as any).close,
-                  param.time,
+                  param.time!,
                   otherSeries
                 )
               } catch (e) {
@@ -193,8 +195,8 @@ export function MultiChartView({ initialSymbol = "AAPL" }: MultiChartViewProps) 
     } else {
       // Clear all sync subscriptions
       chartRefs.current.forEach((chart) => {
-        chart.timeScale().unsubscribeVisibleLogicalRangeChange(() => {})
-        chart.unsubscribeCrosshairMove(() => {})
+        chart.timeScale().unsubscribeVisibleLogicalRangeChange(() => { })
+        chart.unsubscribeCrosshairMove(() => { })
       })
     }
   }, [syncEnabled, setupSync])
@@ -289,13 +291,12 @@ export function MultiChartView({ initialSymbol = "AAPL" }: MultiChartViewProps) 
 
         {tabs.map((tab) => (
           <TabsContent key={tab.id} value={tab.id} className="mt-4">
-            <div className={`grid gap-4 ${
-              tabs.length > 1 && syncEnabled
-                ? layout === "horizontal"
-                  ? "grid-cols-2"
-                  : "grid-rows-2"
-                : "grid-cols-1"
-            }`}>
+            <div className={`grid gap-4 ${tabs.length > 1 && syncEnabled
+              ? layout === "horizontal"
+                ? "grid-cols-2"
+                : "grid-rows-2"
+              : "grid-cols-1"
+              }`}>
               {/* Current tab chart */}
               <Card>
                 <CardContent className="pt-6">
@@ -306,7 +307,7 @@ export function MultiChartView({ initialSymbol = "AAPL" }: MultiChartViewProps) 
                     onChartReady={(chart, series) => registerChart(tab.id, chart, series)}
                     colors={{
                       backgroundColor: 'transparent',
-                      textColor: 'hsl(var(--foreground))',
+                      textColor: resolvedTheme === 'dark' ? '#ffffff' : '#000000',
                     }}
                   />
                 </CardContent>
@@ -330,7 +331,7 @@ export function MultiChartView({ initialSymbol = "AAPL" }: MultiChartViewProps) 
                           onChartReady={(chart, series) => registerChart(nextTab.id, chart, series)}
                           colors={{
                             backgroundColor: 'transparent',
-                            textColor: 'hsl(var(--foreground))',
+                            textColor: resolvedTheme === 'dark' ? '#ffffff' : '#000000',
                           }}
                         />
                       )

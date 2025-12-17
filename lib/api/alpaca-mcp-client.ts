@@ -413,22 +413,36 @@ export class AlpacaMCPClient {
   }
 }
 
-// Singleton instance
-export const alpacaMCPClient = new AlpacaMCPClient()
+// Singleton instance (lazy-loaded to avoid build-time errors)
+let _alpacaMCPClient: AlpacaMCPClient | null = null
+
+export function getAlpacaMCPClient(): AlpacaMCPClient {
+  if (!_alpacaMCPClient) {
+    _alpacaMCPClient = new AlpacaMCPClient()
+  }
+  return _alpacaMCPClient
+}
+
+// For backwards compatibility
+export const alpacaMCPClient = {
+  get instance() {
+    return getAlpacaMCPClient()
+  }
+}
 
 // Convenience functions
 export async function getAccount() {
-  return alpacaMCPClient.getAccount()
+  return getAlpacaMCPClient().getAccount()
 }
 
-export async function placeOrder(params: Parameters<typeof alpacaMCPClient.placeOrder>[0]) {
-  return alpacaMCPClient.placeOrder(params)
+export async function placeOrder(params: Parameters<AlpacaMCPClient['placeOrder']>[0]) {
+  return getAlpacaMCPClient().placeOrder(params)
 }
 
 export async function getQuote(symbol: string) {
-  return alpacaMCPClient.getQuote(symbol)
+  return getAlpacaMCPClient().getQuote(symbol)
 }
 
 export async function chatWithAI(messages: ChatMessage[]) {
-  return alpacaMCPClient.chatWithAI(messages)
+  return getAlpacaMCPClient().chatWithAI(messages)
 }

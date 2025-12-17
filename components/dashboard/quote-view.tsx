@@ -51,9 +51,9 @@ interface QuoteData {
     targetMeanPrice?: number
   }
   summaryProfile?: {
-      sector?: string
-      industry?: string
-      longBusinessSummary?: string
+    sector?: string
+    industry?: string
+    longBusinessSummary?: string
   }
   peers?: string[]
 }
@@ -162,27 +162,27 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
 
           const currentPrice = history[history.length - 1].close
           const now = new Date()
-          
+
           const findPriceAtDate = (targetDate: Date) => {
-             // Find closest date in history (going backwards)
-             const targetTime = targetDate.getTime()
-             // Sort by difference
-             const closest = history.reduce((prev: any, curr: any) => {
-                return (Math.abs(new Date(curr.date).getTime() - targetTime) < Math.abs(new Date(prev.date).getTime() - targetTime) ? curr : prev);
-             });
-             return closest.close;
+            // Find closest date in history (going backwards)
+            const targetTime = targetDate.getTime()
+            // Sort by difference
+            const closest = history.reduce((prev: any, curr: any) => {
+              return (Math.abs(new Date(curr.date).getTime() - targetTime) < Math.abs(new Date(prev.date).getTime() - targetTime) ? curr : prev);
+            });
+            return closest.close;
           }
 
           const getChange = (daysAgo: number) => {
-             const targetDate = new Date()
-             targetDate.setDate(now.getDate() - daysAgo)
-             const startPrice = findPriceAtDate(targetDate)
-             return startPrice ? ((currentPrice - startPrice) / startPrice) : null
+            const targetDate = new Date()
+            targetDate.setDate(now.getDate() - daysAgo)
+            const startPrice = findPriceAtDate(targetDate)
+            return startPrice ? ((currentPrice - startPrice) / startPrice) : null
           }
-          
+
           const getDateChange = (targetDate: Date) => {
-             const startPrice = findPriceAtDate(targetDate)
-             return startPrice ? ((currentPrice - startPrice) / startPrice) : null
+            const startPrice = findPriceAtDate(targetDate)
+            return startPrice ? ((currentPrice - startPrice) / startPrice) : null
           }
 
           setPerformance({
@@ -284,11 +284,11 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
     return (
       <div className="flex flex-1 p-6 flex-col">
         {showBackButton && (
-            <Link href="/dashboard">
+          <Link href="/dashboard">
             <Button variant="ghost" className="mb-4">
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
+              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
             </Button>
-            </Link>
+          </Link>
         )}
         <Card className="border-destructive/50 bg-destructive/10">
           <CardContent className="pt-6">
@@ -304,13 +304,13 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
 
   const price = data.price || {}
   const summary = data.summaryDetail || {}
-  
+
   const isPositive = price.regularMarketChange >= 0
 
   return (
     <div className="flex flex-1 flex-col p-4 lg:p-6">
       <div className="w-full max-w-7xl mx-auto space-y-6">
-        
+
         {/* Header Section */}
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="space-y-1">
@@ -326,11 +326,10 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
                     title={isInWatchlist ? "Remove from watchlist" : "Add to watchlist"}
                   >
                     <Star
-                      className={`h-5 w-5 ${
-                        isInWatchlist
+                      className={`h-5 w-5 ${isInWatchlist
                           ? "fill-yellow-400 text-yellow-400"
                           : "text-muted-foreground"
-                      }`}
+                        }`}
                     />
                   </Button>
                   <Button
@@ -345,24 +344,24 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
                 </>
               )}
             </div>
-            </div>
+          </div>
 
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-           
-  <Card>
+
+            <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1">
                 <CardTitle className="text-xs font-medium text-muted-foreground">
-              {price.longName || price.shortName || symbol}
-                  
+                  {price.longName || price.shortName || symbol}
+
                 </CardTitle>
               </CardHeader>
               <CardContent>
 
-          
+
                 <div className="flex items-center gap-2">
-                <span className="text-md font-bold">{formatCurrency(price.regularMarketPrice)}</span>
-             </div>
-                  <h1 className="text-3xl font-bold tracking-tight">{symbol}</h1>
+                  <span className="text-md font-bold">{formatCurrency(price.regularMarketPrice)}</span>
+                </div>
+                <h1 className="text-3xl font-bold tracking-tight">{symbol}</h1>
               </CardContent>
             </Card>
 
@@ -374,42 +373,42 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-3 gap-2 text-sm">
-                   <div>
-                      <div className="text-xs text-muted-foreground">D</div>
-                      <div className={`font-bold ${price.regularMarketChangePercent >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        {formatPercent(price.regularMarketChangePercent)}
-                      </div>
-                   </div>
-                   <div>
-                      <div className="text-xs text-muted-foreground">W</div>
-                      <div className={`font-bold ${performance.week && performance.week >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        {performance.week ? formatPercent(performance.week) : '-'}
-                      </div>
-                   </div>
-                   <div>
-                      <div className="text-xs text-muted-foreground">M</div>
-                      <div className={`font-bold ${performance.month && performance.month >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        {performance.month ? formatPercent(performance.month) : '-'}
-                      </div>
-                   </div>
-                   <div>
-                      <div className="text-xs text-muted-foreground">6M</div>
-                      <div className={`font-bold ${performance.month6 && performance.month6 >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        {performance.month6 ? formatPercent(performance.month6) : '-'}
-                      </div>
-                   </div>
-                   <div>
-                      <div className="text-xs text-muted-foreground">Y</div>
-                      <div className={`font-bold ${performance.year && performance.year >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        {performance.year ? formatPercent(performance.year) : '-'}
-                      </div>
-                   </div>
-                   <div>
-                      <div className="text-xs text-muted-foreground">5Y</div>
-                      <div className={`font-bold ${performance.year5 && performance.year5 >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        {performance.year5 ? formatPercent(performance.year5) : '-'}
-                      </div>
-                   </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground">D</div>
+                    <div className={`font-bold ${price.regularMarketChangePercent >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                      {formatPercent(price.regularMarketChangePercent)}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground">W</div>
+                    <div className={`font-bold ${performance.week && performance.week >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                      {performance.week ? formatPercent(performance.week) : '-'}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground">M</div>
+                    <div className={`font-bold ${performance.month && performance.month >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                      {performance.month ? formatPercent(performance.month) : '-'}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground">6M</div>
+                    <div className={`font-bold ${performance.month6 && performance.month6 >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                      {performance.month6 ? formatPercent(performance.month6) : '-'}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground">Y</div>
+                    <div className={`font-bold ${performance.year && performance.year >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                      {performance.year ? formatPercent(performance.year) : '-'}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground">5Y</div>
+                    <div className={`font-bold ${performance.year5 && performance.year5 >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                      {performance.year5 ? formatPercent(performance.year5) : '-'}
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -420,17 +419,17 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
                 <Activity className="h-3 w-3 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-               
+
                 <div className="text-lg font-bold">{formatNumber(price.marketCap)}</div>
-             
+
                 <div className="text-lg font-bold">{formatNumber(price.regularMarketVolume)}</div>
                 <div className="text-xs text-muted-foreground">Avg: {formatNumber(summary.averageVolume)}</div>
               </CardContent>
             </Card>
 
-           
+
           </div>
-         
+
         </div>
 
         {/* Price Chart with Lazy Loading */}
@@ -441,10 +440,10 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
         />
 
         {/* Key Stats Grid */}
-        
+
 
         {/* SEC Filings Link */}
-         {/* <Card>
+        {/* <Card>
             <CardHeader>
                 <CardTitle>SEC Filings</CardTitle>
             </CardHeader>
@@ -476,50 +475,50 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
 
         {/* Industry & Peers */}
         <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Industry & Sector</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-4">
-                        <div>
-                            <div className="text-sm font-medium text-muted-foreground">Sector</div>
-                            <div className="text-lg font-bold">{data.summaryProfile?.sector || "N/A"}</div>
-                        </div>
-                        <div>
-                            <div className="text-sm font-medium text-muted-foreground">Industry</div>
-                            <div className="text-lg font-bold">{data.summaryProfile?.industry || "N/A"}</div>
-                        </div>
-                        <div>
-                            <div className="text-sm font-medium text-muted-foreground">Description</div>
-                            <p className="text-sm text-muted-foreground line-clamp-3">
-                                {data.summaryProfile?.longBusinessSummary || "No description available."}
-                            </p>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Industry & Sector</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <div className="text-sm font-medium text-muted-foreground">Sector</div>
+                  <div className="text-lg font-bold">{data.summaryProfile?.sector || "N/A"}</div>
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-muted-foreground">Industry</div>
+                  <div className="text-lg font-bold">{data.summaryProfile?.industry || "N/A"}</div>
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-muted-foreground">Description</div>
+                  <p className="text-sm text-muted-foreground line-clamp-3">
+                    {data.summaryProfile?.longBusinessSummary || "No description available."}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>Related Stocks</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    {data.peers && data.peers.length > 0 ? (
-                        <div className="flex flex-wrap gap-2">
-                            {data.peers.slice(0, 10).map((peerSymbol: string) => (
-                                <Link key={peerSymbol} href={`/dashboard/quote?symbol=${peerSymbol}`}>
-                                    <Badge variant="secondary" className="hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">
-                                        {peerSymbol}
-                                    </Badge>
-                                </Link>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="text-sm text-muted-foreground">No related stocks found.</div>
-                    )}
-                </CardContent>
-            </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Related Stocks</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {data.peers && data.peers.length > 0 ? (
+                <div className="flex flex-wrap gap-2">
+                  {data.peers.slice(0, 10).map((peerSymbol: string) => (
+                    <Link key={peerSymbol} href={`/dashboard/quote?symbol=${peerSymbol}`}>
+                      <Badge variant="secondary" className="hover:bg-primary hover:text-primary-foreground transition-colors cursor-pointer">
+                        {peerSymbol}
+                      </Badge>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-sm text-muted-foreground">No related stocks found.</div>
+              )}
+            </CardContent>
+          </Card>
         </div>
 
       </div>

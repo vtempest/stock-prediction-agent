@@ -1,4 +1,7 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
+import { HoverBorderGradient } from "@/components/ui/hover-border-gradient"
 import {
   Users,
   MessageSquare,
@@ -9,6 +12,7 @@ import {
   Newspaper,
   TrendingDown,
   Calendar,
+  LogIn,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -22,33 +26,72 @@ export function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/30 to-background/90" />
       </div>
 
-      <div className="mx-auto max-w-5xl text-center relative z-10">
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 text-sm backdrop-blur-sm">
-          <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-          <span className="text-muted-foreground">Chatbot Simplexity for Algorithmic Trading</span>
+      <div className="mx-auto max-w-7xl px-6 relative z-10">
+        <div className="flex flex-col items-center text-center mb-12 max-w-4xl mx-auto">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 text-sm backdrop-blur-sm">
+            <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+            <span className="text-muted-foreground">Chatbot Simplexity for Algorithmic Trading</span>
+          </div>
+
+          <h1 className="text-balance text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl leading-tight">
+            <span className="block text-primary"> Auto-Invest Like a Boss</span>
+          </h1>
         </div>
 
-        <h1 className="text-balance text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl leading-tight">
-          <span className="block text-primary"> Invest Like a Boss</span>
-          Of Your Own AI Hedge Fund Team
-        </h1>
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+          <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
+            <h3 className="text-2xl font-bold mb-4">Run Your Own AI Hedge Fund Team</h3>
+            <p className="max-w-2xl rounded-lg border border-border bg-background/50 p-4 text-lg leading-relaxed text-foreground backdrop-blur-sm">
+              Deploy specialized AI agents with algorithmic trading strategies across stocks and prediction markets. Track
+              sharp traders on Polymarket & Kalshi, analyze outcomes with LLM-powered research, and execute momentum,
+              breakout, and scalping strategies with institutional-grade risk management.
+            </p>
 
-        <p className="mx-auto mt-6 max-w-2xl rounded-lg border border-border bg-background/50 p-4 text-lg leading-relaxed text-foreground backdrop-blur-sm">
-          Deploy specialized AI agents with algorithmic trading strategies across stocks and prediction markets. Track
-          sharp traders on Polymarket & Kalshi, analyze outcomes with LLM-powered research, and execute momentum,
-          breakout, and scalping strategies with institutional-grade risk management.
-        </p>
+            <div className="mt-10 flex flex-col items-center lg:items-start gap-4 sm:flex-row">
+              <Link href="/login" rel="noopener noreferrer">
+                <HoverBorderGradient
+                  containerClassName="rounded-full"
+                  as="button"
+                  className="bg-green-600 dark:bg-green-700 text-white flex items-center space-x-2"
+                >
+                  <LogIn className="h-5 w-5" />
+                  <span>Login</span>
+                </HoverBorderGradient>
+              </Link>
 
-        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button size="lg" asChild>
-            <Link href="/survey">
-              <Calendar className="mr-2 h-5 w-5" />
-              Book a Demo
-            </Link>
-          </Button>
+              <Button variant="outline" size="lg" asChild>
+                <Link href="/survey">
+                  <Calendar className="mr-2 h-5 w-5" />
+                  Book a Demo
+                </Link>
+              </Button>
+
+              <Button variant="outline" size="lg" asChild>
+                <Link href="/api/docs" target="_blank" rel="noopener noreferrer">
+                  API Docs
+                </Link>
+              </Button>
+            </div>
+          </div>
+
+          <div className="w-full relative rounded-xl overflow-hidden shadow-2xl border border-border/50 bg-background/50 backdrop-blur-sm">
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="w-full h-auto object-cover"
+              poster="/images/hero-poster.png"
+            >
+              <source src="/public/images/autoinvest-ad.webm" type="video/webm" />
+              <source src="/images/autoinvest-ad.webm" type="video/webm" />
+              Your browser does not support the video tag.
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent pointer-events-none" />
+          </div>
         </div>
 
-        <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
             { icon: Users, label: "Multi-Agent Teams", desc: "4 specialized analysts" },
             { icon: BarChart3, label: "Algo Strategies", desc: "Momentum & breakout" },
@@ -70,6 +113,6 @@ export function HeroSection() {
           ))}
         </div>
       </div>
-    </section>
+    </section >
   )
 }

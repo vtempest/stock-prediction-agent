@@ -49,13 +49,6 @@ export function Header() {
             Research Agents
           </Link>
           <Link
-            href="#prediction-markets"
-            className={navLinkClasses}
-          >
-            <TrendingUp className="h-4 w-4" />
-            Prediction Markets
-          </Link>
-          <Link
             href="#copy-trading"
             className={navLinkClasses}
           >
@@ -63,11 +56,27 @@ export function Header() {
             Copy Trading
           </Link>
           <Link
+            href="#prediction-markets"
+            className={navLinkClasses}
+          >
+            <TrendingUp className="h-4 w-4" />
+            Prediction Markets
+          </Link>
+
+          <Link
             href="#strategies"
             className={navLinkClasses}
           >
             <Target className="h-4 w-4" />
             Algo Strategies
+          </Link>
+
+          <Link
+            href="/api/docs"
+            className={navLinkClasses}
+          >
+            <Sparkles className="h-4 w-4" />
+            API
           </Link>
         </nav>
 

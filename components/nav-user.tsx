@@ -81,9 +81,11 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
+              <DropdownMenuItem asChild>
+                <a href="https://buy.stripe.com/5kQfZgcMng3a6Xebelcs800" target="_blank" rel="noopener noreferrer">
+                  <Sparkles />
+                  Upgrade to Pro
+                </a>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

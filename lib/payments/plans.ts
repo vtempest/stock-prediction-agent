@@ -17,10 +17,10 @@ export const plans: Plan[] = [
       tokens: 1000
     },
     features: [
-      "Unlimited projects",
-      "Advanced analytics",
+      "Unlimited research",
+      "Advanced strategies",
       "Priority support",
-      "10 GB storage"
+      "Team doc sharing"
     ],
     price: 19.99,
     trialDays: 7,

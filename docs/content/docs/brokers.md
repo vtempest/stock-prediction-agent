@@ -46,3 +46,4 @@ title: 💰 Investment Brokers
 | [Yahoo Finance (Unofficial)](https://pypi.org/project/yfinance/) | Everything (Stocks, Crypto, FX) | 3.8 | Average | Free (Open Source) | Best for Learning. No official support. Use via libraries like `yfinance` for non-commercial projects. |
 | [MarketStack](https://marketstack.com) | Global Stocks, Intraday | 4.0 | Solid | Free; \$29/mo | Good Alternative. Scalable cloud data, decent global coverage. |
 | [SOV.AI](https://sov.ai) | Alternative Data, ML Tools | N/A | ML Focus | Paid | Best for Quants. 30,000+ tickers, 30+ years history. 80+ financial ratios, ML asset management tools. Python library. |
+| [Dukascopy](https://www.dukascopy.com) | Forex, Crypto, Commodities | 4.6 | Great | Free | Best for Forex. Real-time tick data. Historical data from 2003. No API key required. 15+ instruments. |

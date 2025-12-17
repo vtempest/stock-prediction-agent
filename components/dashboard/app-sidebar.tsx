@@ -164,8 +164,8 @@ const navigationGroups = [
   {
     title: "Market",
     items: [
+      { name: "Analyze Strategy", tab: "strategies", icon: Zap },
       { name: "Market Scanner", tab: "scanner", icon: BarChart3 },
-      { name: "Strategies", tab: "strategies", icon: Zap },
     ],
   },
   {

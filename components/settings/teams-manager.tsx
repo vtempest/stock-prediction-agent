@@ -1,14 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Plus, Users, UserPlus, Trash2 } from "lucide-react";
-import { createTeam, getUserTeams, inviteMemberToTeam, removeMemberFromTeam } from "@/lib/actions/teams";
+import { Plus, Users, UserPlus, Trash2, Check } from "lucide-react";
+import { createTeam, getUserTeams, inviteMemberToTeam, removeMemberFromTeam, searchUsers } from "@/lib/actions/teams";
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
 
 export function TeamsManager() {
   const [teams, setTeams] = useState<any[]>([]);
@@ -22,6 +28,11 @@ export function TeamsManager() {
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviting, setInviting] = useState(false);
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
+
+  // Autocomplete state
+  const [userSuggestions, setUserSuggestions] = useState<User[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     fetchTeams();
@@ -61,16 +72,72 @@ export function TeamsManager() {
     }
   };
 
+  // Email validation
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Search users for autocomplete
+  const handleSearchUsers = useCallback(async (query: string) => {
+    if (query.length < 2) {
+      setUserSuggestions([]);
+      return;
+    }
+
+    try {
+      const users = await searchUsers(query);
+      setUserSuggestions(users);
+    } catch (error) {
+      console.error("Failed to search users:", error);
+    }
+  }, []);
+
+  // Handle email input change
+  const handleEmailChange = (value: string, teamId: string) => {
+    setSelectedTeamId(teamId);
+    setInviteEmail(value);
+    setSearchQuery(value);
+
+    if (value.length >= 2) {
+      handleSearchUsers(value);
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+    }
+  };
+
+  // Select user from autocomplete
+  const handleSelectUser = (user: User) => {
+    setInviteEmail(user.email);
+    setSearchQuery(user.email);
+    setShowSuggestions(false);
+  };
+
   const handleInvite = async (teamId: string) => {
-    if (!inviteEmail.trim()) return;
-    
+    if (!inviteEmail.trim()) {
+      toast.error("Please enter an email address");
+      return;
+    }
+
+    if (!isValidEmail(inviteEmail)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
     setInviting(true);
     try {
       const result = await inviteMemberToTeam(teamId, inviteEmail);
       if (result.success) {
-        toast.success("Member invited successfully");
+        if (result.invited) {
+          toast.success(`Invitation email sent to ${inviteEmail}`);
+        } else {
+          toast.success("Member added successfully");
+        }
         setInviteEmail("");
+        setSearchQuery("");
         setSelectedTeamId(null);
+        setShowSuggestions(false);
         fetchTeams();
       } else {
         toast.error(result.error || "Failed to invite member");
@@ -202,23 +269,58 @@ export function TeamsManager() {
                     <div className="pt-4 border-t">
                         <Label>Add Member</Label>
                         <div className="flex gap-2 mt-2">
-                            <Input 
-                                placeholder="user@example.com" 
-                                value={selectedTeamId === team.id ? inviteEmail : ""}
-                                onChange={(e) => {
-                                    setSelectedTeamId(team.id);
-                                    setInviteEmail(e.target.value);
-                                }}
-                            />
-                            <Button 
-                                variant="secondary" 
+                            <div className="relative flex-1">
+                                <Input
+                                    placeholder="user@example.com or search by name"
+                                    value={selectedTeamId === team.id ? inviteEmail : ""}
+                                    onChange={(e) => handleEmailChange(e.target.value, team.id)}
+                                    onFocus={() => {
+                                        if (inviteEmail.length >= 2) {
+                                            setShowSuggestions(true);
+                                        }
+                                    }}
+                                />
+                                {showSuggestions && selectedTeamId === team.id && userSuggestions.length > 0 && (
+                                    <div className="absolute z-50 w-full mt-1 bg-popover border rounded-md shadow-md max-h-60 overflow-auto">
+                                        <div className="p-1">
+                                            {userSuggestions.map((user) => (
+                                                <button
+                                                    key={user.id}
+                                                    className="w-full flex items-center gap-2 px-3 py-2 text-sm rounded-sm hover:bg-accent hover:text-accent-foreground cursor-pointer"
+                                                    onClick={() => handleSelectUser(user)}
+                                                >
+                                                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-medium">
+                                                        {user.name?.charAt(0) || "U"}
+                                                    </div>
+                                                    <div className="flex-1 text-left">
+                                                        <p className="font-medium">{user.name}</p>
+                                                        <p className="text-xs text-muted-foreground">{user.email}</p>
+                                                    </div>
+                                                    <Check className="h-4 w-4 opacity-0" />
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            <Button
+                                variant="secondary"
                                 onClick={() => handleInvite(team.id)}
                                 disabled={inviting || !inviteEmail || selectedTeamId !== team.id}
                             >
-                                <UserPlus className="h-4 w-4 mr-2" />
-                                Invite
+                                {inviting ? (
+                                    <>Inviting...</>
+                                ) : (
+                                    <>
+                                        <UserPlus className="h-4 w-4 mr-2" />
+                                        Invite
+                                    </>
+                                )}
                             </Button>
                         </div>
+                        {selectedTeamId === team.id && inviteEmail && !isValidEmail(inviteEmail) && (
+                            <p className="text-xs text-destructive mt-1">Please enter a valid email address</p>
+                        )}
                     </div>
                 </div>
                 </CardContent>

@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, X, Search } from "lucide-react"
 import type { IChartApi, ISeriesApi } from "lightweight-charts"
+import { LineSeries } from "lightweight-charts"
+import { useTheme } from "next-themes"
 
 interface DynamicStockChartProps {
   symbol: string
@@ -48,7 +50,7 @@ export function DynamicStockChart({
   const [data, setData] = useState<ChartData[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [lastFetchedRange, setLastFetchedRange] = useState<{from: number; to: number} | null>(null)
+  const [lastFetchedRange, setLastFetchedRange] = useState<{ from: number; to: number } | null>(null)
 
   // Comparison state
   const [comparisonSymbols, setComparisonSymbols] = useState<ComparisonSymbol[]>([])
@@ -105,6 +107,85 @@ export function DynamicStockChart({
     }
   }
 
+  // Search for stocks
+  const handleSearch = useCallback(async (query: string) => {
+    if (!query.trim()) {
+      setSearchResults([])
+      setShowSearchResults(false)
+      return
+    }
+
+    try {
+      const res = await fetch(`/api/stocks/autocomplete?q=${encodeURIComponent(query)}&limit=5`)
+      const json = await res.json()
+      if (json.success) {
+        setSearchResults(json.data)
+        setShowSearchResults(true)
+      }
+    } catch (error) {
+      console.error("Error searching stocks:", error)
+    }
+  }, [])
+
+  // Add comparison symbol
+  const addComparisonSymbol = useCallback(async (compareSymbol: string) => {
+    // Don't add if it's the same as main symbol or already added
+    if (compareSymbol === symbol || comparisonSymbols.some(c => c.symbol === compareSymbol)) {
+      return
+    }
+
+    // Get next color
+    const color = COMPARISON_COLORS[comparisonSymbols.length % COMPARISON_COLORS.length]
+
+    // Add to state with loading flag
+    const newComparison: ComparisonSymbol = {
+      symbol: compareSymbol,
+      color,
+      data: [],
+      loading: true
+    }
+
+    setComparisonSymbols(prev => [...prev, newComparison])
+    setSearchQuery("")
+    setShowSearchResults(false)
+
+    // Fetch data for the comparison symbol
+    try {
+      const res = await fetch(`/api/stocks/historical/${compareSymbol}?range=${initialRange}&interval=${interval}`)
+      const json = await res.json()
+
+      if (json.success && json.data) {
+        const chartData: ChartData[] = json.data.map((quote: any) => ({
+          time: quote.date || quote.time,
+          open: quote.open,
+          high: quote.high,
+          low: quote.low,
+          close: quote.close
+        })).filter((d: ChartData) => d.open && d.close)
+
+        setComparisonSymbols(prev => prev.map(c =>
+          c.symbol === compareSymbol ? { ...c, data: chartData, loading: false } : c
+        ))
+      }
+    } catch (error) {
+      console.error("Error fetching comparison data:", error)
+      // Remove failed comparison
+      setComparisonSymbols(prev => prev.filter(c => c.symbol !== compareSymbol))
+    }
+  }, [symbol, comparisonSymbols, initialRange, interval])
+
+  // Remove comparison symbol
+  const removeComparisonSymbol = useCallback((compareSymbol: string) => {
+    setComparisonSymbols(prev => prev.filter(c => c.symbol !== compareSymbol))
+    comparisonSeriesRefs.current.delete(compareSymbol)
+  }, [])
+
+  // Handle chart ready
+  const handleChartReady = useCallback((chart: IChartApi, series: ISeriesApi<any>) => {
+    chartRef.current = chart
+    mainSeriesRef.current = series
+  }, [])
+
   // Handle visible range changes from the chart
   const handleVisibleRangeChange = useCallback((range: { from: number; to: number }) => {
     // Check if we need to fetch more data
@@ -135,13 +216,83 @@ export function DynamicStockChart({
     setLastFetchedRange(range)
   }, [symbol, interval, lastFetchedRange])
 
+  // Debounce search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchQuery) {
+        handleSearch(searchQuery)
+      }
+    }, 300)
+
+    return () => clearTimeout(timer)
+  }, [searchQuery, handleSearch])
+
   return (
     <Card className="border-border bg-card">
       <CardHeader>
-        <CardTitle className="text-lg text-card-foreground flex items-center justify-between">
-          <span>{symbol} Price Chart</span>
-          {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-        </CardTitle>
+        <div className="flex items-center justify-between gap-4">
+          <CardTitle className="text-lg text-card-foreground flex items-center gap-2">
+            <span>{symbol} Price Chart</span>
+            {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+          </CardTitle>
+
+          {/* Comparison Search */}
+          <div className="relative w-64">
+            <div className="flex gap-2">
+              <Input
+                placeholder="Compare with symbol..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => searchQuery && setShowSearchResults(true)}
+                onBlur={() => setTimeout(() => setShowSearchResults(false), 200)}
+                className="pr-8"
+              />
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+            </div>
+
+            {/* Search Results Dropdown */}
+            {showSearchResults && searchResults.length > 0 && (
+              <div className="absolute top-full mt-1 w-full bg-popover border border-border rounded-md shadow-lg z-50 max-h-48 overflow-y-auto">
+                {searchResults.map((result) => (
+                  <button
+                    key={result.symbol}
+                    onClick={() => addComparisonSymbol(result.symbol)}
+                    className="w-full px-3 py-2 text-left hover:bg-accent hover:text-accent-foreground text-sm flex items-center justify-between"
+                  >
+                    <span className="font-medium">{result.symbol}</span>
+                    <span className="text-muted-foreground text-xs truncate ml-2">{result.name}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Comparison Badges */}
+        {comparisonSymbols.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-3">
+            <Badge variant="outline" style={{ borderColor: '#2962FF' }}>
+              {symbol}
+            </Badge>
+            {comparisonSymbols.map((comp) => (
+              <Badge
+                key={comp.symbol}
+                variant="outline"
+                style={{ borderColor: comp.color }}
+                className="flex items-center gap-1"
+              >
+                <span>{comp.symbol}</span>
+                {comp.loading && <Loader2 className="h-3 w-3 animate-spin" />}
+                <button
+                  onClick={() => removeComparisonSymbol(comp.symbol)}
+                  className="ml-1 hover:bg-destructive/20 rounded-full p-0.5"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </Badge>
+            ))}
+          </div>
+        )}
       </CardHeader>
       <CardContent>
         {error ? (
@@ -149,15 +300,13 @@ export function DynamicStockChart({
             <p>{error}</p>
           </div>
         ) : data.length > 0 ? (
-          <TechnicalChart
-            data={data}
-            title={`${symbol} - ${interval}`}
-            symbol={symbol}
+          <MultiSeriesChart
+            mainData={data}
+            mainSymbol={symbol}
+            comparisonData={comparisonSymbols}
+            interval={interval}
             onVisibleRangeChange={handleVisibleRangeChange}
-            colors={{
-              backgroundColor: 'transparent',
-              textColor: 'hsl(var(--foreground))',
-            }}
+            onChartReady={handleChartReady}
           />
         ) : loading ? (
           <div className="flex items-center justify-center h-[300px]">
@@ -176,5 +325,111 @@ export function DynamicStockChart({
         )}
       </CardContent>
     </Card>
+  )
+}
+
+// Multi-series chart component to render main + comparison series
+function MultiSeriesChart({
+  mainData,
+  mainSymbol,
+  comparisonData,
+  interval,
+  onVisibleRangeChange,
+  onChartReady
+}: {
+  mainData: ChartData[]
+  mainSymbol: string
+  comparisonData: ComparisonSymbol[]
+  interval: string
+  onVisibleRangeChange?: (range: { from: number; to: number }) => void
+  onChartReady?: (chart: IChartApi, series: ISeriesApi<any>) => void
+}) {
+  const chartRef = useRef<IChartApi | null>(null)
+  const mainSeriesRef = useRef<ISeriesApi<any> | null>(null)
+  const comparisonSeriesRefs = useRef<Map<string, ISeriesApi<any>>>(new Map())
+  const isChartReadyCalled = useRef(false)
+
+  // Handle chart ready - only call once
+  const handleChartReady = useCallback((chart: IChartApi, series: ISeriesApi<any>) => {
+    if (isChartReadyCalled.current) return
+
+    chartRef.current = chart
+    mainSeriesRef.current = series
+    isChartReadyCalled.current = true
+    onChartReady?.(chart, series)
+  }, [onChartReady])
+
+  // Update comparison series when data changes
+  useEffect(() => {
+    if (!chartRef.current) return
+
+    const chart = chartRef.current
+
+    // Add or update comparison series
+    comparisonData.forEach((comp) => {
+      if (comp.data.length > 0) {
+        let lineSeries = comparisonSeriesRefs.current.get(comp.symbol)
+
+        if (!lineSeries) {
+          // Add new line series for comparison
+          lineSeries = chart.addSeries(LineSeries, {
+            color: comp.color,
+            lineWidth: 2,
+            priceScaleId: 'right', // Use same price scale
+          })
+          comparisonSeriesRefs.current.set(comp.symbol, lineSeries)
+        }
+
+        if (lineSeries) {
+          // Convert data to close prices for line series
+          const lineData = comp.data.map(d => {
+            let timeVal = d.time;
+            if (typeof timeVal === 'string' && timeVal.includes('T')) {
+              const date = new Date(timeVal);
+              if (!isNaN(date.getTime())) {
+                timeVal = Math.floor(date.getTime() / 1000) as any;
+              }
+            }
+            return {
+              time: timeVal,
+              value: d.close
+            };
+          })
+
+          lineSeries.setData(lineData)
+        }
+      }
+    })
+
+    // Remove series for symbols that are no longer in comparisonData
+    const currentSymbols = new Set(comparisonData.map(c => c.symbol))
+    comparisonSeriesRefs.current.forEach((series, symbol) => {
+      if (!currentSymbols.has(symbol)) {
+        (chart as any).removeSeries(series)
+        comparisonSeriesRefs.current.delete(symbol)
+      }
+    })
+  }, [comparisonData])
+
+
+  // We need to use the Chart component from lightweight-charts-react-components
+  // but add comparison series dynamically
+  const { resolvedTheme } = useTheme()
+  const textColor = resolvedTheme === 'dark' ? '#ffffff' : '#000000'
+
+  return (
+    <div className="w-full relative">
+      <TechnicalChart
+        data={mainData}
+        title={`${mainSymbol} - ${interval}`}
+        symbol={mainSymbol}
+        onVisibleRangeChange={onVisibleRangeChange}
+        onChartReady={handleChartReady}
+        colors={{
+          backgroundColor: 'transparent',
+          textColor: textColor,
+        }}
+      />
+    </div>
   )
 }

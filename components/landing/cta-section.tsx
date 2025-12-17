@@ -39,6 +39,7 @@ export function CTASection() {
             </Button>
 
 
+
             <Button variant="outline" size="lg" asChild className="w-full">
               <Link href="/pitchdeck.html" target="_blank" rel="noopener noreferrer">
                 Outline Slides
@@ -53,7 +54,7 @@ export function CTASection() {
           </div>
 
           {/* Video Column */}
-                      <div className="flex justify-center lg:justify-end">
+          <div className="flex justify-center lg:justify-end">
             <video
               className="w-3/4 rounded-lg shadow-xl border border-border/50"
               autoPlay

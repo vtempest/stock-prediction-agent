@@ -10,18 +10,13 @@ import { toast } from "sonner";
 
 export function PremiumUpgrade() {
     const { data: session } = authClient.useSession();
-    // @ts-ignore - useActiveSubscription is provided by stripe plugin; type inference might be lagging
-    const { data: activeSubscription, isPending: isLoadingSubscription } = authClient.useActiveSubscription();
     const [loadingPlanId, setLoadingPlanId] = useState<number | null>(null);
 
     const handleUpgrade = async (plan: Plan) => {
         setLoadingPlanId(plan.id);
         try {
-            await authClient.subscription.upgrade({
-                plan: plan.name,
-                successUrl: "/dashboard/settings?success=true",
-                cancelUrl: "/dashboard/settings?cancelled=true",
-            });
+            // Direct link to Stripe checkout
+            window.location.href = "https://buy.stripe.com/5kQfZgcMng3a6Xebelcs800";
         } catch (error) {
             console.error("Subscription error:", error);
             toast.error("Failed to start subscription process");
@@ -30,24 +25,10 @@ export function PremiumUpgrade() {
         }
     };
 
-    if (isLoadingSubscription) {
-        return (
-            <Card className="w-full mb-8">
-                <CardHeader>
-                    <CardTitle>Loading subscription details...</CardTitle>
-                </CardHeader>
-            </Card>
-        );
-    }
-
-    // Filter out free plans if you only want to show upgrades, 
+    // Filter out free plans if you only want to show upgrades,
     // or show all. Typically upgrades are paid.
     // Assuming 'price > 0' means paid.
     const upgradePlans = plans.filter(p => p.price > 0);
-    const currentPlanId = activeSubscription ? activeSubscription.planId : null; // Mapping might be needed depending on how better-auth returns plan ID
-
-    // If already on a premium plan, maybe manage it instead? 
-    // For now, let's just list the plans as requested.
 
     return (
         <Card className="w-full border-primary/20 bg-primary/5 mb-8">
@@ -60,13 +41,11 @@ export function PremiumUpgrade() {
             <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {upgradePlans.map((plan) => {
-                        const isCurrent = activeSubscription?.plan === plan.name; // Simplified check
                         return (
-                            <Card key={plan.id} className={`flex flex-col ${isCurrent ? 'border-primary shadow-md' : ''}`}>
+                            <Card key={plan.id} className="flex flex-col">
                                 <CardHeader>
                                     <CardTitle className="flex justify-between items-center">
                                         {plan.name.charAt(0).toUpperCase() + plan.name.slice(1)}
-                                        {isCurrent && <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">Current</span>}
                                     </CardTitle>
                                     <div className="text-3xl font-bold">
                                         ${plan.price}
@@ -92,16 +71,13 @@ export function PremiumUpgrade() {
                                     <Button
                                         className="w-full"
                                         onClick={() => handleUpgrade(plan)}
-                                        disabled={loadingPlanId === plan.id || isCurrent}
-                                        variant={isCurrent ? "outline" : "default"}
+                                        disabled={loadingPlanId === plan.id}
                                     >
                                         {loadingPlanId === plan.id ? (
                                             <>
                                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                                Processing...
+                                                Redirecting...
                                             </>
-                                        ) : isCurrent ? (
-                                            "Current Plan"
                                         ) : (
                                             `Upgrade to ${plan.name}`
                                         )}

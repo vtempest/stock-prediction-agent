@@ -17,6 +17,25 @@ icon: Bot
 
 The indicatorts library provides building blocks for building systematic trading strategies.
 
+
+
+## Core LLM + Trading Books
+
+Chan, E. P. (2024). *Generative AI for trading and asset management*. Wiley. https://www.wiley.com/en-us/Generative+AI+for+Trading+and+Asset+Management-p-00421846
+
+Noguer i Alonso, M. (2024). *Large language models in finance: A hands-on guide to applying LLMs to trading, banking, and risk management*. https://www.barnesandnoble.com/w/large-language-models-in-finance-miquel-noguer-i-alonso/1148475633
+
+*Applying LLM & generative AI in trading*. (n.d.). Hands-On AI Trading. https://www.hands-on-ai-trading.com/chapters/09-applying-llm-generative-ai-in-trading
+
+## Essential ML + Quant Foundations
+
+López de Prado, M. (2018). *Advances in financial machine learning*. Wiley.
+
+Hilpisch, Y. (2020). *Python for algorithmic trading* (2nd ed.). O'Reilly Media.
+
+Chan, E. P. (2013). *Algorithmic trading: Winning strategies and their rationale*. Wiley.
+
+
 ### 🏗️ Core Components
 
 #### 📊 Asset

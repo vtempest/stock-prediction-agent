@@ -6,6 +6,15 @@ title: Api Data Summary
 
 This document provides a summary of the key data structures and endpoints available in the Stock P/E Calculator API, mapping them to the underlying Yahoo Finance data modules.
 
+
+Bonds 📊
+Crypto assets ₿
+Agriculture ☕
+Energy ⚡
+Metals ⚙️
+Forex currencies 💱
+
+
 ## 🔗 Core Endpoints
 
 | Endpoint | Method | Description | Key Data Returned |
