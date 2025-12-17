@@ -6,6 +6,8 @@ import { TradingConfig } from '@/lib/trading-agents/types'
 export const runtime = 'nodejs'
 export const maxDuration = 60
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: NextRequest) {
   try {
     const { messages } = await request.json()
@@ -19,7 +21,7 @@ export async function POST(request: NextRequest) {
 
     // Get the latest user message
     const userMessage = messages.filter((m: any) => m.role === 'user').pop()
-    
+
     if (!userMessage) {
       return NextResponse.json(
         { error: 'No user message found' },
@@ -58,7 +60,7 @@ export async function POST(request: NextRequest) {
     if (needsTools) {
       // Use agent executor with tools for complex queries
       const agent = new AgentExecutor(llm, tradingTools, 10)
-      
+
       try {
         responseContent = await agent.run(userMessage.content)
       } catch (error: any) {
@@ -80,7 +82,7 @@ When suggesting strategies, always emphasize risk management.
 Use examples with popular stocks like AAPL, TSLA, NVDA when helpful.`
 
       const fullPrompt = `${systemPrompt}\n\nUser: ${userMessage.content}\n\nAssistant:`
-      
+
       try {
         const response = await llm.invoke(fullPrompt)
         responseContent = typeof response.content === 'string' ? response.content : JSON.stringify(response.content)
@@ -102,7 +104,7 @@ Use examples with popular stocks like AAPL, TSLA, NVDA when helpful.`
 
   } catch (error: any) {
     console.error('Alpaca chat error:', error)
-    
+
     return NextResponse.json(
       { error: error.message || 'Failed to process chat message' },
       { status: 500 }

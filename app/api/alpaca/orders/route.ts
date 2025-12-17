@@ -5,6 +5,8 @@ import { users } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { createAlpacaClient } from '@/lib/alpaca/client'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
     const session = await auth.api.getSession({ headers: request.headers })
@@ -30,10 +32,10 @@ export async function GET(request: NextRequest) {
     })
 
     const orders = await alpaca.getOrders({
-      status: status as 'open' | 'closed' | 'all',
-      limit,
+      status: status || 'open',
+      limit: limit || 50,
       direction: 'desc',
-    })
+    } as any)
 
     return NextResponse.json({ success: true, orders })
   } catch (error) {
