@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { ThemeDropdown } from "@/components/theme-dropdown"
 import Link from "next/link"
 
 
@@ -68,6 +69,8 @@ export function DashboardHeader() {
             <SelectItem value="live">🔴 Live</SelectItem>
           </SelectContent>
         </Select>
+
+        <ThemeDropdown />
 
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-5 w-5" />
