@@ -1,4 +1,4 @@
-import Alpaca from '@alpacahq/alpaca-trade-api'
+// import Alpaca from '@alpacahq/alpaca-trade-api'
 
 export interface AlpacaConfig {
   paper?: boolean
@@ -14,11 +14,17 @@ export function createAlpacaClient(config?: Partial<AlpacaConfig>) {
     console.warn("Alpaca keys missing - check .env")
   }
 
-  return new Alpaca({
+  return {
     keyId,
     secretKey,
     paper: config?.paper ?? true,
-  })
+  }
+
+  // return new Alpaca({
+  //   keyId,
+  //   secretKey,
+  //   paper: config?.paper ?? true,
+  // })
 }
 
 export type { Alpaca }
