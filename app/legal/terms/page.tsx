@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { APP_EMAIL, LAST_REVISED_DATE } from "@/lib/customize-site";
+const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME;
 
 export const metadata = {
-  title: `${process?.env?.NEXT_PUBLIC_APP_NAME} Terms of Service`,
+  title: `${APP_NAME} Terms of Service`,
 };
 
 export default function TermsPage({ params }: { params: { lang: string } }) {
@@ -18,7 +19,7 @@ export default function TermsPage({ params }: { params: { lang: string } }) {
       </div>
 
       <h1 className="my-4 text-3xl font-bold text-gray-800 font-variant-caps">
-        {process?.env?.NEXT_PUBLIC_APP_NAME} Terms of Service
+        {APP_NAME} Terms of Service
       </h1>
       <p className="my-4">
         <strong>Revised Date: {LAST_REVISED_DATE}</strong>
@@ -28,10 +29,10 @@ export default function TermsPage({ params }: { params: { lang: string } }) {
         1. Introduction
       </h2>
       <p className="my-4">
-        These Terms of Service (&quot;Terms&quot;) govern your use of {process?.env?.NEXT_PUBLIC_APP_NAME}
+        These Terms of Service (&quot;Terms&quot;) govern your use of {APP_NAME}
         &apos;s products and services, along with any associated apps, software,
         and websites (together, our &quot;Services&quot;). These Terms are a
-        contract between you and {process?.env?.NEXT_PUBLIC_APP_NAME}, and they include our Acceptable Use
+        contract between you and {APP_NAME}, and they include our Acceptable Use
         Policy. By accessing our Services, you agree to these Terms.
       </p>
 
@@ -137,7 +138,7 @@ export default function TermsPage({ params }: { params: { lang: string } }) {
       </h2>
 
       <p className="my-4">
-        <strong>Your {process?.env?.NEXT_PUBLIC_APP_NAME} Account:</strong> To access our Services, we may
+        <strong>Your {APP_NAME} Account:</strong> To access our Services, we may
         ask you to create an Account. You agree to provide correct, current, and
         complete Account information. You may not share your Account login
         information with anyone else. You are responsible for all activity
@@ -193,12 +194,12 @@ export default function TermsPage({ params }: { params: { lang: string } }) {
 
       <p className="my-4">
         The services are provided &quot;as is&quot; and &quot;as available&quot;
-        without warranties of any kind. {process?.env?.NEXT_PUBLIC_APP_NAME} disclaims all warranties,
+        without warranties of any kind. {APP_NAME} disclaims all warranties,
         express or implied.
       </p>
 
       <p className="my-4">
-        To the fullest extent permissible under applicable law, {process?.env?.NEXT_PUBLIC_APP_NAME} shall
+        To the fullest extent permissible under applicable law, {APP_NAME} shall
         not be liable for any indirect, incidental, special, consequential, or
         punitive damages, or any loss of profits or revenues.
       </p>

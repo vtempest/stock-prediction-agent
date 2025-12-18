@@ -20,27 +20,23 @@ export const plans: Plan[] = [
       "Unlimited research",
       "Advanced strategies",
       "Priority support",
-      "Team doc sharing"
     ],
     price: 19.99,
     trialDays: 7,
   },
   {
     id: 2,
-    name: "Enterprise Team",
+    name: "Team",
     priceId: "price_1SfItcD6sln9a8JlFRR4o83g",
     limits: {
       tokens: 10000
     },
     features: [
-      "Everything in Pro",
+      "Team sharing",
       "Unlimited team members",
       "Advanced analytics & reporting",
-      "Dedicated account manager",
       "Custom integrations",
-      "99.9% SLA uptime guarantee",
       "Priority 24/7 support",
-      "Custom training & onboarding"
     ],
     price: 299,
     trialDays: 14,

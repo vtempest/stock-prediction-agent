@@ -2,6 +2,7 @@
 import Link from "next/link"
 import { FileText, Shield, Mail, ExternalLink, Bot } from "lucide-react"
 import { Button } from "@/components/ui/button"
+const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME;
 
 export function Footer() {
     return (
@@ -13,7 +14,7 @@ export function Footer() {
                             <div className="w-4 h-4 rounded-full bg-primary/50 group-hover:scale-110 transition-transform duration-300" />
                         </div>
                         <span className="text-lg font-semibold text-foreground tracking-tight group-hover:text-primary transition-colors duration-300">
-                            {process?.env?.NEXT_PUBLIC_APP_NAME}
+                            {APP_NAME}
                         </span> */}
                     </div>
 
@@ -52,7 +53,7 @@ export function Footer() {
 
                     <div className="flex flex-col items-center md:items-end gap-2 text-sm text-muted-foreground/60">
                         <div className="flex items-center gap-1 hover:text-muted-foreground transition-colors duration-300">
-                            &copy; {new Date().getFullYear()} {process?.env?.NEXT_PUBLIC_APP_NAME}
+                            &copy; {new Date().getFullYear()} {APP_NAME}
                         </div>
                         <span className="text-xs">San Francisco, CA. All rights reserved.</span>
                     </div>

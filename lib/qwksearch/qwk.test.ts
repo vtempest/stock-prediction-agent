@@ -1,9 +1,23 @@
-import * as qwk from './qwksearch-api-client';
+import * as qwk from './api-client';
+import type * as Types from './index';
 
-qwk.searchWeb({
+var searchResults = await qwk.searchWeb({
     query: {
-
         q: 'Bitcoin',
-        cat: 'science'
+        cat: 'news'
     }
 })
+
+import { grab, log } from 'grab-url'
+log(searchResults.data?.results?.[0].url)
+
+if (!searchResults.data?.results?.[0].url)
+    throw new Error('No URL found');
+
+var topResult = await qwk.extractContent({
+    query: {
+        url: searchResults.data?.results?.[0].url || ''
+    }
+})
+
+log(topResult.);

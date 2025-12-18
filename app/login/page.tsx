@@ -5,6 +5,7 @@ import { SiweSignIn } from "@/components/auth/siwe-signin"
 import { Card } from "@/components/ui/card"
 import Link from "next/link"
 import Image from "next/image"
+const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME;
 
 export default function LoginPage() {
   return (
@@ -21,7 +22,7 @@ export default function LoginPage() {
                 className="h-full w-full object-cover"
               />
             </div>
-            <span className="text-2xl font-bold">{process?.env?.NEXT_PUBLIC_APP_NAME}</span>
+            <span className="text-2xl font-bold">{APP_NAME}</span>
           </div>
 
           <div className="text-center">

@@ -19,6 +19,9 @@ import {
 import { useState } from "react"
 import { ThemeDropdown } from "@/components/theme-dropdown"
 
+const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME;
+
+
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -38,7 +41,7 @@ export function Header() {
               className="h-full w-full object-cover"
             />
           </div>
-          <span className="text-xl font-semibold text-foreground">{process?.env?.NEXT_PUBLIC_APP_NAME}</span>
+          <span className="text-xl font-semibold text-foreground">{APP_NAME}</span>
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
