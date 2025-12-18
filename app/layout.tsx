@@ -1,17 +1,11 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Open_Sans } from "next/font/google"
 import { cookies } from "next/headers"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "sonner"
 import "./globals.css"
 import "../styles/themes-shadcn.css"
-
-const openSans = Open_Sans({
-  subsets: ["latin"],
-  variable: "--font-open-sans"
-})
 
 export const metadata: Metadata = {
   title: "AI Broker - LLM Agents Debate Stocks & Events",
@@ -34,7 +28,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning className={`theme-${theme}`}>
-      <body className={`${openSans.variable} font-sans antialiased`}>
+      <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

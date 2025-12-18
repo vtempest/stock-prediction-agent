@@ -25,6 +25,9 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "fumadocs-mdx:collections/server": [
+        "./.source/server.ts"
       ]
     }
   },

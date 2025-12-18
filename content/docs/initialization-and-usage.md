@@ -772,7 +772,7 @@ PineTS distinguishes between `let` and `var` declarations to mimic Pine Script's
 
 **Pine Script:**
 
-```pinescript
+```javascript
 // 'sum' retains its value across bars
 var float sum = 0.0
 sum := sum + close
@@ -799,7 +799,7 @@ PineTS supports standard JavaScript loops, which map to Pine Script's loops.
 
 **Pine Script:**
 
-```pinescript
+```javascript
 float sum = 0.0
 for i = 0 to 9
     sum := sum + close[i]
@@ -822,7 +822,7 @@ PineTS supports the JavaScript `switch` statement, which is equivalent to Pine S
 
 **Pine Script:**
 
-```pinescript
+```javascript
 switch type
     "ema" => ta.ema(close, len)
     "sma" => ta.sma(close, len)
@@ -848,7 +848,7 @@ User-defined functions in PineTS are written as standard JavaScript functions.
 
 **Pine Script:**
 
-```pinescript
+```javascript
 f_ma(source, length) =>
     ta.sma(source, length)
 ```
@@ -867,7 +867,7 @@ Pine Script allows functions to return multiple values (tuples). PineTS handles 
 
 **Pine Script:**
 
-```pinescript
+```javascript
 [macdLine, signalLine, histLine] = ta.macd(close, 12, 26, 9)
 ```
 
@@ -907,7 +907,7 @@ PineTS supports standard JavaScript control flow, which maps to Pine Script's ex
 
 **Pine Script:**
 
-```pinescript
+```javascript
 if close > open
     direction := 1
 else
@@ -968,7 +968,7 @@ This example demonstrates `var` for state, `if/else` logic, and history access.
 
 **Pine Script:**
 
-```pinescript
+```javascript
 pine_sar(start, inc, max) =>
     var float result = na
     var float maxMin = na

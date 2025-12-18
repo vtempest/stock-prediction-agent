@@ -1,4 +1,8 @@
 import { createMDX } from 'fumadocs-mdx/next'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const withMDX = createMDX()
 
@@ -22,6 +26,22 @@ const nextConfig = {
     'shiki',
   ],
   reactStrictMode: true,
+  experimental: {
+    turbo: {
+      resolveAlias: {
+        'fumadocs-mdx:collections/server': path.resolve(__dirname, '.source/server.ts'),
+      },
+    },
+  },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'fumadocs-mdx:collections/server': path.resolve(__dirname, '.source/server.ts'),
+      }
+    }
+    return config
+  },
 }
 
 export default withMDX(nextConfig)

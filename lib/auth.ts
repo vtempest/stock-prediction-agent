@@ -11,13 +11,20 @@ import Stripe from "stripe"
 import { plans, type Plan } from "./payments/plans";
 import { headers } from "next/headers";
 
-const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  typescript: true
-})
+// Lazy Stripe client initialization to avoid build-time errors
+let _stripeClient: Stripe | null = null
+function getStripeClient() {
+  if (!_stripeClient) {
+    _stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY || 'placeholder', {
+      typescript: true
+    })
+  }
+  return _stripeClient
+}
 
 
 // https://buy.stripe.com/5kQfZgcMng3a6Xebelcs800
-// 
+//
 
 export const auth = betterAuth({
   baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
@@ -61,7 +68,9 @@ export const auth = betterAuth({
     }),
 
     stripe({
-      stripeClient,
+      get stripeClient() {
+        return getStripeClient()
+      },
       stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET!,
       createCustomerOnSignUp: true,
       subscription: {

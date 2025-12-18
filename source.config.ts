@@ -97,7 +97,8 @@ export default defineConfig({
 
     return {
       rehypeCodeOptions: {
-        langs: ['ts', 'js', 'html', 'tsx', 'mdx'],
+        // Don't restrict langs to allow any language in docs
+        // langs: ['ts', 'js', 'html', 'tsx', 'mdx'],
         inline: 'tailing-curly-colon',
         themes: {
           light: 'catppuccin-latte',

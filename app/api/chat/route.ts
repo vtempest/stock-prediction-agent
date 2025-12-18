@@ -1,3 +1,7 @@
+// Force dynamic rendering to avoid build-time evaluation
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
 import { type CoreMessage } from 'ai'
 import { toUIMessageStream } from '@ai-sdk/langchain'
 import { chatModel } from '@/lib/ai/providers'
