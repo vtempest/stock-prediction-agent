@@ -431,6 +431,123 @@ export const agentApiLogs = sqliteTable("agent_api_logs", {
 })
 
 // ============================================================================
+// Brokerage Account Profile (CIP, KYC, Suitability)
+// ============================================================================
+
+// Brokerage Profile - Required regulatory information for trading accounts
+export const brokerageProfiles = sqliteTable("brokerage_profiles", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }).unique(),
+
+  // ========== I. Identity Object (CIP & AML) ==========
+  // Legal Name
+  firstName: text("first_name").notNull(),
+  middleName: text("middle_name"),
+  lastName: text("last_name").notNull(),
+
+  // Residential Address (Physical, no P.O. Boxes)
+  resStreet1: text("res_street_1").notNull(),
+  resStreet2: text("res_street_2"),
+  resCity: text("res_city").notNull(),
+  resState: text("res_state").notNull(),
+  resZip: text("res_zip").notNull(),
+  resCountry: text("res_country").notNull().default("USA"),
+
+  // Mailing Address (Optional, if different from residential)
+  mailStreet1: text("mail_street_1"),
+  mailStreet2: text("mail_street_2"),
+  mailCity: text("mail_city"),
+  mailState: text("mail_state"),
+  mailZip: text("mail_zip"),
+  mailCountry: text("mail_country"),
+
+  // Date of Birth & Tax ID
+  dateOfBirth: text("date_of_birth").notNull(), // YYYY-MM-DD format
+  taxIdType: text("tax_id_type").notNull(), // SSN, ITIN, FOREIGN_TAX_ID
+  taxId: text("tax_id").notNull(), // Encrypted
+
+  // Citizenship Status
+  citizenshipCountry: text("citizenship_country").notNull(),
+  visaType: text("visa_type"), // If applicable (H1B, F1, etc.)
+
+  // Trusted Contact (FINRA Rule 4512)
+  trustedContactName: text("trusted_contact_name"),
+  trustedContactPhone: text("trusted_contact_phone"),
+  trustedContactEmail: text("trusted_contact_email"),
+
+  // ========== II. Employment Object (Rule 3210) ==========
+  employmentStatus: text("employment_status").notNull(), // EMPLOYED, UNEMPLOYED, RETIRED, STUDENT, SELF_EMPLOYED
+  employerName: text("employer_name"),
+  occupation: text("occupation"),
+  industryCode: text("industry_code"), // NAICS or custom codes
+
+  // Affiliation Flags
+  isAffiliatedBrokerDealer: integer("is_affiliated_broker_dealer", { mode: "boolean" }).default(false),
+  isControlPerson: integer("is_control_person", { mode: "boolean" }).default(false),
+  controlPersonTickers: text("control_person_tickers"), // JSON array of ticker symbols if true
+  isPoliticallyExposed: integer("is_politically_exposed", { mode: "boolean" }).default(false),
+
+  // ========== III. Financial Profile Object (Suitability) ==========
+  // Income Metrics
+  annualIncome: text("annual_income").notNull(), // Range: <25K, 25K-50K, 50K-100K, 100K-200K, 200K+
+  incomeSource: text("income_source").notNull(), // SALARY, INVESTMENTS, INHERITANCE, BUSINESS, RETIREMENT, OTHER
+
+  // Asset Metrics
+  totalNetWorth: text("total_net_worth").notNull(), // Range: <50K, 50K-100K, 100K-250K, 250K-500K, 500K-1M, 1M+
+  liquidNetWorth: text("liquid_net_worth").notNull(), // Must be <= totalNetWorth
+
+  // Tax Bracket
+  taxBracket: text("tax_bracket"), // 10%, 12%, 22%, 24%, 32%, 35%, 37%
+
+  // ========== IV. Investment Profile Object (Risk & Permissions) ==========
+  // Investment Objective
+  investmentObjective: text("investment_objective").notNull(), // INCOME, GROWTH, SPECULATION, CAPITAL_PRESERVATION
+
+  // Risk Tolerance
+  riskTolerance: text("risk_tolerance").notNull(), // LOW, MEDIUM, HIGH
+
+  // Time Horizon
+  timeHorizon: text("time_horizon").notNull(), // SHORT, AVERAGE, LONG
+
+  // Liquidity Needs
+  liquidityNeeds: text("liquidity_needs").notNull(), // VERY_IMPORTANT, SOMEWHAT_IMPORTANT, NOT_IMPORTANT
+
+  // Experience Level (JSON object with asset classes)
+  // Format: { "equities": { "years": "3-5", "tradesPerYear": "30+", "knowledgeLevel": "GOOD" }, ... }
+  investmentExperience: text("investment_experience").notNull(),
+
+  // ========== V. Disclosures & Agreements ==========
+  // W-9 / W-8BEN Certification
+  w9Certified: integer("w9_certified", { mode: "boolean" }).default(false),
+  w9CertifiedDate: integer("w9_certified_date", { mode: "timestamp" }),
+
+  // Stock Exchange Agreements
+  isNonProfessionalSubscriber: integer("is_non_professional_subscriber", { mode: "boolean" }).default(true),
+
+  // Margin Agreement
+  marginAgreementAccepted: integer("margin_agreement_accepted", { mode: "boolean" }).default(false),
+  marginAgreementDate: integer("margin_agreement_date", { mode: "timestamp" }),
+
+  // Privacy Policy & Terms
+  privacyPolicyAccepted: integer("privacy_policy_accepted", { mode: "boolean" }).default(false),
+  privacyPolicyDate: integer("privacy_policy_date", { mode: "timestamp" }),
+  termsAccepted: integer("terms_accepted", { mode: "boolean" }).default(false),
+  termsAcceptedDate: integer("terms_accepted_date", { mode: "timestamp" }),
+
+  // ========== VI. Infrastructure / API Logic ==========
+  kycStatus: text("kyc_status").notNull().default("PENDING"), // PENDING, REVIEW, APPROVED, REJECTED
+  accountType: text("account_type").notNull().default("CASH"), // CASH, MARGIN, PM (Portfolio Margin)
+  tradingPermissions: text("trading_permissions"), // JSON object with permission levels
+
+  // Metadata
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+  submittedAt: integer("submitted_at", { mode: "timestamp" }), // When user completed the form
+  approvedAt: integer("approved_at", { mode: "timestamp" }), // When KYC was approved
+  approvedBy: text("approved_by"), // Admin user ID who approved
+})
+
+// ============================================================================
 // Organizations & Teams
 // ============================================================================
 

@@ -15,18 +15,28 @@ export function GoogleSignIn() {
   useEffect(() => {
     const checkUserAndRedirect = async () => {
       if (session?.user) {
-        // Check if user has completed the survey
         try {
-          const response = await fetch('/api/user/check-survey')
-          const data = await response.json()
+          // First check if user has completed brokerage profile
+          const brokerageResponse = await fetch('/api/user/check-brokerage')
+          const brokerageData = await brokerageResponse.json()
 
-          if (data.hasCompletedSurvey) {
+          // If no brokerage profile or KYC not approved, redirect to onboarding
+          if (!brokerageData.hasProfile || brokerageData.kycStatus !== "APPROVED") {
+            router.push("/onboarding")
+            return
+          }
+
+          // If brokerage profile is approved, check survey completion
+          const surveyResponse = await fetch('/api/user/check-survey')
+          const surveyData = await surveyResponse.json()
+
+          if (surveyData.hasCompletedSurvey) {
             router.push("/dashboard")
           } else {
             router.push("/survey")
           }
         } catch (error) {
-          console.error("Error checking survey status:", error)
+          console.error("Error checking user status:", error)
           // Default to dashboard if check fails
           router.push("/dashboard")
         }

@@ -80,8 +80,18 @@ export function SiweSignIn() {
       if (data) {
         router.refresh()
 
-        // Check if user has completed the survey
         try {
+          // First check if user has completed brokerage profile
+          const brokerageResponse = await fetch('/api/user/check-brokerage')
+          const brokerageData = await brokerageResponse.json()
+
+          // If no brokerage profile or KYC not approved, redirect to onboarding
+          if (!brokerageData.hasProfile || brokerageData.kycStatus !== "APPROVED") {
+            router.push("/onboarding")
+            return
+          }
+
+          // If brokerage profile is approved, check survey completion
           const surveyResponse = await fetch('/api/user/check-survey')
           const surveyData = await surveyResponse.json()
 
@@ -91,7 +101,7 @@ export function SiweSignIn() {
             router.push("/survey")
           }
         } catch (error) {
-          console.error("Error checking survey status:", error)
+          console.error("Error checking user status:", error)
           // Default to dashboard if check fails
           router.push("/dashboard")
         }

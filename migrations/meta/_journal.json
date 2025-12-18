@@ -43,6 +43,13 @@
       "when": 1765695539238,
       "tag": "0005_glorious_mephistopheles",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1766018929115,
+      "tag": "0006_bent_roulette",
+      "breakpoints": true
     }
   ]
 }

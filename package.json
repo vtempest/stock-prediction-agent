@@ -19,6 +19,7 @@
   "dependencies": {
     "@alpacahq/alpaca-trade-api": "^3.1.3",
     "@better-auth/stripe": "^1.4.7",
+    "@hookform/resolvers": "^5.2.2",
     "@langchain/core": "^1.1.5",
     "@langchain/groq": "^1.0.2",
     "@libsql/client": "^0.15.15",
