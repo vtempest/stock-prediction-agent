@@ -5,6 +5,7 @@ import { db } from "./db";
 import * as schema from "./db/schema";
 import { randomBytes } from "crypto";
 import { verifyMessage } from "ethers";
+import { SiweMessage } from "siwe";
 
 import { stripe } from "@better-auth/stripe"
 import Stripe from "stripe"
@@ -58,9 +59,23 @@ export const auth = betterAuth({
       },
       verifyMessage: async ({ message, signature }) => {
         try {
-          // Verify the signed SIWE message using ethers
-          const recovered = verifyMessage(message, signature);
-          return !!recovered;
+          // Parse the SIWE message
+          const siweMessage = new SiweMessage(message);
+
+          // Verify the signature and get the recovered address
+          const recoveredAddress = verifyMessage(message, signature);
+
+          // Check if the recovered address matches the address in the SIWE message
+          const isValid = recoveredAddress.toLowerCase() === siweMessage.address.toLowerCase();
+
+          if (!isValid) {
+            console.error("Address mismatch:", {
+              recovered: recoveredAddress,
+              expected: siweMessage.address
+            });
+          }
+
+          return isValid;
         } catch (error) {
           console.error("Message verification failed:", error);
           return false;
