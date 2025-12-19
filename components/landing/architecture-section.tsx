@@ -38,16 +38,19 @@ export function ArchitectureSection() {
               Our AI agents analyze candlestick patterns, moving averages, and technical indicators in real-time,
               providing institutional-grade market insights.
             </p>
-            <ul className="mt-6 space-y-3">
-              {["Pattern Recognition", "Technical Indicators", "Sentiment Analysis", "Risk Assessment"].map((item) => (
-                <li key={item} className="flex items-center gap-3">
-                  <div className="h-2 w-2 rounded-full bg-primary" />
-                  <span className="text-muted-foreground">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+
+            <div className="mt-12 flex justify-center">
+              <Image
+                src="/images/securities.svg"
+                alt="Real Time Securities"
+                width={200}
+                height={200}
+                className="w-[200px] bg-zinc-950 p-6 rounded-2xl border border-white/10"
+              />
+            </div>
+          </div>        </div>
+
+
 
         <div className="mt-16">
           {/* Desktop Flow */}

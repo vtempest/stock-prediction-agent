@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Calendar, FileText } from "lucide-react"
 import Link from "next/link"
 import dynamic from "next/dynamic"
+import Image from 'next/image'
 
 const GlobeDemo = dynamic(() => import("@/components/globe-demo"), {
   ssr: false,
@@ -25,12 +26,12 @@ export function CTASection() {
         <div className="grid lg:grid-cols-2 gap-8 items-start">
           {/* Links and Globe Column */}
           <div className="flex flex-col gap-4">
-            {/* Globe */}
             <div className="w-full h-[400px] mb-4">
               <GlobeDemo />
             </div>
 
-            <Button size="lg" asChild className="w-full">
+
+            {/* <Button size="lg" asChild className="w-full">
               <Link href="https://takemymoney.autoinvestment.broker" target="_blank">
                 <Calendar className="mr-2 h-5 w-5" />
                 Book a Demo
@@ -62,13 +63,18 @@ export function CTASection() {
               <Link href="/login" target="_blank" rel="noopener noreferrer">
                 Login
               </Link>
-            </Button>
+            </Button> */}
+
+
+            {/* Globe */}
+
           </div>
 
           {/* Video Column */}
-          <div className="flex justify-center lg:justify-end items-start">
+          <div className="flex flex-col items-center lg:items-end gap-6">
+
             <video
-              className="w-3/4 rounded-lg shadow-xl border border-border/50"
+              className="w-full rounded-lg shadow-xl border border-border/50"
               autoPlay
               loop
               muted

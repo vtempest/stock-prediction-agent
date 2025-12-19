@@ -6,6 +6,7 @@ import { HoverBorderGradient } from "@/components/ui/hover-border-gradient"
 import { Spotlight } from "@/components/ui/spotlight-new"
 import {
   Users,
+  Target,
   MessageSquare,
   TrendingUp,
   BarChart3,
@@ -71,6 +72,8 @@ export function HeroSection() {
 
               <Button variant="outline" size="lg" asChild>
                 <Link href="/api/docs" target="_blank" rel="noopener noreferrer">
+                  <Target className="mr-2 h-5 w-5" />
+
                   API Docs
                 </Link>
               </Button>
@@ -79,7 +82,7 @@ export function HeroSection() {
               <Button variant="outline" size="lg" asChild>
                 <Link href="https://drive.google.com/file/d/1haVl0uguVYnLh8D3EUdaIyi3Tl4kSOIP/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
                   <FileText className="mr-2 h-5 w-5" />
-                  Whitepaper
+                  Paper
                 </Link>
               </Button>
 
@@ -102,12 +105,12 @@ export function HeroSection() {
           {[
             { icon: Users, label: "Multi-Agent Teams", desc: "4 specialized analysts" },
             { icon: BarChart3, label: "Algo Strategies", desc: "Momentum & breakout" },
-            { icon: TrendingUp, label: "Prediction Markets", desc: "Polymarket & Kalshi" },
+            { icon: TrendingUp, label: "Prediction Markets", desc: "Polymarket & Kalshi Correlation" },
             { icon: MessageSquare, label: "Copy Trading", desc: "Follow top performers" },
             { icon: Clock, label: "Time Travel Backtesting", desc: "Test strategies in the past" },
             { icon: Bot, label: "Chatbot Algo Builder", desc: "Modify rules with AI chat" },
             { icon: Newspaper, label: "News Opinion Scanner", desc: "AI judges sentiment shifts" },
-            { icon: TrendingDown, label: "Senate & Investor Tracking", desc: "Follow insider moves" },
+            { icon: TrendingDown, label: "Real-Time Price Updates", desc: "Split-second algo bot trade" },
           ].map((item) => (
             <div
               key={item.label}
