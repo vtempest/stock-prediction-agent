@@ -79,7 +79,7 @@ export function BrokerPlatformsSection() {
       assets: ["Global Stocks", "Options", "Futures", "FX"],
       color: "from-blue-500 to-indigo-600",
       icon: Globe,
-      status: "Active",
+      status: "Coming Soon",
       docs: "https://www.interactivebrokers.com/en/trading/ib-api.php"
     }
   ]
@@ -87,13 +87,13 @@ export function BrokerPlatformsSection() {
     <section className="relative sm:px-6 lg:px-8 bg-muted/30">
       <div className="mx-auto max-w-7xl">
 
-                {/* Flow Arrow */}
-                <div className="my-8 flex justify-center">
-                  <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2">
-                    <span className="text-sm text-muted-foreground">Order flow to auto trade on</span>
-                    <ArrowRight className="h-4 w-4 text-primary" />
-                  </div>
-                </div>
+        {/* Flow Arrow */}
+        <div className="my-8 flex justify-center">
+          <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2">
+            <span className="text-sm text-muted-foreground">Order flow to auto trade on</span>
+            <ArrowRight className="h-4 w-4 text-primary" />
+          </div>
+        </div>
 
         {/* Broker Cards Grid */}
         <div className="flex gap-6 overflow-x-auto pb-4 mb-12 custom-scrollbar">
@@ -186,7 +186,7 @@ export function BrokerPlatformsSection() {
           ))}
         </div>
 
-       
+
       </div>
     </section>
   )

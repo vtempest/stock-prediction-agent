@@ -525,9 +525,8 @@ export default function SettingsPage() {
                           onClick={() => handleThemeChange(themeName)}
                           onMouseEnter={() => handleThemePreview(themeName)}
                           onMouseLeave={handlePreviewEnd}
-                          className={`cursor-pointer ${
-                            colorTheme === themeName ? "bg-accent" : ""
-                          }`}
+                          className={`cursor-pointer ${colorTheme === themeName ? "bg-accent" : ""
+                            }`}
                         >
                           <div className="flex items-center justify-between w-full">
                             <div className="flex items-center gap-2">

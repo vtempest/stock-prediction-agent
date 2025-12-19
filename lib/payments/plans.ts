@@ -5,13 +5,14 @@ export interface Plan {
   limits: any,
   features: string[],
   price: number,
-  trialDays: number
+  trialDays: number,
+  paymentURL: string
 }
 
 export const plans: Plan[] = [
   {
     id: 1,
-    name: "pro",
+    name: "Pro",
     priceId: "price_1Sf25tD6sln9a8JlVfI0B6WR",
     limits: {
       tokens: 1000
@@ -24,6 +25,7 @@ export const plans: Plan[] = [
     ],
     price: 19.99,
     trialDays: 7,
+    paymentURL: "https://buy.stripe.com/5kQfZgcMng3a6Xebelcs800"
   },
   {
     id: 2,
@@ -41,6 +43,7 @@ export const plans: Plan[] = [
     ],
     price: 299,
     trialDays: 14,
+    paymentURL: "https://buy.stripe.com/eVqdR87s32ck4P6gyFcs801"
   },
 
   // {

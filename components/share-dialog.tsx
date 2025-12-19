@@ -35,8 +35,23 @@ export function ShareDialog({
 }: ShareDialogProps) {
   const [open, setOpen] = useState(false)
   const [email, setEmail] = useState("")
+  const [emailError, setEmailError] = useState("")
   const [message, setMessage] = useState(defaultMessage || "")
   const [loading, setLoading] = useState(false)
+
+  const validateEmail = () => {
+    if (!email) {
+      setEmailError("") // Optional: or "Email is required"
+      return false
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setEmailError("Please enter a valid email address")
+      return false
+    }
+    setEmailError("")
+    return true
+  }
 
   const handleShare = async () => {
     if (!email) {
@@ -44,9 +59,7 @@ export function ShareDialog({
       return
     }
 
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
+    if (!validateEmail()) {
       toast.error("Please enter a valid email address")
       return
     }
@@ -116,8 +129,14 @@ export function ShareDialog({
               type="email"
               placeholder="colleague@example.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value)
+                if (emailError) setEmailError("")
+              }}
+              onBlur={validateEmail}
+              className={emailError ? "border-red-500" : ""}
             />
+            {emailError && <p className="text-sm text-red-500">{emailError}</p>}
           </div>
           <div className="space-y-2">
             <Label htmlFor="message">Message (optional)</Label>

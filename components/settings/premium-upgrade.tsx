@@ -16,7 +16,7 @@ export function PremiumUpgrade() {
         setLoadingPlanId(plan.id);
         try {
             // Direct link to Stripe checkout
-            window.location.href = "https://buy.stripe.com/5kQfZgcMng3a6Xebelcs800";
+            window.location.href = plan.paymentURL;
         } catch (error) {
             console.error("Subscription error:", error);
             toast.error("Failed to start subscription process");

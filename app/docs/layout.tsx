@@ -1,5 +1,5 @@
 import { NextProvider } from 'fumadocs-core/framework/next'
-import { DocsLayout } from 'fumadocs-ui/layouts/notebook'
+import { DocsLayout } from 'fumadocs-ui/layouts/docs'
 import { RootProvider } from 'fumadocs-ui/provider/base'
 import { AISearchTrigger } from '@/components/fumadocs/ai/search'
 import { baseOptions, linkItems, logo } from '@/lib/layout.shared'
@@ -50,7 +50,7 @@ export default function Layout({ children }: LayoutProps<'/docs'>) {
               },
             },
           }}
-          tabMode='navbar'
+          tabMode='top'
 
           nav={{
             ...base.nav,
