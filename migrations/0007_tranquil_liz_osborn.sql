@@ -5,7 +5,6 @@ DROP INDEX "sessions_token_unique";--> statement-breakpoint
 DROP INDEX "user_settings_user_id_unique";--> statement-breakpoint
 DROP INDEX "users_email_unique";--> statement-breakpoint
 DROP INDEX "users_api_key_unique";--> statement-breakpoint
-DROP INDEX "wallet_addresses_address_unique";--> statement-breakpoint
 ALTER TABLE `wallet_addresses` ALTER COLUMN "chain_id" TO "chain_id" integer NOT NULL;--> statement-breakpoint
 CREATE UNIQUE INDEX `polymarket_debates_market_id_unique` ON `polymarket_debates` (`market_id`);--> statement-breakpoint
 CREATE UNIQUE INDEX `portfolios_user_id_unique` ON `portfolios` (`user_id`);--> statement-breakpoint
