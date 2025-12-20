@@ -201,11 +201,7 @@
           "200": {
             "description": "Successful response",
             "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Settings"
-                }
-              }
+              "application/json": {}
             }
           },
           "401": {
@@ -221,11 +217,7 @@
         "description": "Save or update user settings and API keys",
         "requestBody": {
           "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Settings"
-              }
-            }
+            "application/json": {}
           }
         },
         "responses": {
@@ -992,7 +984,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["symbol"],
+                "required": [
+                  "symbol"
+                ],
                 "properties": {
                   "symbol": {
                     "type": "string",
@@ -1015,7 +1009,11 @@
                   },
                   "llm_provider": {
                     "type": "string",
-                    "enum": ["groq", "openai", "anthropic"],
+                    "enum": [
+                      "groq",
+                      "openai",
+                      "anthropic"
+                    ],
                     "default": "groq",
                     "description": "LLM provider to use"
                   },
@@ -1149,7 +1147,11 @@
                       "items": {
                         "type": "string"
                       },
-                      "example": ["groq", "openai", "anthropic"]
+                      "example": [
+                        "groq",
+                        "openai",
+                        "anthropic"
+                      ]
                     }
                   }
                 }
@@ -1511,580 +1513,599 @@
             }
           }
         }
-      }
-    },
-    "ScreenerRequest": {
-      "type": "object",
-      "properties": {
-        "minMarketCap": {
-          "type": "number"
-        },
-        "maxMarketCap": {
-          "type": "number"
-        },
-        "minPE": {
-          "type": "number"
-        },
-        "maxPE": {
-          "type": "number"
-        },
-        "sector": {
-          "type": "string"
-        }
-      }
-    },
-    "TradingAgentRequest": {
-      "type": "object",
-      "required": [
-        "symbol",
-        "agent"
-      ],
-      "properties": {
-        "symbol": {
-          "type": "string",
-          "example": "AAPL"
-        },
-        "agent": {
-          "type": "string",
-          "enum": [
-            "debate-analyst",
-            "news-researcher"
-          ],
-          "example": "debate-analyst"
-        },
-        "deep_think_llm": {
-          "type": "string",
-          "example": "llama-3.3-70b-versatile"
-        },
-        "quick_think_llm": {
-          "type": "string",
-          "example": "llama-3.1-8b-instant"
-        },
-        "max_debate_rounds": {
-          "type": "integer",
-          "example": 1
-        }
-      }
-    },
-    "TradingAgentResponse": {
-      "type": "object",
-      "properties": {
-        "success": {
-          "type": "boolean"
-        },
-        "symbol": {
-          "type": "string"
-        },
-        "decision": {
-          "type": "object",
-          "properties": {
-            "action": {
-              "type": "string",
-              "enum": [
-                "BUY",
-                "SELL",
-                "HOLD"
-              ],
-              "example": "BUY"
-            },
-            "confidence": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
-            },
-            "reasoning": {
-              "type": "string"
-            },
-            "risk_assessment": {
-              "type": "string"
-            }
-          }
-        },
-        "analysis": {
-          "type": "object",
-          "properties": {
-            "bull_arguments": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            },
-            "bear_arguments": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          "technical_indicators": {
-            "type": "object"
-          },
-          "sentiment_score": {
+      },
+      "ScreenerRequest": {
+        "type": "object",
+        "properties": {
+          "minMarketCap": {
             "type": "number"
+          },
+          "maxMarketCap": {
+            "type": "number"
+          },
+          "minPE": {
+            "type": "number"
+          },
+          "maxPE": {
+            "type": "number"
+          },
+          "sector": {
+            "type": "string"
           }
         }
-      }
-    }
-  },
-  "DebateAnalysisResponse": {
-    "type": "object",
-    "required": ["success", "symbol", "date"],
-    "properties": {
-      "success": {
-        "type": "boolean",
-        "description": "Whether the analysis completed successfully"
       },
-      "symbol": {
-        "type": "string",
-        "example": "AAPL",
-        "description": "Stock ticker symbol analyzed"
-      },
-      "date": {
-        "type": "string",
-        "format": "date",
-        "example": "2024-12-19",
-        "description": "Analysis date"
-      },
-      "analysis": {
+      "TradingAgentRequest": {
         "type": "object",
-        "required": ["final_decision", "confidence_level", "reasoning"],
+        "required": [
+          "symbol",
+          "agent"
+        ],
         "properties": {
-          "bull_arguments": {
-            "type": "array",
-            "description": "Bullish arguments from Bull Researcher",
-            "items": {
-              "type": "string"
-            },
-            "example": [
-              "Strong fundamentals with 15% YoY revenue growth",
-              "Leading market position in premium smartphone segment"
-            ]
-          },
-          "bear_arguments": {
-            "type": "array",
-            "description": "Bearish arguments from Bear Researcher",
-            "items": {
-              "type": "string"
-            },
-            "example": [
-              "P/E ratio of 28 above historical average",
-              "Regulatory pressure in key markets"
-            ]
-          },
-          "final_decision": {
+          "symbol": {
             "type": "string",
-            "enum": ["BUY", "SELL", "HOLD", "REJECT"],
-            "description": "Final investment decision from Research Manager",
-            "example": "BUY"
+            "example": "AAPL"
           },
-          "confidence_level": {
+          "agent": {
             "type": "string",
-            "enum": ["High", "Medium-High", "Medium", "Medium-Low", "Low"],
-            "description": "Confidence in the decision",
-            "example": "Medium-High"
+            "enum": [
+              "debate-analyst",
+              "news-researcher"
+            ],
+            "example": "debate-analyst"
           },
-          "reasoning": {
-            "type": "string",
-            "description": "Detailed reasoning for the decision",
-            "example": "Bull case stronger based on fundamental analysis and growth trajectory"
-          },
-          "risk_assessment": {
-            "type": "string",
-            "description": "Risk management assessment",
-            "example": "Medium risk with controlled position sizing recommended"
-          },
-          "thesis_compliance": {
-            "type": "object",
-            "description": "Thesis compliance metrics",
-            "properties": {
-              "financial_health": {
-                "type": "string",
-                "example": "9/12"
-              },
-              "growth_score": {
-                "type": "string",
-                "example": "4/6"
-              },
-              "pe_ratio": {
-                "type": "number",
-                "example": 16
-              },
-              "adr_status": {
-                "type": "string",
-                "example": "None"
-              },
-              "analyst_coverage": {
-                "type": "integer",
-                "example": 3
-              },
-              "compliance_percentage": {
-                "type": "number",
-                "minimum": 0,
-                "maximum": 100,
-                "example": 85
-              }
-            }
-          }
-        }
-      },
-      "debate_history": {
-        "type": "array",
-        "description": "Full debate conversation history",
-        "items": {
-          "type": "object",
-          "properties": {
-            "agent": {
-              "type": "string",
-              "example": "bull_researcher"
-            },
-            "message": {
-              "type": "string"
-            },
-            "timestamp": {
-              "type": "string",
-              "format": "date-time"
-            }
-          }
-        }
-      },
-      "metadata": {
-        "type": "object",
-        "description": "Execution metadata",
-        "properties": {
-          "llm_provider": {
-            "type": "string",
-            "example": "groq"
-          },
-          "deep_think_model": {
+          "deep_think_llm": {
             "type": "string",
             "example": "llama-3.3-70b-versatile"
           },
-          "quick_think_model": {
+          "quick_think_llm": {
             "type": "string",
             "example": "llama-3.1-8b-instant"
           },
-          "debate_rounds": {
+          "max_debate_rounds": {
             "type": "integer",
-            "example": 2
-          },
-          "total_tokens": {
-            "type": "integer",
-            "example": 15420
-          },
-          "execution_time_ms": {
-            "type": "integer",
-            "example": 8500
+            "example": 1
           }
         }
       },
-      "error": {
-        "type": "string",
-        "description": "Error message if analysis failed"
-      }
-    }
-  },
-  "BacktestRequest": {
-    "type": "object",
-    "required": [
-      "symbol"
-    ],
-    "properties": {
-      "symbol": {
-        "type": "string",
-        "example": "AAPL"
-      },
-      "printlog": {
-        "type": "boolean",
-        "default": false
-      }
-    }
-  },
-  "BacktestResponse": {
-    "type": "object",
-    "properties": {
-      "success": {
-        "type": "boolean"
-      },
-      "symbol": {
-        "type": "string"
-      },
-      "primo_results": {
+      "TradingAgentResponse": {
         "type": "object",
         "properties": {
-          "total_return": {
-            "type": "number"
+          "success": {
+            "type": "boolean"
           },
-          "sharpe_ratio": {
-            "type": "number"
+          "symbol": {
+            "type": "string"
           },
-          "max_drawdown": {
-            "type": "number"
-          },
-          "win_rate": {
-            "type": "number"
-          }
-        }
-      },
-      "buyhold_results": {
-        "type": "object"
-      },
-      "comparison": {
-        "type": "object"
-      }
-    }
-  },
-  "Portfolio": {
-    "type": "object",
-    "properties": {
-      "totalEquity": {
-        "type": "number"
-      },
-      "cash": {
-        "type": "number"
-      },
-      "stocks": {
-        "type": "number"
-      },
-      "dailyPnL": {
-        "type": "number"
-      },
-      "dailyPnLPercent": {
-        "type": "number"
-      },
-      "winRate": {
-        "type": "number"
-      },
-      "openPositions": {
-        "type": "integer"
-      }
-    }
-  },
-  "Strategy": {
-    "type": "object",
-    "properties": {
-      "id": {
-        "type": "string"
-      },
-      "name": {
-        "type": "string"
-      },
-      "type": {
-        "type": "string",
-        "enum": [
-          "momentum",
-          "mean-reversion",
-          "breakout",
-          "day-scalp"
-        ]
-      },
-      "status": {
-        "type": "string",
-        "enum": [
-          "running",
-          "paused",
-          "paper"
-        ]
-      },
-      "riskLevel": {
-        "type": "string",
-        "enum": [
-          "low",
-          "medium",
-          "high"
-        ]
-      },
-      "todayPnL": {
-        "type": "number"
-      },
-      "winRate": {
-        "type": "number"
-      }
-    }
-  },
-  "CreateStrategyRequest": {
-    "type": "object",
-    "required": [
-      "name",
-      "type"
-    ],
-    "properties": {
-      "name": {
-        "type": "string"
-      },
-      "type": {
-        "type": "string",
-        "enum": [
-          "momentum",
-          "mean-reversion",
-          "breakout",
-          "day-scalp"
-        ]
-      },
-      "riskLevel": {
-        "type": "string",
-        "enum": [
-          "low",
-          "medium",
-          "high"
-        ]
-      }
-    }
-  },
-  "UpdateStrategyRequest": {
-    "type": "object",
-    "properties": {
-      "status": {
-        "type": "string",
-        "enum": [
-          "running",
-          "paused",
-          "paper"
-        ]
-      },
-      "config": {
-        "type": "object"
-      }
-    }
-  },
-  "Signal": {
-    "type": "object",
-    "properties": {
-      "id": {
-        "type": "string"
-      },
-      "asset": {
-        "type": "string"
-      },
-      "type": {
-        "type": "string"
-      },
-      "combinedScore": {
-        "type": "number"
-      },
-      "scoreLabel": {
-        "type": "string"
-      },
-      "fundamentalsScore": {
-        "type": "number"
-      },
-      "technicalScore": {
-        "type": "number"
-      },
-      "sentimentScore": {
-        "type": "number"
-      },
-      "suggestedAction": {
-        "type": "string"
-      }
-    }
-  },
-  "StatisticsRequest": {
-    "type": "object",
-    "properties": {
-      "symbol": {
-        "type": "string",
-        "example": "AAPL"
-      },
-      "period": {
-        "type": "string",
-        "default": "1y"
-      },
-      "metrics": {
-        "type": "array",
-        "items": {
-          "type": "string",
-          "enum": [
-            "rolling_mean",
-            "rolling_std",
-            "bollinger_bands"
-          ]
-        }
-      },
-      "window": {
-        "type": "integer",
-        "default": 14
-      },
-      "correlation": {
-        "type": "object",
-        "description": "Configuration for correlating different timeseries data",
-        "properties": {
-          "target": {
-            "type": "string",
-            "example": "price",
-            "description": "Primary series to correlate against"
-          },
-          "features": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "example": [
-              "volume",
-              "sector_etf_price",
-              "market_index_price"
-            ],
-            "description": "List of other timeseries to test for correlation"
-          },
-          "method": {
-            "type": "string",
-            "enum": [
-              "pearson",
-              "spearman"
-            ],
-            "default": "pearson",
-            "description": "Correlation method to use"
-          }
-        }
-      }
-    }
-  },
-  "StatisticsResponse": {
-    "type": "object",
-    "properties": {
-      "success": {
-        "type": "boolean"
-      },
-      "symbol": {
-        "type": "string"
-      },
-      "data": {
-        "type": "object",
-        "properties": {
-          "timestamps": {
-            "type": "array",
-            "items": {
-              "type": "string"
+          "decision": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "string",
+                "enum": [
+                  "BUY",
+                  "SELL",
+                  "HOLD"
+                ],
+                "example": "BUY"
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "reasoning": {
+                "type": "string"
+              },
+              "risk_assessment": {
+                "type": "string"
+              }
             }
           },
-          "values": {
+          "analysis": {
             "type": "object",
-            "additionalProperties": {
-              "type": "array",
-              "items": {
+            "properties": {
+              "bull_arguments": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "bear_arguments": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "technical_indicators": {
+              "type": "object"
+            },
+            "sentiment_score": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "DebateAnalysisResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "symbol",
+          "date"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether the analysis completed successfully"
+          },
+          "symbol": {
+            "type": "string",
+            "example": "AAPL",
+            "description": "Stock ticker symbol analyzed"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "example": "2024-12-19",
+            "description": "Analysis date"
+          },
+          "analysis": {
+            "type": "object",
+            "required": [
+              "final_decision",
+              "confidence_level",
+              "reasoning"
+            ],
+            "properties": {
+              "bull_arguments": {
+                "type": "array",
+                "description": "Bullish arguments from Bull Researcher",
+                "items": {
+                  "type": "string"
+                },
+                "example": [
+                  "Strong fundamentals with 15% YoY revenue growth",
+                  "Leading market position in premium smartphone segment"
+                ]
+              },
+              "bear_arguments": {
+                "type": "array",
+                "description": "Bearish arguments from Bear Researcher",
+                "items": {
+                  "type": "string"
+                },
+                "example": [
+                  "P/E ratio of 28 above historical average",
+                  "Regulatory pressure in key markets"
+                ]
+              },
+              "final_decision": {
+                "type": "string",
+                "enum": [
+                  "BUY",
+                  "SELL",
+                  "HOLD",
+                  "REJECT"
+                ],
+                "description": "Final investment decision from Research Manager",
+                "example": "BUY"
+              },
+              "confidence_level": {
+                "type": "string",
+                "enum": [
+                  "High",
+                  "Medium-High",
+                  "Medium",
+                  "Medium-Low",
+                  "Low"
+                ],
+                "description": "Confidence in the decision",
+                "example": "Medium-High"
+              },
+              "reasoning": {
+                "type": "string",
+                "description": "Detailed reasoning for the decision",
+                "example": "Bull case stronger based on fundamental analysis and growth trajectory"
+              },
+              "risk_assessment": {
+                "type": "string",
+                "description": "Risk management assessment",
+                "example": "Medium risk with controlled position sizing recommended"
+              },
+              "thesis_compliance": {
+                "type": "object",
+                "description": "Thesis compliance metrics",
+                "properties": {
+                  "financial_health": {
+                    "type": "string",
+                    "example": "9/12"
+                  },
+                  "growth_score": {
+                    "type": "string",
+                    "example": "4/6"
+                  },
+                  "pe_ratio": {
+                    "type": "number",
+                    "example": 16
+                  },
+                  "adr_status": {
+                    "type": "string",
+                    "example": "None"
+                  },
+                  "analyst_coverage": {
+                    "type": "integer",
+                    "example": 3
+                  },
+                  "compliance_percentage": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100,
+                    "example": 85
+                  }
+                }
+              }
+            }
+          },
+          "debate_history": {
+            "type": "array",
+            "description": "Full debate conversation history",
+            "items": {
+              "type": "object",
+              "properties": {
+                "agent": {
+                  "type": "string",
+                  "example": "bull_researcher"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "timestamp": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Execution metadata",
+            "properties": {
+              "llm_provider": {
+                "type": "string",
+                "example": "groq"
+              },
+              "deep_think_model": {
+                "type": "string",
+                "example": "llama-3.3-70b-versatile"
+              },
+              "quick_think_model": {
+                "type": "string",
+                "example": "llama-3.1-8b-instant"
+              },
+              "debate_rounds": {
+                "type": "integer",
+                "example": 2
+              },
+              "total_tokens": {
+                "type": "integer",
+                "example": 15420
+              },
+              "execution_time_ms": {
+                "type": "integer",
+                "example": 8500
+              }
+            }
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if analysis failed"
+          }
+        }
+      },
+      "BacktestRequest": {
+        "type": "object",
+        "required": [
+          "symbol"
+        ],
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "example": "AAPL"
+          },
+          "printlog": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "BacktestResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "primo_results": {
+            "type": "object",
+            "properties": {
+              "total_return": {
+                "type": "number"
+              },
+              "sharpe_ratio": {
+                "type": "number"
+              },
+              "max_drawdown": {
+                "type": "number"
+              },
+              "win_rate": {
                 "type": "number"
               }
             }
           },
-          "correlations": {
+          "buyhold_results": {
+            "type": "object"
+          },
+          "comparison": {
+            "type": "object"
+          }
+        }
+      },
+      "Portfolio": {
+        "type": "object",
+        "properties": {
+          "totalEquity": {
+            "type": "number"
+          },
+          "cash": {
+            "type": "number"
+          },
+          "stocks": {
+            "type": "number"
+          },
+          "dailyPnL": {
+            "type": "number"
+          },
+          "dailyPnLPercent": {
+            "type": "number"
+          },
+          "winRate": {
+            "type": "number"
+          },
+          "openPositions": {
+            "type": "integer"
+          }
+        }
+      },
+      "Strategy": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "momentum",
+              "mean-reversion",
+              "breakout",
+              "day-scalp"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "running",
+              "paused",
+              "paper"
+            ]
+          },
+          "riskLevel": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "todayPnL": {
+            "type": "number"
+          },
+          "winRate": {
+            "type": "number"
+          }
+        }
+      },
+      "CreateStrategyRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "momentum",
+              "mean-reversion",
+              "breakout",
+              "day-scalp"
+            ]
+          },
+          "riskLevel": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          }
+        }
+      },
+      "UpdateStrategyRequest": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "running",
+              "paused",
+              "paper"
+            ]
+          },
+          "config": {
+            "type": "object"
+          }
+        }
+      },
+      "Signal": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "asset": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "combinedScore": {
+            "type": "number"
+          },
+          "scoreLabel": {
+            "type": "string"
+          },
+          "fundamentalsScore": {
+            "type": "number"
+          },
+          "technicalScore": {
+            "type": "number"
+          },
+          "sentimentScore": {
+            "type": "number"
+          },
+          "suggestedAction": {
+            "type": "string"
+          }
+        }
+      },
+      "StatisticsRequest": {
+        "type": "object",
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "example": "AAPL"
+          },
+          "period": {
+            "type": "string",
+            "default": "1y"
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "rolling_mean",
+                "rolling_std",
+                "bollinger_bands"
+              ]
+            }
+          },
+          "window": {
+            "type": "integer",
+            "default": 14
+          },
+          "correlation": {
             "type": "object",
-            "description": "Correlation coefficients between target and features",
-            "additionalProperties": {
-              "type": "number"
-            },
-            "example": {
-              "volume": 0.45,
-              "sector_etf_price": 0.89,
-              "market_index_price": 0.92
+            "description": "Configuration for correlating different timeseries data",
+            "properties": {
+              "target": {
+                "type": "string",
+                "example": "price",
+                "description": "Primary series to correlate against"
+              },
+              "features": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "example": [
+                  "volume",
+                  "sector_etf_price",
+                  "market_index_price"
+                ],
+                "description": "List of other timeseries to test for correlation"
+              },
+              "method": {
+                "type": "string",
+                "enum": [
+                  "pearson",
+                  "spearman"
+                ],
+                "default": "pearson",
+                "description": "Correlation method to use"
+              }
             }
           }
         }
+      },
+      "StatisticsResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "timestamps": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "values": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              },
+              "correlations": {
+                "type": "object",
+                "description": "Correlation coefficients between target and features",
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "example": {
+                  "volume": 0.45,
+                  "sector_etf_price": 0.89,
+                  "market_index_price": 0.92
+                }
+              }
+            }
+          }
+        }
+      },
+      "securitySchemes": {
+        "BearerAuth": {
+          "type": "http",
+          "scheme": "bearer"
+        }
       }
-    }
-  },
-  "securitySchemes": {
-    "BearerAuth": {
-      "type": "http",
-      "scheme": "bearer"
     }
   }
 }

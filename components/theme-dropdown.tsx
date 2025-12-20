@@ -15,11 +15,13 @@ import { useTheme } from "next-themes"
 
 const themeNames = [
   "modern-minimal",
-  "t3-chat",
+  "elegant-luxury",
+  "cyberpunk",
   "twitter",
   "mocha-mousse",
   "bubblegum",
   "amethyst-haze",
+  "pink-lemonade",
   "notebook",
   "doom-64",
   "catppuccin",
@@ -31,23 +33,23 @@ const themeNames = [
   "quantum-rose",
   "nature",
   "bold-tech",
-  "elegant-luxury",
   "amber-minimal",
   "supabase",
   "neo-brutalism",
   "solar-dusk",
   "claymorphism",
-  "cyberpunk",
   "pastel-dreams"
 ];
 
 const themeColors: Record<string, { primary: string; secondary: string }> = {
   "modern-minimal": { primary: "#3b82f6", secondary: "#f3f4f6" },
-  "t3-chat": { primary: "#a84370", secondary: "#f1c4e6" },
+  "elegant-luxury": { primary: "#9b2c2c", secondary: "#fdf2d6" },
+  "cyberpunk": { primary: "#ff00c8", secondary: "#f0f0ff" },
   "twitter": { primary: "#1e9df1", secondary: "#0f1419" },
   "mocha-mousse": { primary: "#A37764", secondary: "#BAAB92" },
   "bubblegum": { primary: "#d04f99", secondary: "#8acfd1" },
   "amethyst-haze": { primary: "#8a79ab", secondary: "#dfd9ec" },
+  "pink-lemonade": { primary: "#a84370", secondary: "#f1c4e6" },
   "notebook": { primary: "#606060", secondary: "#dedede" },
   "doom-64": { primary: "#b71c1c", secondary: "#556b2f" },
   "catppuccin": { primary: "#8839ef", secondary: "#ccd0da" },
@@ -59,13 +61,11 @@ const themeColors: Record<string, { primary: string; secondary: string }> = {
   "quantum-rose": { primary: "#e6067a", secondary: "#ffd6ff" },
   "nature": { primary: "#2e7d32", secondary: "#e8f5e9" },
   "bold-tech": { primary: "#8b5cf6", secondary: "#f3f0ff" },
-  "elegant-luxury": { primary: "#9b2c2c", secondary: "#fdf2d6" },
   "amber-minimal": { primary: "#f59e0b", secondary: "#f3f4f6" },
   "supabase": { primary: "#72e3ad", secondary: "#fdfdfd" },
   "neo-brutalism": { primary: "#ff3333", secondary: "#ffff00" },
   "solar-dusk": { primary: "#B45309", secondary: "#E4C090" },
   "claymorphism": { primary: "#6366f1", secondary: "#d6d3d1" },
-  "cyberpunk": { primary: "#ff00c8", secondary: "#f0f0ff" },
   "pastel-dreams": { primary: "#a78bfa", secondary: "#e9d8fd" }
 };
 
@@ -164,9 +164,8 @@ export function ThemeDropdown() {
               onClick={() => handleThemeChange(themeName)}
               onMouseEnter={() => handleThemePreview(themeName)}
               onMouseLeave={handlePreviewEnd}
-              className={`cursor-pointer ${
-                colorTheme === themeName ? "bg-accent" : ""
-              }`}
+              className={`cursor-pointer ${colorTheme === themeName ? "bg-accent" : ""
+                }`}
             >
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-2">

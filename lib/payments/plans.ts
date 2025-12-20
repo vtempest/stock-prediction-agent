@@ -1,14 +1,3 @@
-export interface Plan {
-  id: number,
-  name: string,
-  priceId: string,
-  limits: any,
-  features: string[],
-  price: number,
-  trialDays: number,
-  paymentURL: string
-}
-
 export const plans: Plan[] = [
   {
     id: 1,
@@ -33,51 +22,35 @@ export const plans: Plan[] = [
     priceId: "price_1SfItcD6sln9a8JlFRR4o83g",
     limits: {
       tokens: 10000,
-      proMembers: 8
+      proMembers: 15
     },
     features: [
-      "8 Pro member spots included",
+      "15 Pro member spots included",
       "Team sharing & collaboration",
-      "Toggle Pro upgrades for members",
+      "Custom data access",
       "Custom integrations",
     ],
     price: 299,
-    trialDays: 14,
+    trialDays: 3,
     paymentURL: "https://buy.stripe.com/eVqdR87s32ck4P6gyFcs801"
-  },
-
-  // {
-  //   id: 2,
-  //   name: "pro",
-  //   priceId: "price_1Rk2OzQ70YfWGPkSD4IBXRDo",
-  //   limits: {
-  //     tokens: 300
-  //   },
-  //   features: [
-  //     "Gives you access to pro features!",
-  //     "Upto 10 team members",
-  //     "Upto 20 GB storage",
-  //     "Upto 10 pages",
-  //     "Phone & email support",
-  //     "AI assistance"
-  //   ],
-  //   price: 29.99,
-  //   trialDays: 0
-  // },
-  // {
-  //   id: 3,
-  //   name: "Premium",
-  //   priceId: "price_1RCQTRDYd93YQoGLLd7bh8Kf",
-  //   limits: {
-  //     tokens: 900
-  //   },
-  //   features: [
-  //     "Unlimited projects",
-  //     "Advanced analytics",
-  //     "Priority support",
-  //     "100 GB storage"
-  //   ],
-  //   price: 59.99,
-  //   trialDays: 7
-  // }
+  }
 ]
+
+export interface Plan {
+  /** Unique identifier for the plan. */
+  id: number;
+  /** Display name of the plan. */
+  name: string;
+  /** The payment provider's price identifier. */
+  priceId: string;
+  /** Resource usage limits associated with the plan. */
+  limits: any;
+  /** List of features included in the plan. */
+  features: string[];
+  /** Numeric price of the plan. */
+  price: number;
+  /** Number of trial days offered for this plan. */
+  trialDays: number;
+  /** Direct link to the payment checkout page. */
+  paymentURL: string;
+}

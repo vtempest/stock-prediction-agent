@@ -183,7 +183,7 @@ const DATA_PROVIDERS = [
 
 const themeNames = [
   "modern-minimal",
-  "t3-chat",
+  "pink-lemonade",
   "twitter",
   "mocha-mousse",
   "bubblegum",
@@ -211,7 +211,7 @@ const themeNames = [
 
 const themeColors: Record<string, { primary: string; secondary: string }> = {
   "modern-minimal": { primary: "#3b82f6", secondary: "#f3f4f6" },
-  "t3-chat": { primary: "#a84370", secondary: "#f1c4e6" },
+  "pink-lemonade": { primary: "#a84370", secondary: "#f1c4e6" },
   "twitter": { primary: "#1e9df1", secondary: "#0f1419" },
   "mocha-mousse": { primary: "#A37764", secondary: "#BAAB92" },
   "bubblegum": { primary: "#d04f99", secondary: "#8acfd1" },
@@ -658,9 +658,8 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode }) {
           <div className="grid grid-cols-3 gap-4">
             <button
               onClick={() => setTheme("light")}
-              className={`relative flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors hover:bg-accent ${
-                theme === "light" ? "border-primary" : "border-muted"
-              }`}
+              className={`relative flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors hover:bg-accent ${theme === "light" ? "border-primary" : "border-muted"
+                }`}
             >
               <Sun className="h-8 w-8" />
               <span className="font-medium">Light</span>
@@ -671,9 +670,8 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode }) {
 
             <button
               onClick={() => setTheme("dark")}
-              className={`relative flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors hover:bg-accent ${
-                theme === "dark" ? "border-primary" : "border-muted"
-              }`}
+              className={`relative flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors hover:bg-accent ${theme === "dark" ? "border-primary" : "border-muted"
+                }`}
             >
               <Moon className="h-8 w-8" />
               <span className="font-medium">Dark</span>
@@ -684,9 +682,8 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode }) {
 
             <button
               onClick={() => setTheme("system")}
-              className={`relative flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors hover:bg-accent ${
-                theme === "system" ? "border-primary" : "border-muted"
-              }`}
+              className={`relative flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-colors hover:bg-accent ${theme === "system" ? "border-primary" : "border-muted"
+                }`}
             >
               <Monitor className="h-8 w-8" />
               <span className="font-medium">System</span>
@@ -729,9 +726,8 @@ export function SettingsDialog({ trigger }: { trigger?: React.ReactNode }) {
                       onClick={() => handleThemeChange(themeName)}
                       onMouseEnter={() => handleThemePreview(themeName)}
                       onMouseLeave={handlePreviewEnd}
-                      className={`cursor-pointer ${
-                        colorTheme === themeName ? "bg-accent" : ""
-                      }`}
+                      className={`cursor-pointer ${colorTheme === themeName ? "bg-accent" : ""
+                        }`}
                     >
                       <div className="flex items-center justify-between w-full">
                         <div className="flex items-center gap-2">

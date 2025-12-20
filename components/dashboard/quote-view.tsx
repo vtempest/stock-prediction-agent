@@ -12,6 +12,16 @@ import Link from "next/link"
 import { useSession } from "@/lib/auth-client"
 import { DynamicStockChart } from "@/components/dashboard/dynamic-stock-chart"
 import { TradeModal } from "@/components/dashboard/trade-modal"
+import * as Broker from '@/lib/api-client';
+
+Broker.postBacktestTechnical({
+  body: {
+    symbol: "AAPL",
+    interval: "1d",
+  }
+})
+
+Broker.getUserPortfolio()
 
 interface QuoteData {
   symbol: string
@@ -87,6 +97,7 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
 
     const checkWatchlist = async () => {
       try {
+
         const res = await fetch('/api/user/watchlist')
         const json = await res.json()
         if (json.success && json.data) {
@@ -107,8 +118,16 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
     const fetchQuote = async () => {
       try {
         setLoading(true)
-        const res = await fetch(`/api/stocks/quote/${symbol}`)
-        const json = await res.json()
+
+        // const res = await fetch(`/api/stocks/quote/${symbol}`)
+        const json = await Broker.getStocksQuoteBySymbol({
+          path: {
+            symbol
+          }
+        })
+
+
+        //await res.json()
 
         if (json.success && json.data) {
           setData(json.data)
@@ -327,8 +346,8 @@ export function QuoteView({ symbol, showBackButton = true, tradeSignals = [] }: 
                   >
                     <Star
                       className={`h-5 w-5 ${isInWatchlist
-                          ? "fill-yellow-400 text-yellow-400"
-                          : "text-muted-foreground"
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "text-muted-foreground"
                         }`}
                     />
                   </Button>

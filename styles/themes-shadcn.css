@@ -73,7 +73,7 @@
   --sidebar-ring: #3b82f6;
 }
 
-.theme-t3-chat.light {
+.theme-pink-lemonade.light {
   --background: #faf5fa;
   --foreground: #501854;
   --card: #faf5fa;
@@ -109,7 +109,7 @@
   --radius: 0.5rem;
 }
 
-.theme-t3-chat.dark {
+.theme-pink-lemonade.dark {
   --background: #221d27;
   --foreground: #d2c4de;
   --card: #2c2632;
@@ -181,7 +181,7 @@
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
   --radius: 1.3rem;
-  --shadow-color: rgba(29,161,242,0.15);
+  --shadow-color: rgba(29, 161, 242, 0.15);
   --shadow-opacity: 0;
   --shadow-blur: 0px;
   --shadow-spread: 0px;
@@ -222,7 +222,7 @@
   --sidebar-accent-foreground: #1c9cf0;
   --sidebar-border: #38444d;
   --sidebar-ring: #1da1f2;
-  --shadow-color: rgba(29,161,242,0.25);
+  --shadow-color: rgba(29, 161, 242, 0.25);
 }
 
 .theme-mocha-mousse.light {
@@ -3055,4 +3055,3 @@
   --sidebar-border: #ffffff;
   --sidebar-ring: #525252;
 }
-

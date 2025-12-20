@@ -70,7 +70,7 @@ import { Input } from "@/components/ui/input"
 // Theme names
 const themeNames = [
   "modern-minimal",
-  "t3-chat",
+  "pink-lemonade",
   "twitter",
   "mocha-mousse",
   "bubblegum",
@@ -98,7 +98,7 @@ const themeNames = [
 
 const themeColors: Record<string, { primary: string; secondary: string }> = {
   "modern-minimal": { primary: "#3b82f6", secondary: "#f3f4f6" },
-  "t3-chat": { primary: "#a84370", secondary: "#f1c4e6" },
+  "pink-lemonade": { primary: "#a84370", secondary: "#f1c4e6" },
   "twitter": { primary: "#1e9df1", secondary: "#0f1419" },
   "mocha-mousse": { primary: "#A37764", secondary: "#BAAB92" },
   "bubblegum": { primary: "#d04f99", secondary: "#8acfd1" },
