@@ -12,7 +12,6 @@ import { PredictionMarketsTab } from "@/components/dashboard/prediction-markets-
 import { CopyTradingTab } from "@/components/dashboard/copy-trading-tab"
 import { RiskPortfolioTab } from "@/components/dashboard/risk-portfolio-tab"
 import { UnifiedOrdersTab } from "@/components/dashboard/unified-orders-tab"
-import { LeadersTab } from "@/components/dashboard/leaders-tab"
 
 import { AlpacaTradingTab } from "@/components/dashboard/alpaca-trading-tab"
 import { MarketScanner } from "@/components/dashboard/market-scanner"
@@ -146,15 +145,14 @@ function DashboardContent() {
           <OverviewTab />
         </TabsContent>
 
-        <TabsContent value="leaders" className="space-y-6 mt-6">
-          <LeadersTab />
-        </TabsContent>
-
         <TabsContent value="scanner" className="space-y-6 mt-6">
           <MarketScanner />
         </TabsContent>
 
         {/* Legacy tabs redirect/mapping if needed, but sidebar is updated */}
+        <TabsContent value="leaders" className="space-y-6 mt-6">
+          <CopyTradingTab />
+        </TabsContent>
         <TabsContent value="watchlist" className="space-y-6 mt-6">
           <MarketScanner />
         </TabsContent>

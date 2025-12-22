@@ -1,3 +1,5 @@
+"use client"
+
 import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -6,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Switch } from "@/components/ui/switch"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Trophy, TrendingUp, Activity, Clock, AlertTriangle, Copy, RefreshCw, Loader2 } from "lucide-react"
+import { Trophy, TrendingUp, Activity, Clock, AlertTriangle, Copy, RefreshCw, Loader2, ArrowUpRight, ArrowDownRight } from "lucide-react"
 
 export function CopyTradingTab() {
   const [traders, setTraders] = useState<any[]>([])
@@ -153,23 +155,50 @@ export function CopyTradingTab() {
                   <td className="p-4">
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button size="sm">
-                          <Copy className="h-4 w-4 mr-2" />
-                          Copy
+                        <Button size="sm" variant="outline">
+                          {source === 'nvstly' ? 'View Trades' : (
+                            <>
+                              <Copy className="h-4 w-4 mr-2" />
+                              Copy
+                            </>
+                          )}
                         </Button>
                       </DialogTrigger>
-                      <DialogContent className="max-w-2xl">
+                      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
                         <DialogHeader>
-                          <DialogTitle>Copy Trade: {trader.name}</DialogTitle>
+                          <DialogTitle>
+                            <div className="flex items-center gap-3">
+                              {trader.rank <= 3 && (
+                                <Trophy className={`h-6 w-6 ${
+                                  trader.rank === 1 ? 'text-yellow-500' :
+                                  trader.rank === 2 ? 'text-gray-400' :
+                                  'text-orange-600'
+                                }`} />
+                              )}
+                              <div>
+                                <div className="text-xl">{trader.name}</div>
+                                <div className="text-sm font-normal text-muted-foreground">
+                                  Rank #{trader.rank} • {source === 'nvstly' ? trader.trades : trader.activePositions} {source === 'nvstly' ? 'trades' : 'positions'}
+                                </div>
+                              </div>
+                            </div>
+                          </DialogTitle>
                         </DialogHeader>
 
                         <div className="space-y-6">
+                          {/* Stats Grid */}
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div className="p-3 bg-muted rounded-lg">
-                              <div className="text-xs text-muted-foreground mb-1">Overall P&L</div>
-                              <div className="text-lg font-bold text-green-500">
+                              <div className="text-xs text-muted-foreground mb-1">
+                                {source === 'nvstly' ? 'Total Gain' : 'Overall P&L'}
+                              </div>
+                              <div className={`text-lg font-bold ${
+                                (source === 'nvstly' ? trader.totalGain : trader.overallPnL) >= 0
+                                  ? 'text-green-500'
+                                  : 'text-red-500'
+                              }`}>
                                 {source === 'nvstly'
-                                  ? `${trader.totalGain}%`
+                                  ? `${trader.totalGain >= 0 ? '+' : ''}${trader.totalGain}%`
                                   : source === 'zulu'
                                   ? `$${trader.overallPnL.toLocaleString()}`
                                   : `${trader.overallPnL.toFixed(2)}%`}
@@ -183,79 +212,146 @@ export function CopyTradingTab() {
                               <div className="text-xs text-muted-foreground mb-1">
                                 {source === 'nvstly' ? 'Avg Return' : 'Max Drawdown'}
                               </div>
-                              <div className="text-lg font-bold text-red-500">
-                                {source === 'nvstly' ? `${trader.avgReturn}%` : `${trader.maxDrawdown}%`}
+                              <div className={`text-lg font-bold ${
+                                source === 'nvstly'
+                                  ? (trader.avgReturn >= 0 ? 'text-green-500' : 'text-red-500')
+                                  : 'text-red-500'
+                              }`}>
+                                {source === 'nvstly'
+                                  ? `${trader.avgReturn >= 0 ? '+' : ''}${trader.avgReturn}%`
+                                  : `${trader.maxDrawdown}%`}
                               </div>
                             </div>
                             <div className="p-3 bg-muted rounded-lg">
                               <div className="text-xs text-muted-foreground mb-1">
-                                {source === 'nvstly' ? 'Total Trades' : 'Volatility'}
+                                {source === 'nvstly' ? 'Reputation' : 'Volatility'}
                               </div>
                               <div className="text-lg font-bold">
-                                {source === 'nvstly' ? trader.trades : `${trader.volatility}%`}
+                                {source === 'nvstly' ? trader.rep : `${trader.volatility}%`}
                               </div>
                             </div>
                           </div>
 
-                          <div>
-                            <h3 className="font-semibold mb-2">Trading Markets</h3>
-                            <div className="flex gap-2 flex-wrap">
-                              {trader.markets?.map((market: any, i: number) => (
-                                <Badge key={i} variant="secondary">{market}</Badge>
-                              ))}
-                            </div>
-                          </div>
-
-                          <div>
-                            <h3 className="font-semibold mb-3">Copy Configuration</h3>
-                            <div className="space-y-4">
-                              <div>
-                                <label className="text-sm font-medium mb-2 block">
-                                  Allocation Amount
-                                </label>
-                                <Input type="number" placeholder="10000" defaultValue="10000" />
-                                <p className="text-xs text-muted-foreground mt-1">
-                                  Capital to allocate for copying this trader
-                                </p>
-                              </div>
-
-                              <div>
-                                <label className="text-sm font-medium mb-2 block">
-                                  Max Position Size (% of allocation)
-                                </label>
-                                <Input type="number" placeholder="20" defaultValue="20" />
-                              </div>
-
-                              <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                                <div>
-                                  <div className="font-medium">Copy All Markets</div>
-                                  <div className="text-xs text-muted-foreground">
-                                    Follow trades across all market categories
+                          {/* Recent Trades - NVSTLY specific */}
+                          {source === 'nvstly' && trader.orders && trader.orders.length > 0 && (
+                            <div>
+                              <h3 className="font-semibold mb-3">Recent Trades</h3>
+                              <div className="space-y-2 max-h-96 overflow-y-auto">
+                                {trader.orders.map((trade: any, idx: number) => (
+                                  <div
+                                    key={idx}
+                                    className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
+                                  >
+                                    <div className="flex items-center gap-3">
+                                      <div className={`p-2 rounded ${
+                                        trade.type === 'buy' ? 'bg-green-500/10' :
+                                        trade.type === 'sell' ? 'bg-blue-500/10' :
+                                        'bg-red-500/10'
+                                      }`}>
+                                        {trade.type === 'buy' ? (
+                                          <ArrowUpRight className="h-4 w-4 text-green-500" />
+                                        ) : trade.type === 'sell' ? (
+                                          <ArrowUpRight className="h-4 w-4 text-blue-500" />
+                                        ) : (
+                                          <ArrowDownRight className="h-4 w-4 text-red-500" />
+                                        )}
+                                      </div>
+                                      <div>
+                                        <div className="font-semibold">{trade.symbol}</div>
+                                        <div className="text-xs text-muted-foreground">
+                                          {new Date(trade.time).toLocaleDateString()} at ${trade.price.toFixed(2)}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="text-right">
+                                      <Badge variant={
+                                        trade.type === 'buy' ? 'default' :
+                                        trade.type === 'sell' ? 'secondary' :
+                                        'destructive'
+                                      }>
+                                        {trade.type.toUpperCase()}
+                                      </Badge>
+                                      {trade.gain !== undefined && (
+                                        <div className={`text-sm font-semibold mt-1 ${
+                                          trade.gain >= 0 ? 'text-green-500' : 'text-red-500'
+                                        }`}>
+                                          {trade.gain >= 0 ? '+' : ''}{trade.gain}%
+                                        </div>
+                                      )}
+                                    </div>
                                   </div>
-                                </div>
-                                <Switch defaultChecked />
-                              </div>
-
-                              <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                                <div>
-                                  <div className="font-medium">Auto-Rebalance</div>
-                                  <div className="text-xs text-muted-foreground">
-                                    Automatically match trader's position sizing
-                                  </div>
-                                </div>
-                                <Switch />
+                                ))}
                               </div>
                             </div>
-                          </div>
+                          )}
 
-                          <div className="flex gap-2">
-                            <Button className="flex-1">
-                              Start Copying
-                            </Button>
-                            <Button variant="outline">
-                              Cancel
-                            </Button>
-                          </div>
+                          {/* Markets - Non-NVSTLY */}
+                          {source !== 'nvstly' && (
+                            <div>
+                              <h3 className="font-semibold mb-2">Trading Markets</h3>
+                              <div className="flex gap-2 flex-wrap">
+                                {trader.markets?.map((market: any, i: number) => (
+                                  <Badge key={i} variant="secondary">{market}</Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Copy Configuration - Non-NVSTLY */}
+                          {source !== 'nvstly' && (
+                            <div>
+                              <h3 className="font-semibold mb-3">Copy Configuration</h3>
+                              <div className="space-y-4">
+                                <div>
+                                  <label className="text-sm font-medium mb-2 block">
+                                    Allocation Amount
+                                  </label>
+                                  <Input type="number" placeholder="10000" defaultValue="10000" />
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    Capital to allocate for copying this trader
+                                  </p>
+                                </div>
+
+                                <div>
+                                  <label className="text-sm font-medium mb-2 block">
+                                    Max Position Size (% of allocation)
+                                  </label>
+                                  <Input type="number" placeholder="20" defaultValue="20" />
+                                </div>
+
+                                <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                                  <div>
+                                    <div className="font-medium">Copy All Markets</div>
+                                    <div className="text-xs text-muted-foreground">
+                                      Follow trades across all market categories
+                                    </div>
+                                  </div>
+                                  <Switch defaultChecked />
+                                </div>
+
+                                <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                                  <div>
+                                    <div className="font-medium">Auto-Rebalance</div>
+                                    <div className="text-xs text-muted-foreground">
+                                      Automatically match trader's position sizing
+                                    </div>
+                                  </div>
+                                  <Switch />
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {source !== 'nvstly' && (
+                            <div className="flex gap-2">
+                              <Button className="flex-1">
+                                Start Copying
+                              </Button>
+                              <Button variant="outline">
+                                Cancel
+                              </Button>
+                            </div>
+                          )}
                         </div>
                       </DialogContent>
                     </Dialog>
@@ -267,10 +363,31 @@ export function CopyTradingTab() {
         </div>
       </Card>
 
-      <Card className="p-6">
-        <h3 className="text-xl font-bold mb-4">Active Copy Trading</h3>
-        <div className="space-y-3"></div>
-      </Card>
+      {source === 'nvstly' && (
+        <Card className="p-6 bg-gradient-to-br from-primary/5 to-primary/10 border-2 border-primary/20">
+          <div className="flex items-start gap-4">
+            <TrendingUp className="h-8 w-8 text-primary flex-shrink-0 mt-1" />
+            <div>
+              <h3 className="font-bold mb-2">About NVSTLY Leaders</h3>
+              <p className="text-sm text-muted-foreground mb-2">
+                Track the performance of top traders on NVSTLY, a platform for copy trading and social investing.
+                Leaders are ranked by their total gain, win rate, and overall reputation score.
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Click "View Trades" to see detailed trade history and performance metrics for each leader.
+                Use the "Sync Data" button to fetch the latest leaderboard data from all available NVSTLY leaders.
+              </p>
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {source !== 'nvstly' && (
+        <Card className="p-6">
+          <h3 className="text-xl font-bold mb-4">Active Copy Trading</h3>
+          <div className="space-y-3"></div>
+        </Card>
+      )}
     </div>
   )
 }

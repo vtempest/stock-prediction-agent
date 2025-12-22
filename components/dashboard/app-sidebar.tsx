@@ -247,9 +247,8 @@ const navigationGroups = [
   {
     title: "Trading",
     items: [
-      { name: "Leaders", tab: "leaders", icon: Trophy },
-      { name: "Orders", tab: "orders", icon: TrendingUp },
       { name: "Copy Trading", tab: "copy-trading", icon: Copy },
+      { name: "Orders", tab: "orders", icon: TrendingUp },
       { name: "Prediction Markets", tab: "prediction-markets", icon: Target },
     ],
   },
